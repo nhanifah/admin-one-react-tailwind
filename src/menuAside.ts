@@ -1,6 +1,7 @@
 import {
   mdiAccountCircle,
   mdiMonitor,
+  mdiUpload,
   mdiGithub,
   mdiLock,
   mdiAlertCircle,
@@ -19,6 +20,11 @@ const menuAside: MenuAsideItem[] = [
     href: '/dashboard',
     icon: mdiMonitor,
     label: 'Dashboard',
+  },
+  {
+    href: '/upload',
+    icon: mdiUpload,
+    label: 'Upload',
   },
   {
     href: '/tables',

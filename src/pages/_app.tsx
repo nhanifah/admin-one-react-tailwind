@@ -6,6 +6,7 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import { store } from '../stores/store'
 import { Provider } from 'react-redux'
+import { Toaster } from "react-hot-toast";
 import '../css/main.css'
 
 export type NextPageWithLayout<P = Record<string, unknown>, IP = P> = NextPage<P, IP> & {
@@ -57,6 +58,8 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
 
             <link rel="icon" href="/admin-one-react-tailwind/favicon.png" />
           </Head>
+
+          <Toaster />
 
           <Script
             src="https://www.googletagmanager.com/gtag/js?id=UA-130795909-1"
