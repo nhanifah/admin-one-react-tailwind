@@ -39,7 +39,7 @@ const LoginPage = () => {
         <title>{getPageTitle('Login')}</title>
       </Head>
 
-      <div className="flex justify-center">
+      <div className="flex min-h-screen justify-center">
         <div className="w-full sm:w-9/12 md:w-7/12 lg:w-6/12 xl:w-4/12 pt-10">
           <div className="">
             <img
