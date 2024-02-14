@@ -39,6 +39,19 @@ module.exports = {
         'fade-out': 'fade-out 250ms ease-in-out',
         'fade-in': 'fade-in 250ms ease-in-out',
       },
+      colors: {
+        main: {
+          100: '#f8d0cd',
+          200: '#f1a19b',
+          300: '#eb716a',
+          400: '#e44238',
+          500: '#dd1306',
+          600: '#b10f05',
+          700: '#850b04',
+          800: '#580802',
+          900: '#2c0401',
+        },
+      },
     },
   },
   plugins: [

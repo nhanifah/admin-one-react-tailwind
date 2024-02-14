@@ -14,7 +14,7 @@ import { useRouter } from 'next/router'
 import { getPageTitle } from '../config'
 
 type LoginForm = {
-  login: string
+  email: string
   password: string
   remember: boolean
 }
@@ -28,7 +28,7 @@ const LoginPage = () => {
   }
 
   const initialValues: LoginForm = {
-    login: 'john.doe',
+    email: 'john.doe',
     password: 'bG1sL9eQ1uD2sK3b',
     remember: true,
   }
@@ -39,32 +39,41 @@ const LoginPage = () => {
         <title>{getPageTitle('Login')}</title>
       </Head>
 
-      <SectionFullScreen bg="purplePink">
-        <CardBox className="w-11/12 md:w-7/12 lg:w-6/12 xl:w-4/12 shadow-2xl">
-          <Formik initialValues={initialValues} onSubmit={handleSubmit}>
-            <Form>
-              <FormField label="Login" help="Please enter your login">
-                <Field name="login" />
-              </FormField>
+      <div className="flex justify-center">
+        <div className="w-full sm:w-9/12 md:w-7/12 lg:w-6/12 xl:w-4/12 pt-10">
+          <div className="">
+            <img
+              src="https://cdn.lpk-harehare.id/lpk_harehare.png"
+              alt="LPK Harehare Indonesia"
+              className="w-[225px] h-[225px] mx-auto"
+            />
+          </div>
+          <CardBox className="">
+            <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+              <Form>
+                <FormField label="Email  / Username" help="Masukan email atau username">
+                  <Field name="email" className="text-2xl" />
+                </FormField>
 
-              <FormField label="Password" help="Please enter your password">
-                <Field name="password" type="password" />
-              </FormField>
+                <FormField label="Password">
+                  <Field name="password" type="password" />
+                </FormField>
 
-              <FormCheckRadio type="checkbox" label="Remember">
-                <Field type="checkbox" name="remember" />
-              </FormCheckRadio>
+                <Divider />
 
-              <Divider />
-
-              <Buttons>
-                <Button type="submit" label="Login" color="info" />
-                <Button href="/dashboard" label="Home" color="info" outline />
-              </Buttons>
-            </Form>
-          </Formik>
-        </CardBox>
-      </SectionFullScreen>
+                <Buttons type="justify-center">
+                  <Button
+                    type="submit"
+                    label="Login"
+                    color="void"
+                    className="bg-main-500 text-white px-20 py-3 text-xl rounded-lg font-semibold w-full"
+                  />
+                </Buttons>
+              </Form>
+            </Formik>
+          </CardBox>
+        </div>
+      </div>
     </>
   )
 }
