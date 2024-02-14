@@ -37,7 +37,7 @@ const FormsPage = () => {
   return (
     <>
       <Head>
-        <title>{getPageTitle('Forms')}</title>
+        <title>{getPageTitle('Cloud Storage')}</title>
       </Head>
 
       <SectionMain>

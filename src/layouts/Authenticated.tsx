@@ -62,7 +62,7 @@ export default function LayoutAuthenticated({ children }: Props) {
           >
             <Icon path={mdiMenu} size="24" />
           </NavBarItemPlain>
-          <NavBarItemPlain useMargin>
+          {/* <NavBarItemPlain useMargin>
             <Formik
               initialValues={{
                 search: '',
@@ -75,7 +75,7 @@ export default function LayoutAuthenticated({ children }: Props) {
                 </FormField>
               </Form>
             </Formik>
-          </NavBarItemPlain>
+          </NavBarItemPlain> */}
         </NavBar>
         <AsideMenu
           isAsideMobileExpanded={isAsideMobileExpanded}
@@ -85,15 +85,7 @@ export default function LayoutAuthenticated({ children }: Props) {
         />
         {children}
         <FooterBar>
-          Get more with{` `}
-          <a
-            href="https://tailwind-react.justboil.me/dashboard"
-            target="_blank"
-            rel="noreferrer"
-            className="text-blue-600"
-          >
-            Premium version
-          </a>
+          All rights reserved.
         </FooterBar>
       </div>
     </div>

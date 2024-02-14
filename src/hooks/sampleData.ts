@@ -1,8 +1,28 @@
 import useSWR from 'swr'
 const fetcher = (url: string) => fetch(url).then((res) => res.json())
 
+export const useBankQuestionClients = () => {
+  const { data, error } = useSWR('/data-sources/questionBank.json', fetcher)
+
+  return {
+    clients: data?.data ?? [],
+    isLoading: !error && !data,
+    isError: error,
+  }
+}
+
+export const useStudentPhyscotestAnswerClients = () => {
+  const { data, error } = useSWR('/data-sources/studentPhyscoResult.json', fetcher)
+
+  return {
+    clients: data?.data ?? [],
+    isLoading: !error && !data,
+    isError: error,
+  }
+}
+
 export const useSampleClients = () => {
-  const { data, error } = useSWR('/admin-one-react-tailwind/data-sources/clients.json', fetcher)
+  const { data, error } = useSWR('/data-sources/clients.json', fetcher)
 
   return {
     clients: data?.data ?? [],
@@ -12,7 +32,7 @@ export const useSampleClients = () => {
 }
 
 export const useSampleTransactions = () => {
-  const { data, error } = useSWR('/admin-one-react-tailwind/data-sources/history.json', fetcher)
+  const { data, error } = useSWR('/data-sources/history.json', fetcher)
 
   return {
     transactions: data?.data ?? [],

@@ -55,6 +55,25 @@ export type Transaction = {
   business: string
 }
 
+export type Quest = {
+  id: string
+  question: string
+  questionWeight: number
+  questionType: string
+  questionCorrect: string
+  questionOptions: string[]
+  createdAt: number
+  updatedAt: number
+}
+
+export type StudentSikotes = {
+    id: string
+    name: string
+    result: number
+    createdAt: number
+    updatedAt: number
+}
+
 export type Client = {
   id: number
   avatar: string

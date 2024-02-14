@@ -1,40 +1,14 @@
 import {
-  mdiMenu,
-  mdiClockOutline,
-  mdiCloud,
-  mdiCrop,
   mdiAccount,
   mdiCogOutline,
   mdiEmail,
   mdiLogout,
   mdiThemeLightDark,
-  mdiGithub,
-  mdiVuejs,
+  mdiHelpCircle,
 } from '@mdi/js'
 import { MenuNavBarItem } from './interfaces'
 
 const menuNavBar: MenuNavBarItem[] = [
-  {
-    icon: mdiMenu,
-    label: 'Sample menu',
-    menu: [
-      {
-        icon: mdiClockOutline,
-        label: 'Item One',
-      },
-      {
-        icon: mdiCloud,
-        label: 'Item Two',
-      },
-      {
-        isDivider: true,
-      },
-      {
-        icon: mdiCrop,
-        label: 'Item Last',
-      },
-    ],
-  },
   {
     isCurrentUser: true,
     menu: [
@@ -68,17 +42,10 @@ const menuNavBar: MenuNavBarItem[] = [
     isToggleLightDark: true,
   },
   {
-    icon: mdiGithub,
-    label: 'GitHub',
+    icon: mdiHelpCircle,
+    label: 'Help & Support',
     isDesktopNoLabel: true,
     href: 'https://github.com/justboil/admin-one-react-tailwind',
-    target: '_blank',
-  },
-  {
-    icon: mdiVuejs,
-    label: 'Vue version',
-    isDesktopNoLabel: true,
-    href: 'https://github.com/justboil/admin-one-vue-tailwind',
     target: '_blank',
   },
   {

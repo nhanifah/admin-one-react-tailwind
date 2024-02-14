@@ -9,6 +9,7 @@ type Props = {
   isBorderless?: boolean
   isTransparent?: boolean
   hasTextareaHeight?: boolean
+  addJawaban?: boolean
   children: ReactNode
 }
 
@@ -23,6 +24,10 @@ const FormField = ({ icons = [], ...props }: Props) => {
       break
     case 3:
       elementWrapperClass = 'grid grid-cols-1 gap-3 md:grid-cols-3'
+  }
+
+  if (props.addJawaban) {
+    elementWrapperClass = 'grid grid-cols-1 gap-1 md:grid-cols-1'
   }
 
   const controlClassName = [

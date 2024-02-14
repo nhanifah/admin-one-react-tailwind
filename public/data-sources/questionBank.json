@@ -1,0 +1,87 @@
+{
+    "data": [
+        {
+            "id": 1,
+            "question": "John",
+            "questionWeight": 2,
+            "questionType": "Multiple Choice",
+            "questionCorrect": "New York",
+            "questionOptions": [
+                "New York",
+                "Los Angeles",
+                "Chicago",
+                "Houston"
+            ],
+            "createdAt": 1707384124,
+            "updatedAt": 1707384124
+        },
+        {
+            "id": 2,
+            "question": "What is the capital of France?",
+            "questionWeight": 2,
+            "questionType": "Multiple Choice",
+            "questionCorrect": "Paris",
+            "questionOptions": [
+                "Paris",
+                "Marseille",
+                "Lyon",
+                "Toulouse"
+            ],
+            "createdAt": 1707384124,
+            "updatedAt": 1707384124
+        },
+        {
+            "id": 3,
+            "question": "What is the capital of Germany?",
+            "questionWeight": 2,
+            "questionType": "Multiple Choice",
+            "questionCorrect": "Berlin",
+            "questionOptions": [
+                "Berlin",
+                "Hamburg",
+                "Munich",
+                "Cologne"
+            ],
+            "createdAt": 1707384124,
+            "updatedAt": 1707384124
+        },
+        {
+            "id": 4,
+            "question": "What is the capital of Italy?",
+            "questionWeight": 2,
+            "questionType": "Multiple Choice",
+            "questionCorrect": "Rome",
+            "questionOptions": [
+                "Rome",
+                "Milan",
+                "Naples",
+                "Turin"
+            ],
+            "createdAt": 1707384124,
+            "updatedAt": 1707384124
+        },
+        {
+            "id": 5,
+            "question": "What is the capital of Spain?",
+            "questionWeight": 2,
+            "questionType": "Multiple Choice",
+            "questionCorrect": "Madrid",
+            "questionOptions": [
+                "Madrid",
+                "Barcelona",
+                "Valencia",
+                "Seville"
+            ],
+            "createdAt": 1707384124,
+            "updatedAt": 1707384124
+        },
+        {
+            "id": 6,
+            "question": "What is the capital of Portugal?",
+            "questionWeight": 2,
+            "questionType": "Essay",
+            "createdAt": 1707384124,
+            "updatedAt": 1707384124
+        }
+    ]
+}

@@ -19,12 +19,26 @@ const menuAside: MenuAsideItem[] = [
   {
     href: '/dashboard',
     icon: mdiMonitor,
-    label: 'Dashboard',
+    label: 'Home',
   },
   {
     href: '/upload',
     icon: mdiUpload,
     label: 'Upload',
+  },
+  {
+    label: 'Psikotes',
+    icon: mdiSquareEditOutline,
+    menu: [
+      {
+        label: 'Bank Soal',
+        href: '/psikotes/questionBank',
+      },
+      {
+        label: 'Jawaban Peserta',
+        href: '/psikotes/userAnswer',
+      },
+    ],
   },
   {
     href: '/tables',
