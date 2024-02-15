@@ -81,7 +81,7 @@ const handler = NextAuth({
                 where: { email: token.email },
             });
             if (user) {
-                token.uid = userExists.id;
+                token.role = userExists.role;
                 token.name = user.name;
             }
             // console.log("REFFERAL:", userExists.refferal_id);

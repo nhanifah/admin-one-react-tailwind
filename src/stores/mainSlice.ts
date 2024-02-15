@@ -9,7 +9,7 @@ interface MainState {
 
 const initialState: MainState = {
   /* User */
-  userName: 'John Doe',
+  userName: 'Administator',
   userEmail: 'doe.doe.doe@example.com',
 
   /* Field focus with ctrl+k (to register only once) */
