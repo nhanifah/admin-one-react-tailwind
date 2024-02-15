@@ -1,4 +1,11 @@
-import { mdiBallotOutline, mdiPlusBox, mdiChatQuestion, mdiScoreboard, mdiWrench, mdiPlusCircle } from '@mdi/js'
+import {
+  mdiBallotOutline,
+  mdiPlusBox,
+  mdiChatQuestion,
+  mdiScoreboard,
+  mdiWrench,
+  mdiPlusCircle,
+} from '@mdi/js'
 import Head from 'next/head'
 import { ReactElement, useState } from 'react'
 import { Field, Form, Formik } from 'formik'
@@ -12,14 +19,21 @@ import TablePsikotesQuest from '../../components/Table/PsikotesQuest'
 import CardBoxModal from '../../components/CardBox/Modal'
 import FormField from '../../components/Form/Field'
 import FormOptionSoal from '../../components/Form/OptionSoal'
+import { setIsModalActive } from '../../stores/modalSlice'
+import { useAppDispatch } from '../../stores/hooks'
+import AddQuestionModal from '../../components/Modals/AddQuestionModal'
 
 const QuestionBank = () => {
-  const [isModalAddActive, setIsModalAddActive] = useState(false)
+  const dispatch = useAppDispatch()
+
+  dispatch(setIsModalActive(false))
+
+  // const [isModalAddActive, setIsModalAddActive] = useState(false)
   const [isMultipleChoice, setIsMultipleChoice] = useState(false)
   const [isQuestTypeSelected, setIsQuestTypeSelected] = useState(false)
 
   const handleModalAction = () => {
-    setIsModalAddActive(false)
+    dispatch(setIsModalActive(false))
     // Reset the form
     setIsMultipleChoice(false)
     setIsQuestTypeSelected(false)
@@ -27,7 +41,8 @@ const QuestionBank = () => {
 
   return (
     <>
-    <CardBoxModal
+      <AddQuestionModal />
+      {/* <CardBoxModal
         title="Tambahkan Pertanyaan Baru"
         buttonColor="success"
         buttonLabel="Simpan"
@@ -37,64 +52,65 @@ const QuestionBank = () => {
       >
         <Formik
           initialValues={{
-            question: '',
-            answer: '',
-            category: '',
-            difficulty: '',
-            point: 0,
             questionType: '',
+            question: '',
+            option: '',
+            answer: '',
+            point: 0,
           }}
           onSubmit={(values) => alert(JSON.stringify(values, null, 2))}
         >
           {({ setFieldValue }) => (
-        <Form>
-          <FormField label="Tipe Pertanyaan" labelFor="questionType" icons={[mdiWrench]}>
-            <Field
-              as="select"
-              name="questionType"
-              onChange={(e) => {
-                const selectedValue = e.target.value;
-                setIsMultipleChoice(selectedValue === 'Multiple Choice');
-                setIsQuestTypeSelected(!!selectedValue);
-                setFieldValue('questionType', selectedValue);
-              }}
-            >
-              <option value="" selected disabled>Pilih Tipe</option>
-              <option value="Multiple Choice">Pilihan Ganda</option>
-              <option value="Essay">Esai</option>
-            </Field>
-          </FormField>
-          {isQuestTypeSelected && (
-            <>
-            <FormField label="Pertanyaan" labelFor="question" icons={[mdiChatQuestion]}>
-            <Field name="question" placeholder="Pertanyaan" autoFocus />
-          </FormField>
-          <FormField label="Point" labelFor="point" icons={[mdiScoreboard]}>
-            <Field name="point" placeholder="Poin" type="number" />
-          </FormField>
-          {isMultipleChoice && (
-            // Render additional fields for the essay question type if necessary
-            <>
-            <FormField label="Tambahkan Jawaban" addJawaban={true} labelFor="addJawaban">
-              <Field name="addJawaban" placeholder="Tambahkan Jawaban" />
-              <Button
-                  type="button"
-                  className="text-white"
-                  outline={false}
-                  icon={mdiPlusCircle}
-                  label="Tambahkan"
-                  small
-              />
-            </FormField>
-            <FormOptionSoal/>
-            </>
+            <Form>
+              <FormField label="Tipe Pertanyaan" labelFor="questionType" icons={[mdiWrench]}>
+                <Field
+                  as="select"
+                  name="questionType"
+                  onChange={(e) => {
+                    const selectedValue = e.target.value
+                    setIsMultipleChoice(selectedValue === 'Multiple Choice')
+                    setIsQuestTypeSelected(!!selectedValue)
+                    setFieldValue('questionType', selectedValue)
+                  }}
+                >
+                  <option value="" selected disabled>
+                    Pilih Tipe
+                  </option>
+                  <option value="Multiple Choice">Pilihan Ganda</option>
+                  <option value="Essay">Esai</option>
+                </Field>
+              </FormField>
+              {isQuestTypeSelected && (
+                <>
+                  <FormField label="Pertanyaan" labelFor="question" icons={[mdiChatQuestion]}>
+                    <Field name="question" placeholder="Pertanyaan" autoFocus />
+                  </FormField>
+                  <FormField label="Point" labelFor="point" icons={[mdiScoreboard]}>
+                    <Field name="point" placeholder="Poin" type="number" />
+                  </FormField>
+                  {isMultipleChoice && (
+                    // Render additional fields for the essay question type if necessary
+                    <>
+                      <FormField label="Tambahkan Jawaban" addJawaban={true} labelFor="addJawaban">
+                        <Field name="addJawaban" placeholder="Tambahkan Jawaban" />
+                        <Button
+                          type="button"
+                          className="text-white"
+                          outline={false}
+                          icon={mdiPlusCircle}
+                          label="Tambahkan"
+                          small
+                        />
+                      </FormField>
+                      <FormOptionSoal />
+                    </>
+                  )}
+                </>
+              )}
+            </Form>
           )}
-          </>
-          )}
-        </Form>
-      )}
         </Formik>
-      </CardBoxModal>
+      </CardBoxModal> */}
 
       <Head>
         <title>{getPageTitle('Psikotes')}</title>
@@ -103,7 +119,7 @@ const QuestionBank = () => {
       <SectionMain>
         <SectionTitleLineWithButton icon={mdiBallotOutline} title="Bank Soal Psikotes" main>
           <Button
-            onClick={() => setIsModalAddActive(true)}
+            onClick={() => dispatch(setIsModalActive(true))}
             target="_blank"
             icon={mdiPlusBox}
             label="Tambahkan"
