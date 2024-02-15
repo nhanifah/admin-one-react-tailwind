@@ -28,15 +28,15 @@ const LoginPage = () => {
   }
 
   const initialValues: LoginForm = {
-    email: 'john.doe',
-    password: 'bG1sL9eQ1uD2sK3b',
+    email: null,
+    password: null,
     remember: true,
   }
 
   return (
     <>
       <Head>
-        <title>{getPageTitle('Login')}</title>
+        <title>{getPageTitle('Masuk')}</title>
       </Head>
 
       <div className="flex min-h-screen justify-center">
@@ -51,12 +51,12 @@ const LoginPage = () => {
           <CardBox className="">
             <Formik initialValues={initialValues} onSubmit={handleSubmit}>
               <Form>
-                <FormField label="Email  / Username" help="Masukan email atau username">
-                  <Field name="email" className="text-2xl" />
+                <FormField label="Surel  / Nama pengguna" help="Masukan surel atau nama pengguna">
+                  <Field name="email" className="text-2xl" placeholder="Surat Elektronik / Nama Pengguna" />
                 </FormField>
 
-                <FormField label="Password">
-                  <Field name="password" type="password" />
+                <FormField label="Katasandi">
+                  <Field name="password" type="password" placeholder="Katasandi"  />
                 </FormField>
 
                 <Divider />
@@ -64,7 +64,7 @@ const LoginPage = () => {
                 <Buttons type="justify-center">
                   <Button
                     type="submit"
-                    label="Login"
+                    label="Masuk"
                     color="void"
                     className="bg-main-500 text-white px-20 py-3 text-xl rounded-lg font-semibold w-full"
                   />

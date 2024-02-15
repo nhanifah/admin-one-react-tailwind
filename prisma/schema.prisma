@@ -1,0 +1,307 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model admins {
+  id           String        @id @db.Char(32)
+  name         String?       @db.VarChar(255)
+  username     String?       @db.VarChar(255)
+  email        String?       @db.VarChar(255)
+  password     String?       @db.VarChar(255)
+  role         String?       @db.Char(32)
+  created_at   DateTime?     @db.DateTime(0)
+  updated_at   DateTime?     @default(now()) @db.DateTime(0)
+  deleted_at   DateTime?     @db.DateTime(0)
+  master_roles master_roles? @relation(fields: [role], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "admins_ibfk_1")
+
+  @@index([role], map: "role")
+}
+
+model audit_log {
+  id         String    @id @db.Char(32)
+  table_name String?   @db.VarChar(255)
+  record_id  String?   @db.Char(32)
+  action     String?   @db.VarChar(255)
+  field_name String?   @db.VarChar(255)
+  old_value  String?   @db.Text
+  new_value  String?   @db.Text
+  user_id    String?   @db.Char(32)
+  timestamp  DateTime? @default(now()) @db.DateTime(0)
+}
+
+model batch_registration {
+  id                 String               @id @db.Char(32)
+  batch_name         String?              @db.VarChar(255)
+  quota              String?              @db.VarChar(255)
+  end_date           DateTime?            @db.DateTime(0)
+  created_at         DateTime?            @db.DateTime(0)
+  updated_at         DateTime?            @default(now()) @db.DateTime(0)
+  deleted_at         DateTime?            @db.DateTime(0)
+  installments       installments[]
+  interview_schedule interview_schedule[]
+  students           students[]
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model cbt_answers {
+  question_id     String        @db.Char(32)
+  student_id      String        @db.Char(32)
+  selected_option String?       @db.Text
+  created_at      DateTime?     @db.DateTime(0)
+  updated_at      DateTime?     @default(now()) @db.DateTime(0)
+  deleted_at      DateTime?     @db.DateTime(0)
+  cbt_questions   cbt_questions @relation(fields: [question_id], references: [id], onUpdate: Restrict, map: "cbt_answers_ibfk_1")
+  students        students      @relation(fields: [student_id], references: [id], onUpdate: Restrict, map: "cbt_answers_ibfk_2")
+
+  @@id([question_id, student_id])
+  @@index([student_id], map: "student_id")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model cbt_enrolled {
+  id              String          @db.Char(32)
+  student_id      String          @db.Char(32)
+  exam_id         String          @db.Char(32)
+  token           String?         @db.VarChar(255)
+  time_start      DateTime?       @db.DateTime(0)
+  time_end        DateTime?       @db.DateTime(0)
+  students        students        @relation(fields: [student_id], references: [id], onUpdate: Restrict, map: "cbt_enrolled_ibfk_1")
+  cbt_examination cbt_examination @relation(fields: [exam_id], references: [id], onUpdate: Restrict, map: "cbt_enrolled_ibfk_2")
+
+  @@id([id, student_id, exam_id])
+  @@index([exam_id], map: "exam_id")
+  @@index([student_id], map: "student_id")
+}
+
+model cbt_examination {
+  id            String          @id @db.Char(32)
+  name          String?         @db.VarChar(255)
+  minimal_value String?         @db.VarChar(255)
+  leases_time   String?         @db.VarChar(255)
+  created_at    DateTime?       @db.DateTime(0)
+  updated_at    DateTime?       @default(now()) @db.DateTime(0)
+  deleted_at    DateTime?       @db.DateTime(0)
+  cbt_enrolled  cbt_enrolled[]
+  cbt_questions cbt_questions[]
+  cbt_results   cbt_results[]
+}
+
+model cbt_questions {
+  id              String              @db.Char(32) @unique
+  type            cbt_questions_type?
+  exam_id         String              @db.Char(32)
+  question_text   String?             @db.Text
+  option_text     String?             @db.LongText
+  answer          String?             @db.Text
+  weight          String?             @db.VarChar(255)
+  created_at      DateTime?           @db.DateTime(0)
+  updated_at      DateTime?           @default(now()) @db.DateTime(0)
+  deleted_at      DateTime?           @db.DateTime(0)
+  cbt_answers     cbt_answers[]
+  cbt_examination cbt_examination     @relation(fields: [exam_id], references: [id], onUpdate: Restrict, map: "cbt_questions_ibfk_1")
+
+  @@id([id, exam_id])
+  @@index([exam_id], map: "exam_id")
+}
+
+model cbt_results {
+  id              String               @db.Char(32)
+  student_id      String               @db.Char(32)
+  exam_id         String               @db.Char(32)
+  total_points    Int?
+  checked         cbt_results_checked?
+  created_at      DateTime?            @db.DateTime(0)
+  updated_at      DateTime?            @default(now()) @db.DateTime(0)
+  deleted_at      DateTime?            @db.DateTime(0)
+  students        students             @relation(fields: [student_id], references: [id], onUpdate: Restrict, map: "cbt_results_ibfk_1")
+  cbt_examination cbt_examination      @relation(fields: [exam_id], references: [id], onUpdate: Restrict, map: "cbt_results_ibfk_2")
+
+  @@id([id, student_id, exam_id])
+  @@index([exam_id], map: "exam_id")
+  @@index([student_id], map: "student_id")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model installments {
+  id                 String                 @id @db.Char(32)
+  student_id         String?                @db.Char(32)
+  package_id         String?                @db.Char(32)
+  batch_id           String?                @db.Char(32)
+  installment_number Int?
+  amount             Decimal?               @db.Decimal(10, 2)
+  category           String?                @db.VarChar(255)
+  discount           installments_discount? @default(no)
+  due_date           DateTime?              @db.DateTime(0)
+  payment_date       DateTime?              @db.DateTime(0)
+  created_at         DateTime?              @db.DateTime(0)
+  updated_at         DateTime?              @default(now()) @db.DateTime(0)
+  students           students?              @relation(fields: [student_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "installments_ibfk_1")
+  learning_packages  learning_packages?     @relation(fields: [package_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "installments_ibfk_2")
+  batch_registration batch_registration?    @relation(fields: [batch_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "installments_ibfk_3")
+
+  @@index([batch_id], map: "batch_id")
+  @@index([package_id], map: "package_id")
+  @@index([student_id], map: "student_id")
+}
+
+model interview_schedule {
+  id                 String              @id @db.Char(32)
+  batch_id           String?             @db.Char(32)
+  interview_date     DateTime?           @db.DateTime(0)
+  interview_location String?             @db.VarChar(255)
+  created_at         DateTime?           @db.DateTime(0)
+  updated_at         DateTime?           @default(now()) @db.DateTime(0)
+  deleted_at         DateTime?           @db.DateTime(0)
+  batch_registration batch_registration? @relation(fields: [batch_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "interview_schedule_ibfk_1")
+
+  @@index([batch_id], map: "batch_id")
+}
+
+model learning_packages {
+  id           String         @id @db.Char(32)
+  name         String?        @db.VarChar(255)
+  description  String?        @db.Text
+  price        Decimal?       @db.Decimal(10, 2)
+  created_at   DateTime?      @db.DateTime(0)
+  updated_at   DateTime?      @default(now()) @db.DateTime(0)
+  deleted_at   DateTime?      @db.DateTime(0)
+  installments installments[]
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model master_referral {
+  id       String                @id @db.Char(32)
+  name     String?               @db.VarChar(255)
+  type     master_referral_type?
+  students students[]
+}
+
+model master_roles {
+  id         String    @id @db.Char(32)
+  name       String?   @db.VarChar(255)
+  access     String?   @db.LongText
+  created_at DateTime? @db.DateTime(0)
+  updated_at DateTime? @default(now()) @db.DateTime(0)
+  admins     admins[]
+}
+
+model student_attachments {
+  id          String    @id @db.Char(32)
+  student_id  String?   @db.Char(32)
+  file_name   String?   @db.VarChar(255)
+  file_url    String?   @db.VarChar(255)
+  uploaded_at DateTime? @db.DateTime(0)
+  updated_at  DateTime? @default(now()) @db.DateTime(0)
+  deleted_at  DateTime? @db.DateTime(0)
+  students    students? @relation(fields: [student_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "student_attachments_ibfk_1")
+
+  @@index([student_id], map: "student_id")
+}
+
+model student_punishments {
+  id              String                               @id @db.Char(32)
+  student_id      String?                              @db.Char(32)
+  punishment_type student_punishments_punishment_type?
+  description     String?                              @db.Text
+  start_date      DateTime?                            @db.DateTime(0)
+  end_date        DateTime?                            @db.DateTime(0)
+  created_at      DateTime?                            @db.DateTime(0)
+  updated_at      DateTime?                            @default(now()) @db.DateTime(0)
+  deleted_at      DateTime?                            @db.DateTime(0)
+  students        students?                            @relation(fields: [student_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "student_punishments_ibfk_1")
+
+  @@index([student_id], map: "student_id")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model students {
+  id                  String                @id @db.Char(32)
+  full_name           String?               @db.VarChar(255)
+  whatsapp_number     String?               @db.VarChar(255)
+  email               String?               @db.VarChar(255)
+  nik                 String?               @db.VarChar(255)
+  province            String?               @db.VarChar(255)
+  city                String?               @db.VarChar(255)
+  subdistrict         String?               @db.VarChar(255)
+  village             String?               @db.VarChar(255)
+  address_detail      String?               @db.VarChar(255)
+  batch_id            String?               @db.Char(32)
+  interview_schedule  DateTime?             @db.DateTime(0)
+  dormitory           students_dormitory?
+  installment         students_installment?
+  referral_id         String?               @db.Char(32)
+  guardian_name       String?               @db.VarChar(255)
+  guardian_phone      String?               @db.VarChar(255)
+  progress            students_progress?
+  created_at          DateTime?             @db.DateTime(0)
+  updated_at          DateTime?             @default(now()) @db.DateTime(0)
+  deleted_at          DateTime?             @db.DateTime(0)
+  cbt_answers         cbt_answers[]
+  cbt_enrolled        cbt_enrolled[]
+  cbt_results         cbt_results[]
+  installments        installments[]
+  student_attachments student_attachments[]
+  student_punishments student_punishments[]
+  batch_registration  batch_registration?   @relation(fields: [batch_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "students_ibfk_1")
+  master_referral     master_referral?      @relation(fields: [referral_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "students_ibfk_2")
+
+  @@index([batch_id], map: "batch_id")
+  @@index([referral_id], map: "referral_id")
+}
+
+enum cbt_questions_type {
+  essay
+  multipleChoice
+}
+
+enum master_referral_type {
+  instagram
+  tiktok
+  youtube
+  facebook
+  website
+  friend
+  other
+}
+
+enum student_punishments_punishment_type {
+  suspension
+  warning
+  expulsion
+  other
+}
+
+enum cbt_results_checked {
+  yes
+  no
+}
+
+enum installments_discount {
+  yes
+  no
+}
+
+enum students_dormitory {
+  yes
+  no
+}
+
+enum students_installment {
+  yes
+  no
+}
+
+enum students_progress {
+  registering
+  psychotest
+  payment
+  success
+  blocked
+  hold
+  blacklist
+}
