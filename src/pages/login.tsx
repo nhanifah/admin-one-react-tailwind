@@ -14,45 +14,53 @@ import { mdiGoogle, mdiLogin } from '@mdi/js'
 import {signIn, useSession} from "next-auth/react";
 import { toast } from "react-hot-toast";
 import { useState } from "react";
+import { z, ZodError } from 'zod'; // Import Zod
 
-type LoginForm = {
-  email: string
-  password: string
-  remember: boolean
-}
+// Define Zod schema for form validation
+const LoginFormSchema = z.object({
+  email: z.string().min(1, 'Masukan nama pengguna atau surel yang valid'),
+  password: z.string().min(1, 'Katasandi tidak boleh kosong'),
+});
 
 const LoginPage = () => {
-  const { data: session } = useSession()
-  const router = useRouter()
+  const { data: session } = useSession();
+  const router = useRouter();
   const [showLoaderCredentials, setShowLoaderCredentials] = useState(false);
   const [showLoaderGoogle, setShowLoaderGoogle] = useState(false);
-  const [userInfo, setUserInfo] = useState({ email: "", password: "" });
+  const [userInfo, setUserInfo] = useState({ email: '', password: '' });
 
-  const handleSubmit = (e) => {
-    // router.push('/dashboard')
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setShowLoaderCredentials(true);
-    console.log(userInfo);
-    setTimeout(() => {
-      setShowLoaderCredentials(false);
-    }, 1000);
 
-    // validate user credentials
-    // if valid, redirect to dashboard
-    // else, show error message
-    signIn('credentials', {
+    try {
+      // Validate form data using Zod schema
+      LoginFormSchema.parse(userInfo);
+
+      // If validation succeeds, attempt sign-in
+      const result = await signIn('credentials', {
         email: userInfo.email,
         password: userInfo.password,
         redirect: false,
-    }).then(({ok, error}) => {
-        if (ok) {
-            router.push('/dashboard');
-        } else {
-            console.log(error);
-            toast.error(error);
-        }
-    })
-  }
+      });
+
+      if (result?.error) {
+        throw new Error(result.error);
+      } else {
+        router.push('/dashboard');
+      }
+    } catch (error) {
+      if (error instanceof ZodError) {
+        const fieldErrors = error.errors.map((err) => err.message);
+        toast.error(fieldErrors.join(' dan '));
+      } else {
+        console.error('Sign-in error:', error);
+        toast.error('An error occurred while signing in');
+      }
+    } finally {
+      setShowLoaderCredentials(false);
+    }
+  };
 
   const handleGoogleLogin = (e) => {
     e.preventDefault();
@@ -63,23 +71,13 @@ const LoginPage = () => {
     }, 3000);
   }
 
-  if (session) {
-    router.push('/dashboard')
-  }
-
   const handleChangeEmail = (event) => {
-    setUserInfo({ email: event.target.value, password: userInfo.password });
-  }
+    setUserInfo({ ...userInfo, email: event.target.value });
+  };
 
-    const handleChangePassword = (event) => {
-        setUserInfo({ email: userInfo.email, password: event.target.value });
-    }
-
-  const initialValues: LoginForm = {
-    email: null,
-    password: null,
-    remember: true,
-  }
+  const handleChangePassword = (event) => {
+    setUserInfo({ ...userInfo, password: event.target.value });
+  };
 
   return (
     <>
@@ -97,7 +95,7 @@ const LoginPage = () => {
             />
           </div>
           <CardBox className="">
-            <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+            <Formik initialValues={userInfo} onSubmit={handleSubmit}>
               <Form>
                 <FormField label="Surel  / Nama pengguna" help="Masukan surel atau nama pengguna">
                   <Field
