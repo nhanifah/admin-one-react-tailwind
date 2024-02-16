@@ -1,19 +1,70 @@
-import { mdiChatQuestion, mdiScoreboard, mdiWrench, mdiPlusCircle } from '@mdi/js'
+import { mdiChatQuestion, mdiScoreboard, mdiWrench, mdiPlusCircle, mdiCloseBox } from '@mdi/js'
 import { Field, Form, Formik } from 'formik'
 import Button from '../../components/Button'
 import CardBoxModal from '../../components/CardBox/Modal'
 import FormField from '../../components/Form/Field'
 import FormOptionSoal from '../../components/Form/OptionSoal'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../../stores/hooks'
 import { setIsModalActive } from '../../stores/modalSlice'
+import { z } from 'zod'
+import axios from 'axios'
+import { addOption, resetOption } from '../../stores/optionSlice'
+import toast from 'react-hot-toast'
+
+const formSchema = z
+  .object({
+    questionType: z.string(),
+    question: z.string().min(1, { message: 'Pertanyaan harus diisi' }),
+    option: z.string().array().optional(),
+    point: z
+      .string()
+      .or(z.number())
+      .refine(
+        (value) => {
+          const pattern = /^\d+$/
+          return pattern.test(String(value))
+        },
+        { message: 'Point harus angka' }
+      )
+      .refine((value) => parseInt(String(value)) > 0, { message: 'Point soal tidak boleh 0' }),
+    answerSelected: z.string().optional(),
+  })
+  .refine(
+    (schema) => {
+      if (schema.questionType == 'multipleChoice') {
+        return schema.option.length > 0
+      } else {
+        return true
+      }
+    },
+    {
+      message: 'Pilihan jawaban belum ditambahkan',
+    }
+  )
+  .refine(
+    (schema) => {
+      if (schema.questionType == 'multipleChoice') {
+        return schema.answerSelected != ''
+      } else {
+        return true
+      }
+    },
+    {
+      message: 'Belum memilih jawaban yang benar',
+    }
+  )
 
 export default function AddQuestionModal() {
   const dispatch = useAppDispatch()
   const isModalActive = useAppSelector((state) => state.modal.isModalActive)
+  const option = useAppSelector((state) => state.option.option)
+
+  const formRef = useRef()
 
   const [isMultipleChoice, setIsMultipleChoice] = useState(false)
   const [isQuestTypeSelected, setIsQuestTypeSelected] = useState(false)
+  const [validationErrors, setValidationErrors] = useState([])
 
   const handleModalAction = () => {
     dispatch(setIsModalActive(false))
@@ -22,26 +73,78 @@ export default function AddQuestionModal() {
     setIsQuestTypeSelected(false)
   }
 
+  const handleSubmit = async (values, { resetForm }) => {
+    try {
+      formSchema.parse(values)
+    } catch (error) {
+      console.log(error)
+      setValidationErrors(error.errors)
+      return
+    }
+
+    try {
+      const response = await axios.post('/api/questionBank', values)
+      console.log(response.data)
+      resetForm({
+        values: {
+          questionType: '',
+          question: '',
+          option: [],
+          answer: '',
+          point: 0,
+          answerSelected: '',
+        },
+      })
+      // setFieldValue('option', [])
+      // values.option = []
+      dispatch(resetOption())
+      toast.success('Soal berhasil ditambahkan!')
+    } catch (error) {
+      toast.error('Soal gagal ditambahkan')
+      console.log(error.response.data)
+    }
+  }
+
   return (
     <CardBoxModal
       title="Tambahkan Pertanyaan Baru"
       buttonColor="success"
       buttonLabel="Simpan"
       isActive={isModalActive}
-      onConfirm={handleModalAction}
+      onConfirm={() => formRef?.current?.handleSubmit()}
       onCancel={handleModalAction}
     >
+      <div
+        className={`${
+          validationErrors.length == 0 ? 'hidden' : ''
+        } bg-red-100 p-2.5 text-red-800 rounded-lg relative`}
+      >
+        <Button
+          icon={mdiCloseBox}
+          iconSize={20}
+          color="danger"
+          className="p-0 absolute right-4 top-2.5 bg-main-200"
+          onClick={() => setValidationErrors([])}
+        />
+        <ul>
+          {validationErrors.map((item, i) => (
+            <li key={`error-${i}`}>{item.message}</li>
+          ))}
+        </ul>
+      </div>
       <Formik
         initialValues={{
           questionType: '',
           question: '',
-          option: '',
+          option: [],
           answer: '',
           point: 0,
+          answerSelected: '',
         }}
-        onSubmit={(values) => alert(JSON.stringify(values, null, 2))}
+        onSubmit={handleSubmit}
+        innerRef={formRef}
       >
-        {({ setFieldValue }) => (
+        {({ setFieldValue, values, errors, touched }) => (
           <Form>
             <FormField label="Tipe Pertanyaan" labelFor="questionType" icons={[mdiWrench]}>
               <Field
@@ -49,7 +152,7 @@ export default function AddQuestionModal() {
                 name="questionType"
                 onChange={(e) => {
                   const selectedValue = e.target.value
-                  setIsMultipleChoice(selectedValue === 'Multiple Choice')
+                  setIsMultipleChoice(selectedValue === 'multipleChoice')
                   setIsQuestTypeSelected(!!selectedValue)
                   setFieldValue('questionType', selectedValue)
                 }}
@@ -57,23 +160,40 @@ export default function AddQuestionModal() {
                 <option value="" selected disabled>
                   Pilih Tipe
                 </option>
-                <option value="Multiple Choice">Pilihan Ganda</option>
+                <option value="multipleChoice">Pilihan Ganda</option>
                 <option value="Essay">Esai</option>
               </Field>
             </FormField>
             {isQuestTypeSelected && (
               <>
                 <FormField label="Pertanyaan" labelFor="question" icons={[mdiChatQuestion]}>
-                  <Field name="question" placeholder="Pertanyaan" autoFocus />
+                  <Field
+                    name="question"
+                    placeholder="Pertanyaan"
+                    autoFocus
+                    onChange={(e) => setFieldValue('question', e.target.value)}
+                    value={values.question}
+                  />
                 </FormField>
                 <FormField label="Point" labelFor="point" icons={[mdiScoreboard]}>
-                  <Field name="point" placeholder="Poin" type="number" />
+                  <Field
+                    name="point"
+                    placeholder="Poin"
+                    type="number"
+                    value={values.point}
+                    onChange={(e) => setFieldValue('point', e.target.value)}
+                  />
                 </FormField>
                 {isMultipleChoice && (
                   // Render additional fields for the essay question type if necessary
                   <>
                     <FormField label="Tambahkan Jawaban" addJawaban={true} labelFor="addJawaban">
-                      <Field name="addJawaban" placeholder="Tambahkan Jawaban" />
+                      <Field
+                        name="addJawaban"
+                        placeholder="Tambahkan Jawaban"
+                        value={values.answer}
+                        onChange={(e) => setFieldValue('answer', e.target.value)}
+                      />
                       <Button
                         type="button"
                         className="text-white"
@@ -81,6 +201,11 @@ export default function AddQuestionModal() {
                         icon={mdiPlusCircle}
                         label="Tambahkan"
                         small
+                        onClick={() => {
+                          dispatch(addOption(values.answer))
+                          values.option.push(values.answer)
+                          setFieldValue('answer', '')
+                        }}
                       />
                     </FormField>
                     <FormOptionSoal />

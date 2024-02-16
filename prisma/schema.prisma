@@ -92,7 +92,7 @@ model cbt_examination {
 }
 
 model cbt_questions {
-  id              String              @db.Char(32) @unique
+  id              String              @unique @default(uuid()) @db.Char(32)
   type            cbt_questions_type?
   exam_id         String              @db.Char(32)
   question_text   String?             @db.Text
@@ -105,7 +105,8 @@ model cbt_questions {
   cbt_answers     cbt_answers[]
   cbt_examination cbt_examination     @relation(fields: [exam_id], references: [id], onUpdate: Restrict, map: "cbt_questions_ibfk_1")
 
-  @@id([id, exam_id])
+
+  @@id([id])
   @@index([exam_id], map: "exam_id")
 }
 

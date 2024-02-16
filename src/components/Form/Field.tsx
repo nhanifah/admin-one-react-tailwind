@@ -10,6 +10,7 @@ type Props = {
   isTransparent?: boolean
   hasTextareaHeight?: boolean
   addJawaban?: boolean
+  withErrorsValidate?: boolean
   children: ReactNode
 }
 
@@ -26,7 +27,7 @@ const FormField = ({ icons = [], ...props }: Props) => {
       elementWrapperClass = 'grid grid-cols-1 gap-3 md:grid-cols-3'
   }
 
-  if (props.addJawaban) {
+  if (props.addJawaban || props.withErrorsValidate) {
     elementWrapperClass = 'grid grid-cols-1 gap-1 md:grid-cols-1'
   }
 
