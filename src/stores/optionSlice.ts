@@ -12,6 +12,9 @@ export const styleSlice = createSlice({
   name: 'option',
   initialState,
   reducers: {
+    initOption: (state, action: PayloadAction<string[]>) => {
+      state.option = action.payload
+    },
     addOption: (state, action: PayloadAction<string>) => {
       state.option.push(action.payload)
     },
@@ -24,6 +27,6 @@ export const styleSlice = createSlice({
   },
 })
 
-export const { addOption, popOption, resetOption } = styleSlice.actions
+export const { initOption, addOption, popOption, resetOption } = styleSlice.actions
 
 export default styleSlice.reducer

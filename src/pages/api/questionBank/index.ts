@@ -33,7 +33,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const body = await req.body
 
     try {
-      const response = await prisma.cbt_questions.delete({
+      const question = await prisma.cbt_questions.delete({
         where: {
           id: body.id,
         },
@@ -44,6 +44,29 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     } catch (error) {
       console.log('delete failed')
       return res.status(400).json({ message: 'delete failed' })
+    }
+  } else if (req.method == 'PUT') {
+    const body = await req.body
+
+    try {
+      const question = await prisma.cbt_questions.update({
+        where: {
+          id: body.id,
+        },
+        data: {
+          type: cbt_questions_type[body.questionType],
+          question_text: body.question,
+          option_text: JSON.stringify(body.option),
+          answer: body.answerSelected,
+          weight: body.point,
+        },
+      })
+
+      console.log('update success')
+      return res.status(200).json({ message: 'update sucess', data: question })
+    } catch (error) {
+      console.log('update failed')
+      return res.status(400).json({ message: 'update failed' })
     }
   }
 }

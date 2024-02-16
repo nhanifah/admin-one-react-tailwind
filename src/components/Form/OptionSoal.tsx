@@ -4,12 +4,13 @@ import { useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../../stores/hooks'
 import { popOption } from '../../stores/optionSlice'
 
-const OptionSoal = () => {
+const OptionSoal = ({ selectedOption = null }) => {
   const dispatch = useAppDispatch()
   const option = useAppSelector((state) => state.option.option)
   const { values, setFieldValue } = useFormikContext()
-  const [optionSelected, setOptionSelected] = useState(null)
-
+  const [optionSelected, setOptionSelected] = useState(
+    option.indexOf(selectedOption) == -1 ? null : option.indexOf(selectedOption)
+  )
   return (
     <>
       <h3 className="mb-5 text-lg font-medium text-gray-900 dark:text-white">Pilihan Jawaban</h3>

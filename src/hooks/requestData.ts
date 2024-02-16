@@ -22,6 +22,23 @@ export const useBankQuestionClients = () => {
     }
   }
 
+  const updateData = async (data: object) => {
+    try {
+      const response = await axios.put('/api/questionBank', data)
+      mutate('/api/questionBank')
+      return {
+        status: response.status,
+        data: response.data,
+      }
+    } catch (error) {
+      console.log(error.response.data)
+      return {
+        status: error.response.status,
+        data: error.response.data ?? 'Terjadi Kesalahan',
+      }
+    }
+  }
+
   const deleteData = async (id: string) => {
     try {
       const response = await axios.delete('/api/questionBank', { data: { id: id } })
@@ -43,6 +60,7 @@ export const useBankQuestionClients = () => {
     isLoading: !error && !data,
     isError: error,
     createData,
+    updateData,
     deleteData,
   }
 }

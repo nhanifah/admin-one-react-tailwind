@@ -7,53 +7,10 @@ import FormOptionSoal from '../../components/Form/OptionSoal'
 import { useRef, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../../stores/hooks'
 import { setIsModalActive } from '../../stores/modalSlice'
-import { z } from 'zod'
+import { questionSchema } from '../../utils/validator'
 import { addOption, resetOption } from '../../stores/optionSlice'
 import toast from 'react-hot-toast'
 import { useBankQuestionClients } from '../../hooks/requestData'
-
-const formSchema = z
-  .object({
-    questionType: z.string(),
-    question: z.string().min(1, { message: 'Pertanyaan harus diisi' }),
-    option: z.string().array().optional(),
-    point: z
-      .string()
-      .or(z.number())
-      .refine(
-        (value) => {
-          const pattern = /^\d+$/
-          return pattern.test(String(value))
-        },
-        { message: 'Point harus angka' }
-      )
-      .refine((value) => parseInt(String(value)) > 0, { message: 'Point soal tidak boleh 0' }),
-    answerSelected: z.string().optional(),
-  })
-  .refine(
-    (schema) => {
-      if (schema.questionType == 'multipleChoice') {
-        return schema.option.length > 0
-      } else {
-        return true
-      }
-    },
-    {
-      message: 'Pilihan jawaban belum ditambahkan',
-    }
-  )
-  .refine(
-    (schema) => {
-      if (schema.questionType == 'multipleChoice') {
-        return schema.answerSelected != ''
-      } else {
-        return true
-      }
-    },
-    {
-      message: 'Belum memilih jawaban yang benar',
-    }
-  )
 
 export default function AddQuestionModal() {
   const dispatch = useAppDispatch()
@@ -76,7 +33,7 @@ export default function AddQuestionModal() {
 
   const handleSubmit = async (values, { resetForm }) => {
     try {
-      formSchema.parse(values)
+      questionSchema.parse(values)
     } catch (error) {
       console.log(error)
       setValidationErrors(error.errors)
@@ -143,7 +100,7 @@ export default function AddQuestionModal() {
         onSubmit={handleSubmit}
         innerRef={formRef}
       >
-        {({ setFieldValue, values, errors, touched }) => (
+        {({ setFieldValue, values }) => (
           <Form>
             <FormField label="Tipe Pertanyaan" labelFor="questionType" icons={[mdiWrench]}>
               <Field
@@ -160,7 +117,7 @@ export default function AddQuestionModal() {
                   Pilih Tipe
                 </option>
                 <option value="multipleChoice">Pilihan Ganda</option>
-                <option value="Essay">Esai</option>
+                <option value="essay">Esai</option>
               </Field>
             </FormField>
             {isQuestTypeSelected && (

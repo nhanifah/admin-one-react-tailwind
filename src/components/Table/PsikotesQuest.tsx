@@ -5,8 +5,9 @@ import {
   mdiScoreboard,
   mdiTrashCan,
   mdiWrench,
+  mdiCloseBox,
 } from '@mdi/js'
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useBankQuestionClients } from '../../hooks/requestData'
 import { Quest } from '../../interfaces'
 import Button from '../Button'
@@ -16,9 +17,14 @@ import { Field, Form, Formik } from 'formik'
 import FormField from '../Form/Field'
 import FormOptionSoal from '../Form/OptionSoal'
 import toast from 'react-hot-toast'
+import { questionSchema } from '../../utils/validator'
+import { addOption, initOption } from '../../stores/optionSlice'
+import { useAppDispatch } from '../../stores/hooks'
 
 const TableSampleClients = () => {
-  const { clients, deleteData } = useBankQuestionClients()
+  const formEditRef = useRef()
+  const dispatch = useAppDispatch()
+  const { clients, deleteData, updateData } = useBankQuestionClients()
 
   const perPage = 50
 
@@ -43,10 +49,42 @@ const TableSampleClients = () => {
   const [isQuestTypeSelected, setIsQuestTypeSelected] = useState(false)
   const [isMultipleChoice, setIsMultipleChoice] = useState(false)
   const [itemSelected, setItemSelected] = useState({})
+  const [validationErrors, setValidationErrors] = useState([])
 
   const handleModalAction = () => {
     setIsModalInfoActive(false)
     setIsModalTrashActive(false)
+  }
+
+  const handleUpdate = async (values, { resetForm }) => {
+    try {
+      questionSchema.parse(values)
+    } catch (error) {
+      console.log(error)
+      setValidationErrors(error.errors)
+      return
+    }
+    console.log(itemSelected)
+    const { status, data } = await updateData({ id: itemSelected.id, ...values })
+    if (status == 200) {
+      console.log(data)
+      resetForm({
+        values: {
+          questionType: '',
+          question: '',
+          option: [],
+          answer: '',
+          point: 0,
+          answerSelected: '',
+        },
+      })
+      setItemSelected({})
+      setIsModalInfoActive(false)
+      toast.success('Pertanyaan berhasil diedit')
+    } else {
+      console.log(data)
+      toast.error('Pertanyaan gagal diedit')
+    }
   }
 
   const handleDelete = async (question: Quest) => {
@@ -69,21 +107,40 @@ const TableSampleClients = () => {
         buttonColor="success"
         buttonLabel="Simpan"
         isActive={isModalInfoActive}
-        onConfirm={handleModalAction}
+        onConfirm={() => formEditRef?.current?.handleSubmit()}
         onCancel={handleModalAction}
       >
+        <div
+          className={`${
+            validationErrors.length == 0 ? 'hidden' : ''
+          } bg-red-100 p-2.5 text-red-800 rounded-lg relative`}
+        >
+          <Button
+            icon={mdiCloseBox}
+            iconSize={20}
+            color="danger"
+            className="p-0 absolute right-4 top-2.5 bg-main-200"
+            onClick={() => setValidationErrors([])}
+          />
+          <ul>
+            {validationErrors.map((item, i) => (
+              <li key={`error-${i}`}>{item.message}</li>
+            ))}
+          </ul>
+        </div>
         <Formik
           initialValues={{
-            question: '',
+            questionType: itemSelected?.type ?? '',
+            question: itemSelected.question_text ?? '',
+            option: itemSelected?.option_text ? JSON.parse(itemSelected.option_text) : [],
             answer: '',
-            category: '',
-            difficulty: '',
-            point: 0,
-            questionType: '',
+            point: itemSelected?.weight ?? 0,
+            answerSelected: itemSelected?.answer ?? '',
           }}
-          onSubmit={(values) => alert(JSON.stringify(values, null, 2))}
+          innerRef={formEditRef}
+          onSubmit={handleUpdate}
         >
-          {({ setFieldValue }) => (
+          {({ values, setFieldValue }) => (
             <Form>
               <FormField label="Tipe Pertanyaan" labelFor="questionType" icons={[mdiWrench]}>
                 <Field
@@ -91,7 +148,7 @@ const TableSampleClients = () => {
                   name="questionType"
                   onChange={(e) => {
                     const selectedValue = e.target.value
-                    setIsMultipleChoice(selectedValue === 'Multiple Choice')
+                    setIsMultipleChoice(selectedValue === 'multipleChoice')
                     setIsQuestTypeSelected(!!selectedValue)
                     setFieldValue('questionType', selectedValue)
                   }}
@@ -99,8 +156,8 @@ const TableSampleClients = () => {
                   <option value="" selected disabled>
                     Pilih Tipe
                   </option>
-                  <option value="Multiple Choice">Pilihan Ganda</option>
-                  <option value="Essay">Esai</option>
+                  <option value="multipleChoice">Pilihan Ganda</option>
+                  <option value="essay">Esai</option>
                 </Field>
               </FormField>
               {isQuestTypeSelected && (
@@ -123,9 +180,14 @@ const TableSampleClients = () => {
                           icon={mdiPlusCircle}
                           label="Tambahkan"
                           small
+                          onClick={() => {
+                            dispatch(addOption(values.answer))
+                            values.option.push(values.answer)
+                            setFieldValue('answer', '')
+                          }}
                         />
                       </FormField>
-                      <FormOptionSoal />
+                      <FormOptionSoal selectedOption={itemSelected.answer} />
                     </>
                   )}
                 </>
@@ -184,7 +246,13 @@ const TableSampleClients = () => {
                   <Button
                     color="info"
                     icon={mdiPencil}
-                    onClick={() => setIsModalInfoActive(true)}
+                    onClick={() => {
+                      setItemSelected(quest)
+                      setIsMultipleChoice(quest.type == 'multipleChoice')
+                      setIsQuestTypeSelected(!!(quest.type == 'multipleChoice'))
+                      dispatch(initOption(JSON.parse(quest.option_text)))
+                      setIsModalInfoActive(true)
+                    }}
                     small
                   />
                   <Button
