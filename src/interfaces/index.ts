@@ -57,21 +57,22 @@ export type Transaction = {
 
 export type Quest = {
   id: string
-  question: string
-  questionWeight: number
-  questionType: string
-  questionCorrect: string
-  questionOptions: string[]
-  createdAt: number
-  updatedAt: number
+  type: string
+  exam_id: string
+  weight: number
+  question_text: string
+  option_text: string
+  answer: string
+  created_at: Date
+  updated_at: Date
 }
 
 export type StudentSikotes = {
-    id: string
-    name: string
-    result: number
-    createdAt: number
-    updatedAt: number
+  id: string
+  name: string
+  result: number
+  createdAt: number
+  updatedAt: number
 }
 
 export type Client = {

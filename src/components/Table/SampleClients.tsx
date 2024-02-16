@@ -1,6 +1,6 @@
 import { mdiEye, mdiTrashCan } from '@mdi/js'
 import React, { useState } from 'react'
-import { useSampleClients } from '../../hooks/sampleData'
+import { useSampleClients } from '../../hooks/requestData'
 import { Client } from '../../interfaces'
 import Button from '../Button'
 import Buttons from '../Buttons'

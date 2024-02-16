@@ -8,9 +8,9 @@ import { useRef, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../../stores/hooks'
 import { setIsModalActive } from '../../stores/modalSlice'
 import { z } from 'zod'
-import axios from 'axios'
 import { addOption, resetOption } from '../../stores/optionSlice'
 import toast from 'react-hot-toast'
+import { useBankQuestionClients } from '../../hooks/requestData'
 
 const formSchema = z
   .object({
@@ -59,6 +59,7 @@ export default function AddQuestionModal() {
   const dispatch = useAppDispatch()
   const isModalActive = useAppSelector((state) => state.modal.isModalActive)
   const option = useAppSelector((state) => state.option.option)
+  const { createData } = useBankQuestionClients()
 
   const formRef = useRef()
 
@@ -82,9 +83,9 @@ export default function AddQuestionModal() {
       return
     }
 
-    try {
-      const response = await axios.post('/api/questionBank', values)
-      console.log(response.data)
+    const { status, data } = await createData(values)
+    if (status == 200) {
+      console.log(data)
       resetForm({
         values: {
           questionType: '',
@@ -95,13 +96,11 @@ export default function AddQuestionModal() {
           answerSelected: '',
         },
       })
-      // setFieldValue('option', [])
-      // values.option = []
       dispatch(resetOption())
       toast.success('Soal berhasil ditambahkan!')
-    } catch (error) {
+    } else {
+      console.log(data)
       toast.error('Soal gagal ditambahkan')
-      console.log(error.response.data)
     }
   }
 

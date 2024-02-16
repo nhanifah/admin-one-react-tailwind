@@ -25,5 +25,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       // console.log(err)
       return res.status(400).json(err)
     }
+  } else if (req.method == 'GET') {
+    const questions = await prisma.cbt_questions.findMany()
+
+    return res.status(200).json({ data: questions })
+  } else if (req.method == 'DELETE') {
+    const body = await req.body
+
+    try {
+      const response = await prisma.cbt_questions.delete({
+        where: {
+          id: body.id,
+        },
+      })
+
+      console.log('delete success')
+      return res.status(200).json({ message: 'delete success' })
+    } catch (error) {
+      console.log('delete failed')
+      return res.status(400).json({ message: 'delete failed' })
+    }
   }
 }

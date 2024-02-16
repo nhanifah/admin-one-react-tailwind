@@ -1,16 +1,24 @@
-import {mdiChatQuestion, mdiPencil, mdiPlusCircle, mdiScoreboard, mdiTrashCan, mdiWrench} from '@mdi/js'
+import {
+  mdiChatQuestion,
+  mdiPencil,
+  mdiPlusCircle,
+  mdiScoreboard,
+  mdiTrashCan,
+  mdiWrench,
+} from '@mdi/js'
 import React, { useState } from 'react'
-import { useBankQuestionClients } from '../../hooks/sampleData'
+import { useBankQuestionClients } from '../../hooks/requestData'
 import { Quest } from '../../interfaces'
 import Button from '../Button'
 import Buttons from '../Buttons'
 import CardBoxModal from '../CardBox/Modal'
-import {Field, Form, Formik} from "formik";
-import FormField from "../Form/Field";
-import FormOptionSoal from "../Form/OptionSoal";
+import { Field, Form, Formik } from 'formik'
+import FormField from '../Form/Field'
+import FormOptionSoal from '../Form/OptionSoal'
+import toast from 'react-hot-toast'
 
 const TableSampleClients = () => {
-  const { clients } = useBankQuestionClients()
+  const { clients, deleteData } = useBankQuestionClients()
 
   const perPage = 50
 
@@ -33,80 +41,96 @@ const TableSampleClients = () => {
   const [isModalInfoActive, setIsModalInfoActive] = useState(false)
   const [isModalTrashActive, setIsModalTrashActive] = useState(false)
   const [isQuestTypeSelected, setIsQuestTypeSelected] = useState(false)
-    const [isMultipleChoice, setIsMultipleChoice] = useState(false)
+  const [isMultipleChoice, setIsMultipleChoice] = useState(false)
+  const [itemSelected, setItemSelected] = useState({})
 
   const handleModalAction = () => {
     setIsModalInfoActive(false)
     setIsModalTrashActive(false)
   }
 
+  const handleDelete = async (question: Quest) => {
+    const { status, data } = await deleteData(question.id)
+    if (status == 200) {
+      console.log(data)
+      setIsModalTrashActive(false)
+      toast.success('Pertanyaan berhasil dihapus')
+    } else {
+      console.log(data)
+      setIsModalTrashActive(false)
+      toast.error('Pertanyaan gagal dihapus')
+    }
+  }
+
   return (
     <>
       <CardBoxModal
-          title="Sunting Pertanyaan"
-          buttonColor="success"
-          buttonLabel="Simpan"
-          isActive={isModalInfoActive}
-          onConfirm={handleModalAction}
-          onCancel={handleModalAction}
+        title="Sunting Pertanyaan"
+        buttonColor="success"
+        buttonLabel="Simpan"
+        isActive={isModalInfoActive}
+        onConfirm={handleModalAction}
+        onCancel={handleModalAction}
       >
         <Formik
-            initialValues={{
-              question: '',
-              answer: '',
-              category: '',
-              difficulty: '',
-              point: 0,
-              questionType: '',
-            }}
-            onSubmit={(values) => alert(JSON.stringify(values, null, 2))}
+          initialValues={{
+            question: '',
+            answer: '',
+            category: '',
+            difficulty: '',
+            point: 0,
+            questionType: '',
+          }}
+          onSubmit={(values) => alert(JSON.stringify(values, null, 2))}
         >
           {({ setFieldValue }) => (
-              <Form>
-                <FormField label="Tipe Pertanyaan" labelFor="questionType" icons={[mdiWrench]}>
-                  <Field
-                      as="select"
-                      name="questionType"
-                      onChange={(e) => {
-                        const selectedValue = e.target.value;
-                        setIsMultipleChoice(selectedValue === 'Multiple Choice');
-                        setIsQuestTypeSelected(!!selectedValue);
-                        setFieldValue('questionType', selectedValue);
-                      }}
-                  >
-                    <option value="" selected disabled>Pilih Tipe</option>
-                    <option value="Multiple Choice">Pilihan Ganda</option>
-                    <option value="Essay">Esai</option>
-                  </Field>
-                </FormField>
-                {isQuestTypeSelected && (
+            <Form>
+              <FormField label="Tipe Pertanyaan" labelFor="questionType" icons={[mdiWrench]}>
+                <Field
+                  as="select"
+                  name="questionType"
+                  onChange={(e) => {
+                    const selectedValue = e.target.value
+                    setIsMultipleChoice(selectedValue === 'Multiple Choice')
+                    setIsQuestTypeSelected(!!selectedValue)
+                    setFieldValue('questionType', selectedValue)
+                  }}
+                >
+                  <option value="" selected disabled>
+                    Pilih Tipe
+                  </option>
+                  <option value="Multiple Choice">Pilihan Ganda</option>
+                  <option value="Essay">Esai</option>
+                </Field>
+              </FormField>
+              {isQuestTypeSelected && (
+                <>
+                  <FormField label="Pertanyaan" labelFor="question" icons={[mdiChatQuestion]}>
+                    <Field name="question" placeholder="Pertanyaan" autoFocus />
+                  </FormField>
+                  <FormField label="Point" labelFor="point" icons={[mdiScoreboard]}>
+                    <Field name="point" placeholder="Poin" type="number" />
+                  </FormField>
+                  {isMultipleChoice && (
+                    // Render additional fields for the essay question type if necessary
                     <>
-                      <FormField label="Pertanyaan" labelFor="question" icons={[mdiChatQuestion]}>
-                        <Field name="question" placeholder="Pertanyaan" autoFocus />
+                      <FormField label="Tambahkan Jawaban" addJawaban={true} labelFor="addJawaban">
+                        <Field name="addJawaban" placeholder="Tambahkan Jawaban" />
+                        <Button
+                          type="button"
+                          className="text-white"
+                          outline={false}
+                          icon={mdiPlusCircle}
+                          label="Tambahkan"
+                          small
+                        />
                       </FormField>
-                      <FormField label="Point" labelFor="point" icons={[mdiScoreboard]}>
-                        <Field name="point" placeholder="Poin" type="number" />
-                      </FormField>
-                      {isMultipleChoice && (
-                          // Render additional fields for the essay question type if necessary
-                          <>
-                            <FormField label="Tambahkan Jawaban" addJawaban={true} labelFor="addJawaban">
-                              <Field name="addJawaban" placeholder="Tambahkan Jawaban" />
-                              <Button
-                                  type="button"
-                                  className="text-white"
-                                  outline={false}
-                                  icon={mdiPlusCircle}
-                                  label="Tambahkan"
-                                  small
-                              />
-                            </FormField>
-                            <FormOptionSoal/>
-                          </>
-                      )}
+                      <FormOptionSoal />
                     </>
-                )}
-              </Form>
+                  )}
+                </>
+              )}
+            </Form>
           )}
         </Formik>
       </CardBoxModal>
@@ -116,19 +140,19 @@ const TableSampleClients = () => {
         buttonColor="danger"
         buttonLabel="Konfirmasi"
         isActive={isModalTrashActive}
-        onConfirm={handleModalAction}
+        onConfirm={() => handleDelete(itemSelected)}
         onCancel={handleModalAction}
       >
-        <p>
-          Apa kamu yakin ingin menghapus soal ini?
-        </p>
+        <p>Apa kamu yakin ingin menghapus soal ini?</p>
         <p>Ketika soal terhapus, soal sudah tidak dapat dipulihkan kembali</p>
       </CardBoxModal>
 
       <table>
         <thead>
           <tr>
-            <th><center>#</center></th>
+            <th>
+              <center>#</center>
+            </th>
             <th>Pertanyaan</th>
             <th>Jawaban</th>
             <th>Tipe Soal</th>
@@ -140,22 +164,20 @@ const TableSampleClients = () => {
           {clientsPaginated.map((quest: Quest, index: number) => (
             <tr key={quest.id}>
               <td className="border-b-0 lg:w-6 before:hidden">
-                <td data-label="Number">{index+1}</td>
+                <td data-label="Number">{index + 1}</td>
               </td>
-              <td data-label="Question">{quest.question}</td>
-              <td data-label="Correct">
-                {quest.questionCorrect != null ? quest.questionCorrect : "-"}
-              </td>
-              <td data-label="Type">{quest.questionType}</td>
+              <td data-label="Question">{quest.question_text}</td>
+              <td data-label="Correct">{quest.answer != null ? quest.answer : '-'}</td>
+              <td data-label="Type">{quest.type}</td>
               <td data-label="Created" className="lg:w-1 whitespace-nowrap">
-              <small className="text-gray-500 dark:text-slate-400">
-                    {new Date(quest.createdAt * 1000).toLocaleDateString('id-ID', {
-                        weekday: 'long',
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                    })}
-              </small>
+                <small className="text-gray-500 dark:text-slate-400">
+                  {new Date(quest.created_at).toLocaleDateString('id-ID', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                  })}
+                </small>
               </td>
               <td className="before:hidden lg:w-1 whitespace-nowrap">
                 <Buttons type="justify-start lg:justify-end" noWrap>
@@ -168,7 +190,10 @@ const TableSampleClients = () => {
                   <Button
                     color="danger"
                     icon={mdiTrashCan}
-                    onClick={() => setIsModalTrashActive(true)}
+                    onClick={() => {
+                      setItemSelected(quest)
+                      setIsModalTrashActive(true)
+                    }}
                     small
                   />
                 </Buttons>
