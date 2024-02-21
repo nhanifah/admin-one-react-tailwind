@@ -12,6 +12,7 @@ import {
   mdiResponsive,
   mdiPalette,
   mdiVuejs,
+  mdiAccountBoxMultiple
 } from '@mdi/js'
 import { MenuAsideItem } from './interfaces'
 
@@ -37,6 +38,28 @@ const menuAside: MenuAsideItem[] = [
       {
         label: 'Jawaban Peserta',
         href: '/psikotes/userAnswer',
+      },
+    ],
+  },
+  {
+    label: 'Peserta',
+    icon: mdiAccountBoxMultiple,
+    menu: [
+      {
+        label: 'Daftar Siswa',
+        href: '/student/list',
+      },
+      {
+        label: 'Kontrak Siswa',
+        href: '/student/agreement',
+      },
+      {
+        label: 'Cicilan Siswa',
+        href: '/student/installment',
+      },
+      {
+        label: 'Sanksi Siswa',
+        href: '/student/penalty',
       },
     ],
   },
