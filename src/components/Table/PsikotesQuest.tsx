@@ -249,7 +249,7 @@ const TableSampleClients = () => {
                     onClick={() => {
                       setItemSelected(quest)
                       setIsMultipleChoice(quest.type == 'multipleChoice')
-                      setIsQuestTypeSelected(!!(quest.type == 'multipleChoice'))
+                      setIsQuestTypeSelected(true)
                       dispatch(initOption(JSON.parse(quest.option_text)))
                       setIsModalInfoActive(true)
                     }}

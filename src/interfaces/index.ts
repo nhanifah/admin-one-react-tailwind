@@ -67,12 +67,47 @@ export type Quest = {
   updated_at: Date
 }
 
+export type Student = {
+  id: string
+  full_name: string
+  email: string
+  nik: string
+  province: string
+  city: string
+  subdistrict: string
+  village: string
+  address_detail: string
+  batch_id: string
+  interview_schedule: string
+  dormitory: string
+  installment: string
+  refferal_id?: string
+  guardian_name: string
+  guardian_phone: string
+  progress: string
+}
+
 export type StudentSikotes = {
   id: string
-  name: string
-  result: number
-  createdAt: number
-  updatedAt: number
+  student_id: string
+  students: Student
+  total_points: number
+  checked: string
+  created_at: number
+  updated_at: number
+}
+
+export type studentAnswer = {
+  id: string
+  exam_id: string
+  type: string
+  question_text: string
+  option_text: string
+  answer: string
+  weight: number
+  selected_option: string
+  checked: boolean
+  student_id: string
 }
 
 export type Client = {

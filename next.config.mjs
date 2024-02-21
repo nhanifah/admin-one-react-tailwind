@@ -1,16 +1,16 @@
 /**
  * @type {import('next').NextConfig}
  */
- const nextConfig = {
-  basePath: "",
+const nextConfig = {
+  basePath: '',
   async redirects() {
     return [
       {
-          source: '/',
-          destination: '/dashboard',
-          basePath: false,
-          permanent: false
-      }
+        source: '/',
+        destination: '/dashboard',
+        basePath: false,
+        permanent: false,
+      },
     ]
   },
   images: {

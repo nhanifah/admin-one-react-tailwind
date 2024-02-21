@@ -3,6 +3,7 @@ import darkModeReducer from './darkModeSlice'
 import mainReducer from './mainSlice'
 import modalReducer from './modalSlice'
 import optionReducer from './optionSlice'
+import answerReducer from './answerSlice'
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     main: mainReducer,
     modal: modalReducer,
     option: optionReducer,
+    answer: answerReducer,
   },
 })
 

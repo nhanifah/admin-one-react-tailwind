@@ -1,5 +1,13 @@
 import { z } from 'zod'
 
+export const answerCheckedSchema = z.object({
+  answers: z.array(
+    z.object({
+      checked: z.custom((data) => data, { message: 'Masih ada yang belum dicek' }),
+    })
+  ),
+})
+
 export const questionSchema = z
   .object({
     questionType: z.string(),

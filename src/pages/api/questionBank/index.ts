@@ -15,8 +15,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             question_text: body.question,
             option_text: JSON.stringify(body.option),
             answer: body.answerSelected,
-            weight: body.point,
-            exam_id: '4a7790d9-7804-4808-9f58-183f3177',
+            weight: parseInt(body.point),
+            exam_id: '1e8c3b0d-a7e2-4e61-979a-1102189459a8',
           },
         ],
       })

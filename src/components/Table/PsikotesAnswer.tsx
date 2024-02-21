@@ -1,23 +1,17 @@
-import {
-  mdiChatQuestion,
-  mdiEye,
-  mdiPlusCircle,
-  mdiScoreboard,
-  mdiTrashCan,
-  mdiWrench,
-} from '@mdi/js'
+import { mdiEye } from '@mdi/js'
 import React, { useState } from 'react'
 import { useStudentPhyscotestAnswerClients } from '../../hooks/requestData'
-import { Quest, StudentSikotes } from '../../interfaces'
+import { StudentSikotes } from '../../interfaces'
 import Button from '../Button'
 import Buttons from '../Buttons'
-import CardBoxModal from '../CardBox/Modal'
-import { Field, Form, Formik } from 'formik'
-import FormField from '../Form/Field'
-import FormOptionSoal from '../Form/OptionSoal'
+import AnswerModal from '../Modals/AnswerModal'
+import { useAppDispatch } from '../../stores/hooks'
+import { setIsModalActive } from '../../stores/modalSlice'
+import { setAnswer, setStudentName, setStudentId } from '../../stores/answerSlice'
 
 const TableSampleClients = () => {
-  const { clients } = useStudentPhyscotestAnswerClients()
+  const { clients, getAnswerByStudent } = useStudentPhyscotestAnswerClients()
+  const dispatch = useAppDispatch()
 
   const perPage = 50
 
@@ -37,100 +31,9 @@ const TableSampleClients = () => {
     pagesList.push(i)
   }
 
-  const [isModalInfoActive, setIsModalInfoActive] = useState(false)
-  const [isModalTrashActive, setIsModalTrashActive] = useState(false)
-  const [isQuestTypeSelected, setIsQuestTypeSelected] = useState(false)
-  const [isMultipleChoice, setIsMultipleChoice] = useState(false)
-
-  const handleModalAction = () => {
-    setIsModalInfoActive(false)
-    setIsModalTrashActive(false)
-  }
-
   return (
     <>
-      <CardBoxModal
-        title="Sunting Pertanyaan"
-        buttonColor="success"
-        buttonLabel="Simpan"
-        isActive={isModalInfoActive}
-        onConfirm={handleModalAction}
-        onCancel={handleModalAction}
-      >
-        <Formik
-          initialValues={{
-            question: '',
-            answer: '',
-            category: '',
-            difficulty: '',
-            point: 0,
-            questionType: '',
-          }}
-          onSubmit={(values) => alert(JSON.stringify(values, null, 2))}
-        >
-          {({ setFieldValue }) => (
-            <Form>
-              <FormField label="Tipe Pertanyaan" labelFor="questionType" icons={[mdiWrench]}>
-                <Field
-                  as="select"
-                  name="questionType"
-                  onChange={(e) => {
-                    const selectedValue = e.target.value
-                    setIsMultipleChoice(selectedValue === 'Multiple Choice')
-                    setIsQuestTypeSelected(!!selectedValue)
-                    setFieldValue('questionType', selectedValue)
-                  }}
-                >
-                  <option value="" selected disabled>
-                    Pilih Tipe
-                  </option>
-                  <option value="Multiple Choice">Pilihan Ganda</option>
-                  <option value="Essay">Esai</option>
-                </Field>
-              </FormField>
-              {isQuestTypeSelected && (
-                <>
-                  <FormField label="Pertanyaan" labelFor="question" icons={[mdiChatQuestion]}>
-                    <Field name="question" placeholder="Pertanyaan" autoFocus />
-                  </FormField>
-                  <FormField label="Point" labelFor="point" icons={[mdiScoreboard]}>
-                    <Field name="point" placeholder="Poin" type="number" />
-                  </FormField>
-                  {isMultipleChoice && (
-                    // Render additional fields for the essay question type if necessary
-                    <>
-                      <FormField label="Tambahkan Jawaban" addJawaban={true} labelFor="addJawaban">
-                        <Field name="addJawaban" placeholder="Tambahkan Jawaban" />
-                        <Button
-                          type="button"
-                          className="text-white"
-                          outline={false}
-                          icon={mdiPlusCircle}
-                          label="Tambahkan"
-                          small
-                        />
-                      </FormField>
-                      <FormOptionSoal />
-                    </>
-                  )}
-                </>
-              )}
-            </Form>
-          )}
-        </Formik>
-      </CardBoxModal>
-
-      <CardBoxModal
-        title="Mau menghapus soal?"
-        buttonColor="danger"
-        buttonLabel="Konfirmasi"
-        isActive={isModalTrashActive}
-        onConfirm={handleModalAction}
-        onCancel={handleModalAction}
-      >
-        <p>Apa kamu yakin ingin menghapus soal ini?</p>
-        <p>Ketika soal terhapus, soal sudah tidak dapat dipulihkan kembali</p>
-      </CardBoxModal>
+      <AnswerModal />
 
       <table>
         <thead>
@@ -151,11 +54,13 @@ const TableSampleClients = () => {
               <td className="border-b-0 lg:w-6 before:hidden">
                 <td data-label="Number">{index + 1}</td>
               </td>
-              <td data-label="Name">{data.name}</td>
-              <td data-label="Correct">{data.result != 0 ? data.result : 'Belum Diperiksa'}</td>
+              <td data-label="Name">{data.students.full_name}</td>
+              <td data-label="Correct">
+                {data.checked != 'no' ? data.total_points : 'Belum Diperiksa'}
+              </td>
               <td data-label="CreatedAt" className="lg:w-1 whitespace-nowrap">
                 <small className="text-gray-500 dark:text-slate-400">
-                  {new Date(data.createdAt * 1000).toLocaleDateString('id-ID', {
+                  {new Date(data.created_at).toLocaleDateString('id-ID', {
                     weekday: 'long',
                     year: 'numeric',
                     month: 'long',
@@ -165,7 +70,7 @@ const TableSampleClients = () => {
               </td>
               <td data-label="UpdatedAt" className="lg:w-1 whitespace-nowrap">
                 <small className="text-gray-500 dark:text-slate-400">
-                  {new Date(data.updatedAt * 1000).toLocaleDateString('id-ID', {
+                  {new Date(data.updated_at).toLocaleDateString('id-ID', {
                     weekday: 'long',
                     year: 'numeric',
                     month: 'long',
@@ -178,7 +83,14 @@ const TableSampleClients = () => {
                   <Button
                     color="info"
                     icon={mdiEye}
-                    onClick={() => setIsModalInfoActive(true)}
+                    onClick={async () => {
+                      const response = await getAnswerByStudent(data.student_id)
+                      dispatch(setAnswer(response.data))
+                      dispatch(setStudentName(data.students.full_name))
+                      dispatch(setStudentId(data.students.id))
+                      console.log(response)
+                      dispatch(setIsModalActive(true))
+                    }}
                     small
                   />
                 </Buttons>

@@ -12,9 +12,10 @@ type Props = {
   addJawaban?: boolean
   withErrorsValidate?: boolean
   children: ReactNode
+  noMargin?: boolean
 }
 
-const FormField = ({ icons = [], ...props }: Props) => {
+const FormField = ({ icons = [], noMargin = false, ...props }: Props) => {
   const childrenCount = Children.count(props.children)
 
   let elementWrapperClass = ''
@@ -40,7 +41,7 @@ const FormField = ({ icons = [], ...props }: Props) => {
   ].join(' ')
 
   return (
-    <div className="mb-6 last:mb-0">
+    <div className={`${noMargin ? 'mb-0' : 'mb-6'} last:mb-0`}>
       {props.label && (
         <label
           htmlFor={props.labelFor}

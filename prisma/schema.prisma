@@ -81,7 +81,7 @@ model cbt_enrolled {
 model cbt_examination {
   id            String          @id @db.Char(32)
   name          String?         @db.VarChar(255)
-  minimal_value String?         @db.VarChar(255)
+  minimal_value Int             @default(0)
   leases_time   String?         @db.VarChar(255)
   created_at    DateTime?       @db.DateTime(0)
   updated_at    DateTime?       @default(now()) @db.DateTime(0)
@@ -98,7 +98,7 @@ model cbt_questions {
   question_text   String?             @db.Text
   option_text     String?             @db.LongText
   answer          String?             @db.Text
-  weight          String?             @db.VarChar(255)
+  weight          Int?                @default(0)
   created_at      DateTime?           @db.DateTime(0)
   updated_at      DateTime?           @default(now()) @db.DateTime(0)
   deleted_at      DateTime?           @db.DateTime(0)
@@ -114,7 +114,7 @@ model cbt_results {
   id              String               @db.Char(32)
   student_id      String               @db.Char(32)
   exam_id         String               @db.Char(32)
-  total_points    Int?
+  total_points    Int?                 @default(0)
   checked         cbt_results_checked?
   created_at      DateTime?            @db.DateTime(0)
   updated_at      DateTime?            @default(now()) @db.DateTime(0)
@@ -235,7 +235,7 @@ model students {
   interview_schedule  DateTime?             @db.DateTime(0)
   dormitory           students_dormitory?
   installment         students_installment?
-  referral_id         String?               @db.Char(32)
+  referral_id         String?               @db.Char(32) @ignore
   guardian_name       String?               @db.VarChar(255)
   guardian_phone      String?               @db.VarChar(255)
   progress            students_progress?
@@ -299,6 +299,8 @@ enum students_installment {
 
 enum students_progress {
   registering
+  assessment
+  qualified
   psychotest
   payment
   success
