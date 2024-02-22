@@ -65,10 +65,6 @@ const menuAside: MenuAsideItem[] = [
     icon: mdiAccountBoxMultiple,
     menu: [
       {
-        label: 'Interview',
-        href: '/student/list',
-      },
-      {
         label: 'Daftar Siswa',
         href: '/student/list',
       },
