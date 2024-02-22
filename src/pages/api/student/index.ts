@@ -21,7 +21,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             },
             include: {
                 batch_registration: true,
-                master_referral: true
+                master_referral: true,
+                student_attachments: true
             }
         });
 

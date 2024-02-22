@@ -137,6 +137,13 @@ export type Students = {
     id: string
     referral_name: string
   }
+  student_attachments: {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    filter: any
+    id: string
+    file_name: string
+    file_url: string
+  }
 }
 
 export type Client = {
