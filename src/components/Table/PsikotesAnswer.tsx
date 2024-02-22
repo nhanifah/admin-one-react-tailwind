@@ -22,7 +22,7 @@ const TableSampleClients = () => {
   let numPages = clients.length / perPage
 
   if (numPages % 1 !== 0) {
-    numPages = 1
+    numPages = Math.floor(numPages) + 1
   }
 
   const pagesList = []
@@ -49,6 +49,15 @@ const TableSampleClients = () => {
           </tr>
         </thead>
         <tbody>
+          {
+            clients.length === 0 && (
+              <tr>
+                <td colSpan={6}>
+                  <center>Data tidak ditemukan</center>
+                </td>
+              </tr>
+            )
+          }
           {clientsPaginated.map((data: StudentSikotes, index: number) => (
             <tr key={data.id}>
               <td className="border-b-0 lg:w-6 before:hidden">

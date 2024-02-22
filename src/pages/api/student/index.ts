@@ -14,8 +14,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     if (req.method == 'GET') {
         // const students = await prisma.students.findMany();
-        // join relation with batch_registration & master_refferal
+        // join relation with batch_registration & master_referral
         const students = await prisma.students.findMany({
+            where: {
+                progress: 'success'
+            },
             include: {
                 batch_registration: true,
                 master_referral: true
