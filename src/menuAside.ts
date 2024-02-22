@@ -12,7 +12,8 @@ import {
   mdiResponsive,
   mdiPalette,
   mdiVuejs,
-  mdiAccountBoxMultiple
+  mdiAccountBoxMultiple,
+  mdiListBox,
 } from '@mdi/js'
 import { MenuAsideItem } from './interfaces'
 
@@ -38,6 +39,24 @@ const menuAside: MenuAsideItem[] = [
       {
         label: 'Jawaban Peserta',
         href: '/psikotes/userAnswer',
+      },
+    ],
+  },
+  {
+    label: 'Batch',
+    icon: mdiListBox,
+    menu: [
+      {
+        label: 'Daftar Batch',
+        href: '/batch/list',
+      },
+      {
+        label: 'Interview',
+        href: '/batch/interview',
+      },
+      {
+        label: 'Daftar Calon Siswa',
+        href: '/batch/student',
       },
     ],
   },

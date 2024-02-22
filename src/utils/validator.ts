@@ -8,6 +8,23 @@ export const answerCheckedSchema = z.object({
   ),
 })
 
+export const batchSchema = z.object({
+  batch_name: z
+    .string({
+      required_error: 'Nama batch harus diisi',
+    })
+    .refine((value) => value.length > 0, { message: 'Nama batch harus diisi' }),
+  quota: z
+    .string()
+    .or(z.number())
+    .refine((value) => parseInt(String(value)) > 0, { message: 'Quota tidak boleh 0' }),
+  end_date: z
+    .string({
+      required_error: 'Tanggal penutupan batch harus diisi',
+    })
+    .refine((value) => value.length > 0, { message: 'Tanggal penutupan batch harus diisi' }),
+})
+
 export const questionSchema = z
   .object({
     questionType: z.string(),

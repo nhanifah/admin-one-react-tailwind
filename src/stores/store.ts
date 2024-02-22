@@ -4,6 +4,7 @@ import mainReducer from './mainSlice'
 import modalReducer from './modalSlice'
 import optionReducer from './optionSlice'
 import answerReducer from './answerSlice'
+import batchReducer from './batchSlice'
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
     modal: modalReducer,
     option: optionReducer,
     answer: answerReducer,
+    batch: batchReducer,
   },
 })
 

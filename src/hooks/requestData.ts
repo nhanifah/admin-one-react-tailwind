@@ -110,9 +110,26 @@ export const useStudentClients = () => {
     deleteData,
   }
 }
-// export const useBankQuestionTransaction = () => {
 
-// }
+export const useBatchClients = () => {
+  const { data, error } = useSWR('/api/batch', fetcher)
+
+  const createData = async (batch) => {
+    const response = await axios.post('/api/batch', batch)
+    mutate('/api/batch')
+    return {
+      status: response.status,
+      data: response.data,
+    }
+  }
+
+  return {
+    clients: data?.data ?? [],
+    isLoading: !error && !data,
+    isError: error,
+    createData,
+  }
+}
 
 export const useStudentPhyscotestAnswerClients = () => {
   const { data, error } = useSWR('/api/result', fetcher)
