@@ -1,6 +1,5 @@
 import axios from 'axios'
 import useSWR, { mutate } from 'swr'
-import { studentAnswer } from '../interfaces'
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json())
 
@@ -66,6 +65,54 @@ export const useBankQuestionClients = () => {
     deleteData,
   }
 }
+
+export const useStudentClients = () => {
+  const { data, error } = useSWR('/api/student', fetcher)
+
+  const updateData = async (data: object) => {
+    try {
+      const response = await axios.put('/api/student', data)
+      mutate('/api/student')
+      return {
+        status: response.status,
+        data: response.data,
+      }
+    } catch (error) {
+      console.log(error.response.data)
+      return {
+        status: error.response.status,
+        data: error.response.data ?? 'Terjadi Kesalahan',
+      }
+    }
+  }
+
+  const deleteData = async (id: string) => {
+    try {
+      const response = await axios.delete('/api/student', { data: { id: id } })
+      mutate('/api/student')
+      return {
+        status: response.status,
+        data: response.data,
+      }
+    } catch (error) {
+      return {
+        status: error.response.status,
+        data: error?.response?.data ?? 'Terjadi kesalahan',
+      }
+    }
+  }
+
+  return {
+    clients: data?.data ?? [],
+    isLoading: !error && !data,
+    isError: error,
+    updateData,
+    deleteData,
+  }
+}
+// export const useBankQuestionTransaction = () => {
+
+// }
 
 export const useStudentPhyscotestAnswerClients = () => {
   const { data, error } = useSWR('/api/result', fetcher)

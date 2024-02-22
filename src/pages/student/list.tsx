@@ -15,7 +15,7 @@ import SectionMain from '../../components/Section/Main'
 import SectionTitle from '../../components/Section/Title'
 import SectionTitleLineWithButton from '../../components/Section/TitleLineWithButton'
 import { getPageTitle } from '../../config'
-import TableSampleClients from "../../components/Table/SampleClients";
+import StudentLists from "../../components/Table/StudentLists";
 
 const StudentList = () => {
     return (
@@ -29,7 +29,7 @@ const StudentList = () => {
                 </SectionTitleLineWithButton>
 
                 <CardBox className="mb-6" hasTable>
-                    <TableSampleClients />
+                    <StudentLists />
                 </CardBox>
             </SectionMain>
         </>

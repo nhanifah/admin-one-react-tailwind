@@ -110,6 +110,35 @@ export type studentAnswer = {
   student_id: string
 }
 
+export type Student = {
+  id: string
+  full_name: string
+  whatsapp_number: string
+  email: string
+  nik: string
+  province: string
+  city: string
+  subdistrict: string
+  village: string
+  address_detail: string
+  batch_id: string
+  interview_schedule: string
+  dormitory: string
+  guardian_name: string
+  guardian_phone: string
+  progress: number
+  created_at: Date
+  updated_at: Date
+  batch_registration: {
+    id: string
+    batch_name: string
+  }
+  master_referral: {
+    id: string
+    referral_name: string
+  }
+}
+
 export type Client = {
   id: number
   avatar: string
