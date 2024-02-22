@@ -78,7 +78,7 @@ const handler = NextAuth({
         token.role = userExists.role
         token.name = user.name
       }
-      // console.log("REFFERAL:", userExists.refferal_id);
+      // console.log("REFFERAL:", userExists.referral_id);
       console.log('TOKEN JWT:', token)
       console.log('USER JWT:', user)
       return token

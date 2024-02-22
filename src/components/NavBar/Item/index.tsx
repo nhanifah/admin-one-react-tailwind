@@ -52,7 +52,6 @@ export default function NavBarItem({ item }: Props) {
         }`}
         onClick={handleMenuClick}
       >
-        {item.isCurrentUser && <UserAvatarCurrentUser className="w-6 h-6 mr-3 inline-flex" />}
         {item.icon && <Icon path={item.icon} className="transition-colors" />}
         <span
           className={`px-2 transition-colors ${

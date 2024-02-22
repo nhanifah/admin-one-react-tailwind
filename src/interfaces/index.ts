@@ -81,7 +81,7 @@ export type Student = {
   interview_schedule: string
   dormitory: string
   installment: string
-  refferal_id?: string
+  referral_id?: string
   guardian_name: string
   guardian_phone: string
   progress: string
@@ -110,7 +110,7 @@ export type studentAnswer = {
   student_id: string
 }
 
-export type Student = {
+export type Students = {
   id: string
   full_name: string
   whatsapp_number: string

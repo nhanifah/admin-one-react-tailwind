@@ -1,11 +1,11 @@
 import { mdiEye, mdiTrashCan, mdiWhatsapp } from '@mdi/js'
 import React, { useState } from 'react'
 import { useStudentClients } from '../../hooks/requestData'
-import { Student } from '../../interfaces'
+import { Students } from '../../interfaces'
 import Button from '../Button'
 import Buttons from '../Buttons'
 import CardBoxModal from '../CardBox/Modal'
-import UserAvatar from '../UserAvatar'
+import StudentAvatar from '../UserAvatar'
 
 const StudentLists = () => {
   const { clients } = useStudentClients()
@@ -16,7 +16,11 @@ const StudentLists = () => {
 
   const clientsPaginated = clients.slice(perPage * currentPage, perPage * (currentPage + 1))
 
-  const numPages = clients.length / perPage
+  let numPages = clients.length / perPage
+
+  if (numPages % 1 !== 0) {
+    numPages = Math.floor(numPages) + 1
+  }
 
   const pagesList = []
 
@@ -69,22 +73,31 @@ const StudentLists = () => {
             <th>Nama</th>
             <th>Batch</th>
             <th>Asrama</th>
-            <th>Progress</th>
+            <th>Asal</th>
             <th />
           </tr>
         </thead>
         <tbody>
-          {clientsPaginated.map((client: Student) => (
+          {
+            clients.length === 0 && (
+              <tr>
+                <td colSpan={6} className="text-center py-6">
+                  <p className="text-gray-500 dark:text-slate-400">Data tidak ditemukan</p>
+                </td>
+              </tr>
+            )
+          }
+          {clientsPaginated.map((client: Students) => (
             <tr key={client.id}>
               <td className="border-b-0 lg:w-6 before:hidden">
-                <UserAvatar username={client.id} className="w-24 h-24 mx-auto lg:w-6 lg:h-6" />
+                <StudentAvatar imgUrl="https://lpk-harehare.nos.jkt-1.neo.id/foto_190224_3578281009000002.png" alt={client.full_name} className="w-24 h-24 mx-auto lg:w-6 lg:h-6" />
               </td>
-              <td data-label="Name">{client.full_name}</td>
+              <td data-label="Nama">{client.full_name}</td>
               <td data-label="Batch">{client.batch_registration.batch_name}</td>
-              <td data-label="Dorm" className="lg:w-32">
+              <td data-label="Asrama" className="lg:w-32">
                 {client.dormitory === 'yes' ? 'Iya' : 'Tidak'}
               </td>
-              <td data-label="Batch">{client.progress}</td>
+              <td data-label="Asal">{client.province}</td>
               {/* <td data-label="Progress" className="lg:w-1 whitespace-nowrap">
                 <small className="text-gray-500 dark:text-slate-400">{client.created}</small>
               </td> */}
@@ -93,7 +106,19 @@ const StudentLists = () => {
                   <Button
                     color="success"
                     icon={mdiWhatsapp}
-                    onClick={() => setIsModalInfoActive(true)}
+                    onClick={() => {
+                      // sanitize phone number
+                      let whatsapp = client.guardian_phone
+                      if (whatsapp.charAt(0) === '+') {
+                        whatsapp = whatsapp.substring(1);
+                      }
+                      whatsapp = whatsapp.replace(/[\s\-_.,]/g, '');
+                      if (whatsapp.startsWith('08')) {
+                        whatsapp = '62' + whatsapp.substring(1);
+                      }
+
+                      window.open(`https://wa.me/${whatsapp}`)
+                    }}
                     small
                   />
                   <Button
