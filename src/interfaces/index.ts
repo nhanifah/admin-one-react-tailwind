@@ -155,3 +155,7 @@ export type UserForm = {
   name: string
   email: string
 }
+
+export type BatchStudents = {
+  id: string
+}

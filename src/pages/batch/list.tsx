@@ -11,6 +11,7 @@ import Button from '../../components/Button'
 import { useAppDispatch } from '../../stores/hooks'
 import { showModal } from '../../stores/batchSlice'
 import AddBatchModal from '../../components/Modals/AddBatchModal'
+import BatchStudentsModal from '../../components/Modals/BatchStudentsModal'
 
 const BatchList = () => {
   const dispatch = useAppDispatch()
@@ -18,6 +19,7 @@ const BatchList = () => {
   return (
     <>
       <AddBatchModal />
+      <BatchStudentsModal />
       <Head>
         <title>{getPageTitle('Jawaban Peserta')}</title>
       </Head>

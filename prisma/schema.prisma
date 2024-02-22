@@ -235,7 +235,7 @@ model students {
   interview_schedule  DateTime?             @db.DateTime(0)
   dormitory           students_dormitory?
   installment         students_installment?
-  referral_id         String?               @db.Char(32) @ignore
+  referral_id         String?               @db.Char(32)
   guardian_name       String?               @db.VarChar(255)
   guardian_phone      String?               @db.VarChar(255)
   progress            students_progress?

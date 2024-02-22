@@ -1,15 +1,33 @@
 import { mdiEye } from '@mdi/js'
-import React, { useState } from 'react'
-import { useBatchClients, useStudentPhyscotestAnswerClients } from '../../hooks/requestData'
+import React, { useEffect, useState } from 'react'
+import {
+  useBatchClients,
+  useBatchStudentsClients,
+  useStudentPhyscotestAnswerClients,
+} from '../../hooks/requestData'
 import Button from '../Button'
 import Buttons from '../Buttons'
 import AnswerModal from '../Modals/AnswerModal'
-import { useAppDispatch } from '../../stores/hooks'
+import { useAppDispatch, useAppSelector } from '../../stores/hooks'
 import { setIsModalActive } from '../../stores/modalSlice'
-import { selectBatch, showModalStudents } from '../../stores/batchSlice'
+import { showModalStudents } from '../../stores/batchSlice'
 
-const TableBatch = () => {
-  const { clients } = useBatchClients()
+const TableBatchStudents = () => {
+  const selectedBatch = useAppSelector((state) => state.batch.batch_selected)
+  const { clients } = useBatchStudentsClients(selectedBatch)
+  // const clients = getBatchStudents(selectedBatch)
+  // const [clients, setClients] = useState([])
+  // useEffect(() => {
+  //   const getData = async () => {
+  //     const response = await getBatchStudents(selectedBatch)
+  //     console.log(response.data)
+  //     setClients(response.data)
+  //   }
+
+  //   getData()
+  // }, [])
+
+  // const clients = students
   const dispatch = useAppDispatch()
 
   const perPage = 50
@@ -32,8 +50,6 @@ const TableBatch = () => {
 
   return (
     <>
-      <AnswerModal />
-
       <table>
         <thead>
           <tr>
@@ -64,10 +80,7 @@ const TableBatch = () => {
                     color="info"
                     icon={mdiEye}
                     small
-                    onClick={() => {
-                      dispatch(selectBatch(data.id))
-                      dispatch(showModalStudents())
-                    }}
+                    onClick={() => dispatch(showModalStudents())}
                   />
                 </Buttons>
               </td>
@@ -98,4 +111,4 @@ const TableBatch = () => {
   )
 }
 
-export default TableBatch
+export default TableBatchStudents
