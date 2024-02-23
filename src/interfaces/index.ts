@@ -11,6 +11,7 @@ export type MenuAsideItem = {
   color?: ColorButtonKey
   isLogout?: boolean
   menu?: MenuAsideItem[]
+  onClick?: () => void
 }
 
 export type MenuNavBarItem = {
@@ -24,6 +25,7 @@ export type MenuNavBarItem = {
   isToggleLightDark?: boolean
   isCurrentUser?: boolean
   menu?: MenuNavBarItem[]
+  onClick?: () => void
 }
 
 export type ColorKey = 'white' | 'light' | 'contrast' | 'success' | 'danger' | 'warning' | 'info'

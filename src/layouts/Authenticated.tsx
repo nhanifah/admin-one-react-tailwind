@@ -23,16 +23,19 @@ export default function LayoutAuthenticated({ children }: Props) {
 
   const router = useRouter()
 
+  // session check
+  if (session === null) {
+      console.log('session null')
+      router.push('/login')
+  } else {
+      console.log('session now', session)
+  }
+
   useEffect(() => {
     const handleRouteChangeStart = () => {
       setIsAsideMobileExpanded(false)
       setIsAsideLgActive(false)
     }
-
-    // session check
-    if (!session) {
-        router.push('/login')
-        }
 
     router.events.on('routeChangeStart', handleRouteChangeStart)
 

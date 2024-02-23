@@ -8,10 +8,10 @@ import { Field, Form, Formik } from 'formik'
 import FormField from '../components/Form/Field'
 import Divider from '../components/Divider'
 import Buttons from '../components/Buttons'
-import { useRouter } from 'next/router'
+// import { useRouter } from 'next/router'
 import { getPageTitle } from '../config'
 import { mdiGoogle, mdiLogin } from '@mdi/js'
-import {signIn, useSession} from "next-auth/react";
+import {signIn} from "next-auth/react";
 import { toast } from "react-hot-toast";
 import { useState } from "react";
 import { z, ZodError } from 'zod'; // Import Zod
@@ -23,8 +23,7 @@ const LoginFormSchema = z.object({
 });
 
 const LoginPage = () => {
-  const { data: session } = useSession();
-  const router = useRouter();
+  // const router = useRouter();
   const [showLoaderCredentials, setShowLoaderCredentials] = useState(false);
   const [showLoaderGoogle, setShowLoaderGoogle] = useState(false);
   const [userInfo, setUserInfo] = useState({ email: '', password: '' });
@@ -42,12 +41,16 @@ const LoginPage = () => {
         email: userInfo.email,
         password: userInfo.password,
         redirect: false,
+        callbackUrl: '/dashboard',
       });
 
       if (result?.error) {
         throw new Error(result.error);
       } else {
-        router.push('/dashboard');
+        console.log('Sign-in result:', result);
+        // router.push(result.url);
+        // redirect to dashboard
+        window.location.replace(result.url);
       }
     } catch (error) {
       if (error instanceof ZodError) {
@@ -55,7 +58,7 @@ const LoginPage = () => {
         toast.error(fieldErrors.join(' dan '));
       } else {
         console.error('Sign-in error:', error);
-        toast.error('An error occurred while signing in');
+        toast.error(error.message || 'Terjadi kesalahan saat masuk');
       }
     } finally {
       setShowLoaderCredentials(false);
