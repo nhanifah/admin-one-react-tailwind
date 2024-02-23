@@ -223,14 +223,13 @@ const TableSampleClients = () => {
           </tr>
         </thead>
         <tbody>
-        {clients.length === 0 && (
+          {clients.length === 0 && (
             <tr>
               <td colSpan={6} className="text-center">
                 <p className="text-gray-500 dark:text-slate-400">Tidak ada data</p>
               </td>
             </tr>
-
-        )}
+          )}
           {clientsPaginated.map((quest: Quest, index: number) => (
             <tr key={quest.id}>
               <td className="border-b-0 lg:w-6 before:hidden">

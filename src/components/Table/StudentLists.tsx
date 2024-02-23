@@ -1,4 +1,4 @@
-import { mdiEye, mdiTrashCan, mdiWhatsapp, mdiAccount, mdiMail } from '@mdi/js'
+import { mdiEye, mdiTrashCan, mdiWhatsapp, mdiCurrencyUsd, mdiMail } from '@mdi/js'
 import React, { useState } from 'react'
 import { useStudentClients } from '../../hooks/requestData'
 import { Students } from '../../interfaces'
@@ -49,61 +49,52 @@ const StudentLists = () => {
         onConfirm={handleModalAction}
         onCancel={handleModalAction}
       >
-          <Formik
-              initialValues={{
-                full_name: 'John Doe',
-                email: 'john.doe@example.com',
-                whatsapp: '083116448996',
-                color: 'green',
-                textarea: '',
-              }}
-              onSubmit={(values) => alert(JSON.stringify(values, null, 2))}
-            >
-            <Form>
-            <FormField
-                label="Nama Lengkap"
-                labelFor="full_name"
-              >
-                <Field name="full_name" placeholder="Nama Lengkap" id="full_name" />
-              </FormField>
+        <Formik
+          initialValues={{
+            full_name: 'John Doe',
+            email: 'john.doe@example.com',
+            whatsapp: '083116448996',
+            color: 'green',
+            textarea: '',
+          }}
+          onSubmit={(values) => alert(JSON.stringify(values, null, 2))}
+        >
+          <Form>
+            <FormField label="Nama Lengkap" labelFor="full_name">
+              <Field name="full_name" placeholder="Nama Lengkap" id="full_name" />
+            </FormField>
 
-              <FormField label="Kontak" icons={[mdiWhatsapp, mdiMail]}>
-                <Field name="whatsapp" placeholder="Whatsapp" disabled />
-                <Field type="email" name="email" placeholder="Email" disabled />
-              </FormField>
+            <FormField label="Kontak" icons={[mdiWhatsapp, mdiMail]}>
+              <Field name="whatsapp" placeholder="Whatsapp" disabled />
+              <Field type="email" name="email" placeholder="Email" disabled />
+            </FormField>
 
-              <Divider />
+            <Divider />
 
-              <FormField
-                label="Alamat"
-                labelFor="address"
-              >
-                <Field name="phone" placeholder="Provinsi" id="phone" />
-                <Field name="phone" placeholder="Kota / Kabupaten" id="phone" />
-                <Field name="phone" placeholder="Kecamatan" id="phone" />
-              </FormField>
+            <FormField label="Alamat" labelFor="address">
+              <Field name="phone" placeholder="Provinsi" id="phone" />
+              <Field name="phone" placeholder="Kota / Kabupaten" id="phone" />
+              <Field name="phone" placeholder="Kecamatan" id="phone" />
+            </FormField>
 
-              <FormField
-                label=""
-                help="Help line comes here"
-              >
-                <Field name="phone" placeholder="Kelurahan / Desa" id="phone" />
-              </FormField>
+            <FormField label="" help="Help line comes here">
+              <Field name="phone" placeholder="Kelurahan / Desa" id="phone" />
+            </FormField>
 
-              <FormField label="" hasTextareaHeight>
-                <Field name="textarea" as="textarea" placeholder="Alamat Lengkap" />
-              </FormField>
+            <FormField label="" hasTextareaHeight>
+              <Field name="textarea" as="textarea" placeholder="Alamat Lengkap" />
+            </FormField>
 
-              <Divider />
+            <Divider />
 
-              <FormField label="Biodata Orangtua" icons={[mdiWhatsapp, mdiMail]}>
-                <Field name="guardian_name" placeholder="Nama Orangtua" disabled />
-                <Field name="guardian_phone" placeholder="Whatsapp Orangtua" disabled />
-              </FormField>
+            <FormField label="Biodata Orangtua" icons={[mdiWhatsapp, mdiMail]}>
+              <Field name="guardian_name" placeholder="Nama Orangtua" disabled />
+              <Field name="guardian_phone" placeholder="Whatsapp Orangtua" disabled />
+            </FormField>
 
-              <Divider />
-            </Form>
-          </Formik>
+            <Divider />
+          </Form>
+        </Formik>
       </WideCardBoxModal>
 
       <WideCardBoxModal
@@ -132,68 +123,82 @@ const StudentLists = () => {
           </tr>
         </thead>
         <tbody>
-          {
-            clients.length === 0 && (
-              <tr>
-                <td colSpan={6} className="text-center py-6">
-                  <p className="text-gray-500 dark:text-slate-400">Data tidak ditemukan</p>
-                </td>
-              </tr>
-            )
-          }
-          {clientsPaginated.map((client: Students) => {
-            let fotoAttachments = [];
-            fotoAttachments = client.student_attachments.filter(attachment => attachment.file_name.includes('foto_'));
-            
-            return (
-              <tr key={client.id}>
-              <td className="border-b-0 lg:w-6 before:hidden">
-                <StudentAvatar imgUrl={fotoAttachments.length != 0 ? fotoAttachments[0]['file_url'] : 'https://lpk-harehare.nos.jkt-1.neo.id/avatar.jpg'} alt={client.full_name} className="w-24 h-24 mx-auto lg:w-6 lg:h-6" />
-              </td>
-              <td data-label="Nama">{client.full_name}</td>
-              <td data-label="Batch">{client.batch_registration.batch_name}</td>
-              <td data-label="Asrama" className="lg:w-32">
-                {client.dormitory === 'yes' ? 'Iya' : 'Tidak'}
-              </td>
-              <td data-label="Asal">{client.province}</td>
-              {/* <td data-label="Progress" className="lg:w-1 whitespace-nowrap">
-                <small className="text-gray-500 dark:text-slate-400">{client.created}</small>
-              </td> */}
-              <td className="before:hidden lg:w-1 whitespace-nowrap">
-                <Buttons type="justify-start lg:justify-end" noWrap>
-                  <Button
-                    color="success"
-                    icon={mdiWhatsapp}
-                    onClick={() => {
-                      // sanitize phone number
-                      let whatsapp = client.guardian_phone
-                      if (whatsapp.charAt(0) === '+') {
-                        whatsapp = whatsapp.substring(1);
-                      }
-                      whatsapp = whatsapp.replace(/[\s\-_.,]/g, '');
-                      if (whatsapp.startsWith('08')) {
-                        whatsapp = '62' + whatsapp.substring(1);
-                      }
-
-                      window.open(`https://wa.me/${whatsapp}`)
-                    }}
-                    small
-                  />
-                  <Button
-                    color="info"
-                    icon={mdiEye}
-                    onClick={() => setIsModalInfoActive(true)}
-                    small
-                  />
-                  <Button
-                    color="danger"
-                    icon={mdiTrashCan}
-                    onClick={() => setIsModalTrashActive(true)}
-                    small
-                  />
-                </Buttons>
+          {clients.length === 0 && (
+            <tr>
+              <td colSpan={6} className="text-center py-6">
+                <p className="text-gray-500 dark:text-slate-400">Data tidak ditemukan</p>
               </td>
             </tr>
+          )}
+          {clientsPaginated.map((client: Students) => {
+            let fotoAttachments = []
+            fotoAttachments = client.student_attachments.filter((attachment) =>
+              attachment.file_name.includes('foto_')
+            )
+
+            return (
+              <tr key={client.id}>
+                <td className="border-b-0 lg:w-6 before:hidden">
+                  <StudentAvatar
+                    imgUrl={
+                      fotoAttachments.length != 0
+                        ? fotoAttachments[0]['file_url']
+                        : 'https://lpk-harehare.nos.jkt-1.neo.id/avatar.jpg'
+                    }
+                    alt={client.full_name}
+                    className="w-24 h-24 mx-auto lg:w-6 lg:h-6"
+                  />
+                </td>
+                <td data-label="Nama">{client.full_name}</td>
+                <td data-label="Batch">{client.batch_registration.batch_name}</td>
+                <td data-label="Asrama" className="lg:w-32">
+                  {client.dormitory === 'yes' ? 'Iya' : 'Tidak'}
+                </td>
+                <td data-label="Asal">{client.province}</td>
+                {/* <td data-label="Progress" className="lg:w-1 whitespace-nowrap">
+                <small className="text-gray-500 dark:text-slate-400">{client.created}</small>
+              </td> */}
+                <td className="before:hidden lg:w-1 whitespace-nowrap">
+                  <Buttons type="justify-start lg:justify-end" noWrap>
+                    <Button
+                      color="warning"
+                      icon={mdiCurrencyUsd}
+                      onClick={() => setIsModalInfoActive(true)}
+                      small
+                    />
+                    <Button
+                      color="success"
+                      icon={mdiWhatsapp}
+                      onClick={() => {
+                        // sanitize phone number
+                        let whatsapp = client.guardian_phone
+                        if (whatsapp.charAt(0) === '+') {
+                          whatsapp = whatsapp.substring(1)
+                        }
+                        whatsapp = whatsapp.replace(/[\s\-_.,]/g, '')
+                        if (whatsapp.startsWith('08')) {
+                          whatsapp = '62' + whatsapp.substring(1)
+                        }
+
+                        window.open(`https://wa.me/${whatsapp}`)
+                      }}
+                      small
+                    />
+                    <Button
+                      color="info"
+                      icon={mdiEye}
+                      onClick={() => setIsModalInfoActive(true)}
+                      small
+                    />
+                    <Button
+                      color="danger"
+                      icon={mdiTrashCan}
+                      onClick={() => setIsModalTrashActive(true)}
+                      small
+                    />
+                  </Buttons>
+                </td>
+              </tr>
             )
           })}
         </tbody>

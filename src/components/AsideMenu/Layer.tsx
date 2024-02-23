@@ -23,7 +23,7 @@ export default function AsideMenuLayer({ menu, className = '', ...props }: Props
     isLogout: true,
     onClick: () => {
       signOut({ callbackUrl: '/login' })
-    }
+    },
   }
 
   const handleAsideLgCloseClick = (e: React.MouseEvent) => {

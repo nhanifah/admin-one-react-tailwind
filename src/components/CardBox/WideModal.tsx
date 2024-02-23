@@ -16,12 +16,7 @@ type Props = {
   onCancel?: () => void
 }
 
-const WideCardBoxModal = ({
-  title,
-  isActive,
-  children,
-  onCancel,
-}: Props) => {
+const WideCardBoxModal = ({ title, isActive, children, onCancel }: Props) => {
   if (!isActive) {
     return null
   }

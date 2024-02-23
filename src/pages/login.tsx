@@ -11,30 +11,30 @@ import Buttons from '../components/Buttons'
 // import { useRouter } from 'next/router'
 import { getPageTitle } from '../config'
 import { mdiGoogle, mdiLogin } from '@mdi/js'
-import {signIn} from "next-auth/react";
-import { toast } from "react-hot-toast";
-import { useState } from "react";
-import { z, ZodError } from 'zod'; // Import Zod
+import { signIn } from 'next-auth/react'
+import { toast } from 'react-hot-toast'
+import { useState } from 'react'
+import { z, ZodError } from 'zod' // Import Zod
 
 // Define Zod schema for form validation
 const LoginFormSchema = z.object({
   email: z.string().min(1, 'Masukan nama pengguna atau surel yang valid'),
   password: z.string().min(1, 'Katasandi tidak boleh kosong'),
-});
+})
 
 const LoginPage = () => {
   // const router = useRouter();
-  const [showLoaderCredentials, setShowLoaderCredentials] = useState(false);
-  const [showLoaderGoogle, setShowLoaderGoogle] = useState(false);
-  const [userInfo, setUserInfo] = useState({ email: '', password: '' });
+  const [showLoaderCredentials, setShowLoaderCredentials] = useState(false)
+  const [showLoaderGoogle, setShowLoaderGoogle] = useState(false)
+  const [userInfo, setUserInfo] = useState({ email: '', password: '' })
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setShowLoaderCredentials(true);
+    e.preventDefault()
+    setShowLoaderCredentials(true)
 
     try {
       // Validate form data using Zod schema
-      LoginFormSchema.parse(userInfo);
+      LoginFormSchema.parse(userInfo)
 
       // If validation succeeds, attempt sign-in
       const result = await signIn('credentials', {
@@ -42,45 +42,45 @@ const LoginPage = () => {
         password: userInfo.password,
         redirect: false,
         callbackUrl: '/dashboard',
-      });
+      })
 
       if (result?.error) {
-        throw new Error(result.error);
+        throw new Error(result.error)
       } else {
-        console.log('Sign-in result:', result);
+        console.log('Sign-in result:', result)
         // router.push(result.url);
         // redirect to dashboard
-        window.location.replace(result.url);
+        window.location.replace(result.url)
       }
     } catch (error) {
       if (error instanceof ZodError) {
-        const fieldErrors = error.errors.map((err) => err.message);
-        toast.error(fieldErrors.join(' dan '));
+        const fieldErrors = error.errors.map((err) => err.message)
+        toast.error(fieldErrors.join(' dan '))
       } else {
-        console.error('Sign-in error:', error);
-        toast.error(error.message || 'Terjadi kesalahan saat masuk');
+        console.error('Sign-in error:', error)
+        toast.error(error.message || 'Terjadi kesalahan saat masuk')
       }
     } finally {
-      setShowLoaderCredentials(false);
+      setShowLoaderCredentials(false)
     }
-  };
+  }
 
   const handleGoogleLogin = (e) => {
-    e.preventDefault();
-    setShowLoaderGoogle(true);
-    console.log(userInfo);
+    e.preventDefault()
+    setShowLoaderGoogle(true)
+    console.log(userInfo)
     setTimeout(() => {
-      setShowLoaderGoogle(false);
-    }, 3000);
+      setShowLoaderGoogle(false)
+    }, 3000)
   }
 
   const handleChangeEmail = (event) => {
-    setUserInfo({ ...userInfo, email: event.target.value });
-  };
+    setUserInfo({ ...userInfo, email: event.target.value })
+  }
 
   const handleChangePassword = (event) => {
-    setUserInfo({ ...userInfo, password: event.target.value });
-  };
+    setUserInfo({ ...userInfo, password: event.target.value })
+  }
 
   return (
     <>
@@ -112,11 +112,11 @@ const LoginPage = () => {
 
                 <FormField label="Katasandi">
                   <Field
-                      name="password"
-                      type="password"
-                      placeholder="Katasandi"
-                      onChange={handleChangePassword}
-                      value={userInfo.password}
+                    name="password"
+                    type="password"
+                    placeholder="Katasandi"
+                    onChange={handleChangePassword}
+                    value={userInfo.password}
                   />
                 </FormField>
 

@@ -9,7 +9,7 @@ import NavBarItemPlain from '../components/NavBar/Item/Plain'
 import AsideMenu from '../components/AsideMenu'
 import FooterBar from '../components/FooterBar'
 import { useRouter } from 'next/router'
-import { useSession } from "next-auth/react";
+import { useSession } from 'next-auth/react'
 
 type Props = {
   children: ReactNode
@@ -25,10 +25,10 @@ export default function LayoutAuthenticated({ children }: Props) {
 
   // session check
   if (session === null) {
-      console.log('session null')
-      router.push('/login')
+    console.log('session null')
+    router.push('/login')
   } else {
-      console.log('session now', session)
+    console.log('session now', session)
   }
 
   useEffect(() => {
@@ -49,29 +49,29 @@ export default function LayoutAuthenticated({ children }: Props) {
   const layoutAsidePadding = 'xl:pl-60'
 
   return (
-        <div className={`overflow-hidden lg:overflow-visible`}>
-          <div
-              className={`${layoutAsidePadding} ${
-                  isAsideMobileExpanded ? 'ml-60 lg:ml-0' : ''
-              } pt-14 min-h-screen w-screen transition-position lg:w-auto bg-gray-50 dark:bg-slate-800 dark:text-slate-100`}
+    <div className={`overflow-hidden lg:overflow-visible`}>
+      <div
+        className={`${layoutAsidePadding} ${
+          isAsideMobileExpanded ? 'ml-60 lg:ml-0' : ''
+        } pt-14 min-h-screen w-screen transition-position lg:w-auto bg-gray-50 dark:bg-slate-800 dark:text-slate-100`}
+      >
+        <NavBar
+          menu={menuNavBar}
+          className={`${layoutAsidePadding} ${isAsideMobileExpanded ? 'ml-60 lg:ml-0' : ''}`}
+        >
+          <NavBarItemPlain
+            display="flex lg:hidden"
+            onClick={() => setIsAsideMobileExpanded(!isAsideMobileExpanded)}
           >
-            <NavBar
-                menu={menuNavBar}
-                className={`${layoutAsidePadding} ${isAsideMobileExpanded ? 'ml-60 lg:ml-0' : ''}`}
-            >
-              <NavBarItemPlain
-                  display="flex lg:hidden"
-                  onClick={() => setIsAsideMobileExpanded(!isAsideMobileExpanded)}
-              >
-                <Icon path={isAsideMobileExpanded ? mdiBackburger : mdiForwardburger} size="24"/>
-              </NavBarItemPlain>
-              <NavBarItemPlain
-                  display="hidden lg:flex xl:hidden"
-                  onClick={() => setIsAsideLgActive(true)}
-              >
-                <Icon path={mdiMenu} size="24"/>
-              </NavBarItemPlain>
-              {/* <NavBarItemPlain useMargin>
+            <Icon path={isAsideMobileExpanded ? mdiBackburger : mdiForwardburger} size="24" />
+          </NavBarItemPlain>
+          <NavBarItemPlain
+            display="hidden lg:flex xl:hidden"
+            onClick={() => setIsAsideLgActive(true)}
+          >
+            <Icon path={mdiMenu} size="24" />
+          </NavBarItemPlain>
+          {/* <NavBarItemPlain useMargin>
             <Formik
               initialValues={{
                 search: '',
@@ -85,18 +85,16 @@ export default function LayoutAuthenticated({ children }: Props) {
               </Form>
             </Formik>
           </NavBarItemPlain> */}
-            </NavBar>
-            <AsideMenu
-                isAsideMobileExpanded={isAsideMobileExpanded}
-                isAsideLgActive={isAsideLgActive}
-                menu={menuAside}
-                onAsideLgClose={() => setIsAsideLgActive(false)}
-            />
-            {children}
-            <FooterBar>
-              All rights reserved.
-            </FooterBar>
-          </div>
-        </div>
+        </NavBar>
+        <AsideMenu
+          isAsideMobileExpanded={isAsideMobileExpanded}
+          isAsideLgActive={isAsideLgActive}
+          menu={menuAside}
+          onAsideLgClose={() => setIsAsideLgActive(false)}
+        />
+        {children}
+        <FooterBar>All rights reserved.</FooterBar>
+      </div>
+    </div>
   )
 }

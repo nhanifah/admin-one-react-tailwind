@@ -43,11 +43,13 @@ export default function Button({
 }: Props) {
   const Spinner = ({ size, white }) => {
     // set the size of the spinner
-    const spinnerSize = size === "sm" ? "h-8 w-8" : "h-16 w-16";
+    const spinnerSize = size === 'sm' ? 'h-8 w-8' : 'h-16 w-16'
     // set the color of the spinner
-    const spinnerColor = white ? "white" : "main-500";
+    const spinnerColor = white ? 'white' : 'main-500'
     return (
-        <div className={`animate-spin rounded-full ${spinnerSize} border-t-2 border-b-2 border-${spinnerColor}`}></div>
+      <div
+        className={`animate-spin rounded-full ${spinnerSize} border-t-2 border-b-2 border-${spinnerColor}`}
+      ></div>
     )
   }
 
@@ -97,14 +99,14 @@ export default function Button({
   }
 
   // if loading is true, show the spinner
-    if (loading) {
-        // if componenClassString is red, set the spinner color to white
-        return (
-            <button className={componentClassString} onClick={onClick} disabled={disabled}>
-                <Spinner size="sm" white={componentClassString.includes("bg-main-500") ? true : false} />
-            </button>
-        )
-    }
+  if (loading) {
+    // if componenClassString is red, set the spinner color to white
+    return (
+      <button className={componentClassString} onClick={onClick} disabled={disabled}>
+        <Spinner size="sm" white={componentClassString.includes('bg-main-500') ? true : false} />
+      </button>
+    )
+  }
 
   return React.createElement(
     asAnchor ? 'a' : 'button',
