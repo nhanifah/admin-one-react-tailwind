@@ -15,29 +15,32 @@ import SectionMain from '../../components/Section/Main'
 import SectionTitle from '../../components/Section/Title'
 import SectionTitleLineWithButton from '../../components/Section/TitleLineWithButton'
 import { getPageTitle } from '../../config'
-import StudentLists from "../../components/Table/StudentLists";
+import StudentLists from '../../components/Table/StudentLists'
 
 const StudentList = () => {
-    return (
-        <>
-            <Head>
-                <title>{getPageTitle('Daftar Siswa')}</title>
-            </Head>
+  return (
+    <>
+      <Head>
+        <title>{getPageTitle('Daftar Siswa')}</title>
+      </Head>
 
-            <SectionMain>
-                <SectionTitleLineWithButton icon={mdiBallotOutline} title="Daftar Siswa" main>
-                </SectionTitleLineWithButton>
+      <SectionMain>
+        <SectionTitleLineWithButton
+          icon={mdiBallotOutline}
+          title="Daftar Siswa"
+          main
+        ></SectionTitleLineWithButton>
 
-                <CardBox className="mb-6" hasTable>
-                    <StudentLists />
-                </CardBox>
-            </SectionMain>
-        </>
-    )
+        <CardBox className="mb-6" hasTable>
+          <StudentLists />
+        </CardBox>
+      </SectionMain>
+    </>
+  )
 }
 
 StudentList.getLayout = function getLayout(page: ReactElement) {
-    return <LayoutAuthenticated>{page}</LayoutAuthenticated>
+  return <LayoutAuthenticated>{page}</LayoutAuthenticated>
 }
 
 export default StudentList

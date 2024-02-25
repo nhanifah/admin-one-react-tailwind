@@ -5,6 +5,7 @@ import AsideMenuItem from './Item'
 import AsideMenuList from './List'
 import { MenuAsideItem } from '../../interfaces'
 import { useAppSelector } from '../../stores/hooks'
+import { signOut } from 'next-auth/react'
 
 type Props = {
   menu: MenuAsideItem[]
@@ -20,6 +21,9 @@ export default function AsideMenuLayer({ menu, className = '', ...props }: Props
     icon: mdiLogout,
     color: 'info',
     isLogout: true,
+    onClick: () => {
+      signOut({ callbackUrl: '/login' })
+    },
   }
 
   const handleAsideLgCloseClick = (e: React.MouseEvent) => {

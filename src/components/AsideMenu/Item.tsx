@@ -67,7 +67,12 @@ const AsideMenuItem = ({ item, isDropdownList = false }: Props) => {
           {asideMenuItemInnerContents}
         </Link>
       )}
-      {!item.href && (
+      {item.isLogout && (
+        <div className={componentClass} onClick={item.onClick}>
+          {asideMenuItemInnerContents}
+        </div>
+      )}
+      {!item.href && !item.isLogout && (
         <div className={componentClass} onClick={() => setIsDropdownActive(!isDropdownActive)}>
           {asideMenuItemInnerContents}
         </div>

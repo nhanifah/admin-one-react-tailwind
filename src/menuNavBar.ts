@@ -7,6 +7,7 @@ import {
   mdiHelpCircle,
 } from '@mdi/js'
 import { MenuNavBarItem } from './interfaces'
+import { signOut } from 'next-auth/react'
 
 const menuNavBar: MenuNavBarItem[] = [
   {
@@ -32,6 +33,10 @@ const menuNavBar: MenuNavBarItem[] = [
         icon: mdiLogout,
         label: 'Log Out',
         isLogout: true,
+        onClick: () => {
+          console.log('signing out')
+          signOut()
+        },
       },
     ],
   },
@@ -53,6 +58,10 @@ const menuNavBar: MenuNavBarItem[] = [
     label: 'Log out',
     isDesktopNoLabel: true,
     isLogout: true,
+    onClick: () => {
+      console.log('signing out')
+      signOut()
+    },
   },
 ]
 

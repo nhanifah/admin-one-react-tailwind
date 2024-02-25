@@ -53,7 +53,7 @@ export const getButtonColor = (
       contrast: 'ring-gray-300 dark:ring-gray-400',
       success: 'ring-emerald-300 dark:ring-emerald-700',
       danger: 'ring-red-300 dark:ring-red-700',
-      warning: 'ring-yellow-300 dark:ring-yellow-700',
+      warning: 'ring-yellow-100 dark:ring-yellow-500',
       info: 'ring-blue-300 dark:ring-blue-700',
     },
     active: {
@@ -73,7 +73,7 @@ export const getButtonColor = (
       contrast: 'bg-gray-800 text-white dark:bg-white dark:text-black',
       success: 'bg-emerald-600 dark:bg-emerald-500 text-white',
       danger: 'bg-red-600 dark:bg-red-500 text-white',
-      warning: 'bg-yellow-600 dark:bg-yellow-500 text-white',
+      warning: 'bg-yellow-400 dark:bg-yellow-300 text-white',
       info: 'bg-blue-600 dark:bg-blue-500 text-white',
     },
     bgHover: {
@@ -86,7 +86,7 @@ export const getButtonColor = (
       danger:
         'hover:bg-red-700 hover:border-red-700 hover:dark:bg-red-600 hover:dark:border-red-600',
       warning:
-        'hover:bg-yellow-700 hover:border-yellow-700 hover:dark:bg-yellow-600 hover:dark:border-yellow-600',
+        'hover:bg-yellow-500 hover:border-yellow-500 hover:dark:bg-yellow-400 hover:dark:border-yellow-400',
       info: 'hover:bg-blue-700 hover:border-blue-700 hover:dark:bg-blue-600 hover:dark:border-blue-600',
     },
     borders: {
@@ -96,7 +96,7 @@ export const getButtonColor = (
       contrast: 'border-gray-800 dark:border-white',
       success: 'border-emerald-600 dark:border-emerald-500',
       danger: 'border-red-600 dark:border-red-500',
-      warning: 'border-yellow-600 dark:border-yellow-500',
+      warning: 'border-yellow-400 dark:border-yellow-300',
       info: 'border-blue-600 dark:border-blue-500',
     },
     text: {

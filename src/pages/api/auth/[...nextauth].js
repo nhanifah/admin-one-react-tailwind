@@ -28,7 +28,7 @@ const handler = NextAuth({
       name: 'Credentials',
       type: 'credentials',
 
-      async authorize(credentials, req) {
+      async authorize(credentials) {
         const { email, password } = credentials
         // perform your login logic
         // find user from db
@@ -70,7 +70,7 @@ const handler = NextAuth({
     signIn: '/login',
   },
   callbacks: {
-    jwt: async ({ token, user, session }) => {
+    jwt: async ({ token, user }) => {
       const userExists = await prisma.admins.findFirst({
         where: { email: token.email },
       })
@@ -78,21 +78,23 @@ const handler = NextAuth({
         token.role = userExists.role
         token.name = user.name
       }
-      // console.log("REFFERAL:", userExists.referral_id);
+      // console.log("REFFERAL:", userExists.refferal_id);
       console.log('TOKEN JWT:', token)
       console.log('USER JWT:', user)
       return token
     },
     session: async ({ session, token }) => {
-      // Update session with user data
-      const userExists = await prisma.admins.findFirst({
-        where: { email: token.email },
-      })
-      if (session?.user) {
-        session.user.id = userExists.id
-        session.user.name = userExists.name
-        session.user.email = userExists.email
-      }
+      // // Update session with user data
+      // const userExists = await prisma.admins.findFirst({
+      //   where: { email: token.email },
+      // })
+      // if (session?.user) {
+      //   session.user.id = userExists.id
+      //   session.user.name = userExists.name
+      //   session.user.email = userExists.email
+      // }
+      session.accessToken = token.accessToken
+      console.log('SESSION:', session)
       return session
     },
     redirect: async ({ url, baseUrl }) => {
