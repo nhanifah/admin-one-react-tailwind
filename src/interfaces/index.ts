@@ -129,6 +129,7 @@ export type Students = {
   progress: number
   created_at: Date
   updated_at: Date
+  checked: boolean
   batch_registration: {
     id: string
     batch_name: string
@@ -165,4 +166,8 @@ export type UserForm = {
 
 export type BatchStudents = {
   id: string
+  batch_name: string
+  quota: number
+  end_date: string
+  students: Students[]
 }

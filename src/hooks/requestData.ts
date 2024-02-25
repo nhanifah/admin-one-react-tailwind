@@ -86,6 +86,22 @@ export const useStudentClients = () => {
     }
   }
 
+  const updateProgress = async (data: object) => {
+    try {
+      const response = await axios.put('/api/student/progress', data)
+      return {
+        status: response.status,
+        data: response.data,
+      }
+    } catch (error) {
+      console.log(error.response.data)
+      return {
+        status: error.response.status,
+        data: error.response.data ?? 'Terjadi Kesalahan',
+      }
+    }
+  }
+
   const deleteData = async (id: string) => {
     try {
       const response = await axios.delete('/api/student', { data: { id: id } })
@@ -108,6 +124,7 @@ export const useStudentClients = () => {
     isError: error,
     updateData,
     deleteData,
+    updateProgress,
   }
 }
 
@@ -140,10 +157,14 @@ export const useBatchClients = () => {
 }
 
 export const useBatchStudentsClients = (id: string) => {
-  const { data, error } = useSWR(`/api/batch/${id}`, fetcher)
+  const { data, error } = useSWR(`/api/batch/${id}`, fetcher, {
+    revalidateIfStale: false,
+    revalidateOnFocus: false,
+    revalidateOnMount: false,
+  })
 
   return {
-    clients: data?.data ?? [],
+    clients: data?.data[0] ?? [],
     isLoading: !error && !data,
     isError: error,
   }

@@ -1,5 +1,15 @@
 import { z } from 'zod'
 
+export const studentProgressSchema = z.object({
+  selectedStudentsId: z
+    .string()
+    .array()
+    .nonempty({ message: 'Pilih siswa yang ingin diupadte progressnya' }),
+  progress: z
+    .string({ required_error: 'Harus memilih progress' })
+    .refine((value) => value.length > 0, { message: 'Harus memilih progress' }),
+})
+
 export const answerCheckedSchema = z.object({
   answers: z.array(
     z.object({

@@ -1,6 +1,6 @@
 import { mdiEye } from '@mdi/js'
 import React, { useState } from 'react'
-import { useBatchClients, useStudentPhyscotestAnswerClients } from '../../hooks/requestData'
+import { useBatchClients } from '../../hooks/requestData'
 import Button from '../Button'
 import Buttons from '../Buttons'
 import AnswerModal from '../Modals/AnswerModal'
@@ -32,8 +32,6 @@ const TableBatch = () => {
 
   return (
     <>
-      <AnswerModal />
-
       <table>
         <thead>
           <tr>
@@ -65,7 +63,7 @@ const TableBatch = () => {
                     icon={mdiEye}
                     small
                     onClick={() => {
-                      dispatch(selectBatch(data.id))
+                      dispatch(selectBatch(data))
                       dispatch(showModalStudents())
                     }}
                   />

@@ -17,6 +17,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       },
     })
 
+    batch[0].students = batch[0].students.map((item, index) => {
+      return {
+        ...item,
+        checked: false,
+      }
+    })
+
     return res.status(200).json({ data: batch })
   }
 }

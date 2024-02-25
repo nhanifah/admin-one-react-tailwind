@@ -6,14 +6,13 @@ import { getSession } from 'next-auth/react'
 const prisma = new PrismaClient({ log: ['query', 'error'] })
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const session = await getSession({ req })
+  // const session = await getSession({ req })
 
-  if (!session) {
-    // return res.status(401).json({ message: 'Unauthorized' });
-  }
+  // if (!session) {
+  //   return res.status(401).json({ message: 'Unauthorized' })
+  // }
 
   if (req.method == 'GET') {
-    // const students = await prisma.students.findMany();
     // join relation with batch_registration & master_referral
     const students = await prisma.students.findMany({
       where: {
