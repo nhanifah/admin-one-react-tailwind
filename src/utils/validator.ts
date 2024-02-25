@@ -4,7 +4,7 @@ export const studentProgressSchema = z.object({
   selectedStudentsId: z
     .string()
     .array()
-    .nonempty({ message: 'Pilih siswa yang ingin diupadte progressnya' }),
+    .nonempty({ message: 'Pilih siswa yang ingin diupdate progressnya' }),
   progress: z
     .string({ required_error: 'Harus memilih progress' })
     .refine((value) => value.length > 0, { message: 'Harus memilih progress' }),
@@ -56,7 +56,7 @@ export const questionSchema = z
   .refine(
     (schema) => {
       if (schema.questionType == 'multipleChoice') {
-        return schema.option.length > 0
+        return schema?.option?.length > 0
       } else {
         return true
       }

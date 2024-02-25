@@ -128,7 +128,7 @@ export type Students = {
   dormitory: string
   guardian_name: string
   guardian_phone: string
-  progress: number
+  progress: string
   created_at: Date
   updated_at: Date
   checked: boolean

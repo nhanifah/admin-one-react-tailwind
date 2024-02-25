@@ -11,6 +11,7 @@ import Button from '../Button'
 import { useRef } from 'react'
 import { studentProgressSchema } from '../../utils/validator'
 import { useStudentClients } from '../../hooks/requestData'
+import React from 'react'
 
 export default function BatchStudentsModal() {
   const { updateProgress } = useStudentClients()
@@ -56,7 +57,7 @@ export default function BatchStudentsModal() {
     } catch (error) {
       console.log(error)
       // setValidationErrors(error.errors)
-      toast.error('Validation error')
+      toast.error(error.errors[0].message)
       return
     }
 

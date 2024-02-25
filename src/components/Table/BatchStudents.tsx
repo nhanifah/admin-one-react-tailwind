@@ -4,7 +4,13 @@ import { useBatchStudentsClients } from '../../hooks/requestData'
 import Button from '../Button'
 import Buttons from '../Buttons'
 import { useAppDispatch, useAppSelector } from '../../stores/hooks'
-import { closeModalStudents, setStudentsSelected, showModalStudents } from '../../stores/batchSlice'
+import {
+  closeModalStudents,
+  setStudent,
+  setStudentsSelected,
+  showModalStudents,
+  showStudentDetailModal,
+} from '../../stores/batchSlice'
 import { BatchStudents, Students } from '../../interfaces'
 import StudentAvatar from '../UserAvatar'
 import axios from 'axios'
@@ -48,7 +54,7 @@ const TableBatchStudents = () => {
     numPages = 1
   }
 
-  const pagesList = []
+  const pagesList: number[] = []
 
   for (let i = 0; i < numPages; i++) {
     pagesList.push(i)
@@ -57,7 +63,7 @@ const TableBatchStudents = () => {
   useEffect(() => {
     console.log('CHanged')
     let checkCount = 0
-    selectedStudents.map((item, index) => {
+    selectedStudents.map((item: Students, index) => {
       if (item.checked == true) {
         checkCount += 1
       }
@@ -66,7 +72,7 @@ const TableBatchStudents = () => {
   }, [selectedStudents])
 
   const handleCheck = (e: React.ChangeEvent<HTMLInputElement>, id: string) => {
-    const updated = selectedStudents.map((item, index) => {
+    const updated: Students[] = selectedStudents.map((item: Students, index) => {
       console.log(!item.checked, 'L')
       if (item.checked) {
         setCheckAll(false)
@@ -158,7 +164,10 @@ const TableBatchStudents = () => {
                     <Button
                       color="info"
                       icon={mdiEye}
-                      onClick={() => dispatch(closeModalStudents())}
+                      onClick={() => {
+                        dispatch(setStudent(client))
+                        dispatch(showStudentDetailModal())
+                      }}
                       small
                     />
                   </Buttons>
@@ -175,7 +184,7 @@ const TableBatchStudents = () => {
               <Button
                 key={page}
                 active={page === currentPage}
-                label={page + 1}
+                label={String(page + 1)}
                 color={page === currentPage ? 'lightDark' : 'whiteDark'}
                 small
                 onClick={() => setCurrentPage(page)}

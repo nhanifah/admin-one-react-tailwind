@@ -25,7 +25,7 @@ const StudentLists = () => {
     numPages = Math.floor(numPages) + 1
   }
 
-  const pagesList = []
+  const pagesList: number[] = []
 
   for (let i = 0; i < numPages; i++) {
     pagesList.push(i)
@@ -210,7 +210,7 @@ const StudentLists = () => {
               <Button
                 key={page}
                 active={page === currentPage}
-                label={page + 1}
+                label={String(page + 1)}
                 color={page === currentPage ? 'lightDark' : 'whiteDark'}
                 small
                 onClick={() => setCurrentPage(page)}

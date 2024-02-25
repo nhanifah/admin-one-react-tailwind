@@ -11,6 +11,7 @@ import { questionSchema } from '../../utils/validator'
 import { addOption, resetOption } from '../../stores/optionSlice'
 import toast from 'react-hot-toast'
 import { useBankQuestionClients } from '../../hooks/requestData'
+import React from 'react'
 
 export default function AddQuestionModal() {
   const dispatch = useAppDispatch()

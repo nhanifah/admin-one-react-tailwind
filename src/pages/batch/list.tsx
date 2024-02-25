@@ -12,22 +12,25 @@ import { useAppDispatch } from '../../stores/hooks'
 import { showModal } from '../../stores/batchSlice'
 import AddBatchModal from '../../components/Modals/AddBatchModal'
 import BatchStudentsModal from '../../components/Modals/BatchStudentsModal'
+import React from 'react'
+import StudentDetailModal from '../../components/Modals/StudentDetailModal'
 
 const BatchList = () => {
   const dispatch = useAppDispatch()
 
   return (
     <>
+      <Head>
+        <title>{getPageTitle('Daftar Batch')}</title>
+      </Head>
       <AddBatchModal />
       <BatchStudentsModal />
-      <Head>
-        <title>{getPageTitle('Jawaban Peserta')}</title>
-      </Head>
+      <StudentDetailModal />
 
       <SectionMain>
         <SectionTitleLineWithButton icon={mdiBallotOutline} title="Daftar Batch" main>
           <Button
-            onClick={() => dispatch(showModal())}
+            onClick={() => dispatch(showModal(null))}
             target="_blank"
             icon={mdiPlusBox}
             label="Tambahkan"
