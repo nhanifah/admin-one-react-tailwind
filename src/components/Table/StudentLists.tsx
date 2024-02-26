@@ -9,9 +9,12 @@ import StudentAvatar from '../UserAvatar'
 import FormField from '../Form/Field'
 import { Field, Form, Formik } from 'formik'
 import Divider from '../../components/Divider'
+import { useAppDispatch } from '../../stores/hooks'
+import { setStudent, showStudentDetailModal } from '../../stores/batchSlice'
 
-const StudentLists = () => {
-  const { clients } = useStudentClients()
+const StudentLists = ({ progress }) => {
+  const dispatch = useAppDispatch()
+  const { clients } = useStudentClients(progress)
 
   const perPage = 5
 
@@ -41,62 +44,6 @@ const StudentLists = () => {
 
   return (
     <>
-      <WideCardBoxModal
-        title="Biodata Siswa"
-        buttonColor="info"
-        buttonLabel="Done"
-        isActive={isModalInfoActive}
-        onConfirm={handleModalAction}
-        onCancel={handleModalAction}
-      >
-        <Formik
-          initialValues={{
-            full_name: 'John Doe',
-            email: 'john.doe@example.com',
-            whatsapp: '083116448996',
-            color: 'green',
-            textarea: '',
-          }}
-          onSubmit={(values) => alert(JSON.stringify(values, null, 2))}
-        >
-          <Form>
-            <FormField label="Nama Lengkap" labelFor="full_name">
-              <Field name="full_name" placeholder="Nama Lengkap" id="full_name" />
-            </FormField>
-
-            <FormField label="Kontak" icons={[mdiWhatsapp, mdiMail]}>
-              <Field name="whatsapp" placeholder="Whatsapp" disabled />
-              <Field type="email" name="email" placeholder="Email" disabled />
-            </FormField>
-
-            <Divider />
-
-            <FormField label="Alamat" labelFor="address">
-              <Field name="phone" placeholder="Provinsi" id="phone" />
-              <Field name="phone" placeholder="Kota / Kabupaten" id="phone" />
-              <Field name="phone" placeholder="Kecamatan" id="phone" />
-            </FormField>
-
-            <FormField label="" help="Help line comes here">
-              <Field name="phone" placeholder="Kelurahan / Desa" id="phone" />
-            </FormField>
-
-            <FormField label="" hasTextareaHeight>
-              <Field name="textarea" as="textarea" placeholder="Alamat Lengkap" />
-            </FormField>
-
-            <Divider />
-
-            <FormField label="Biodata Orangtua" icons={[mdiWhatsapp, mdiMail]}>
-              <Field name="guardian_name" placeholder="Nama Orangtua" disabled />
-              <Field name="guardian_phone" placeholder="Whatsapp Orangtua" disabled />
-            </FormField>
-
-            <Divider />
-          </Form>
-        </Formik>
-      </WideCardBoxModal>
-
       <WideCardBoxModal
         title="Please confirm"
         buttonColor="danger"
@@ -132,7 +79,7 @@ const StudentLists = () => {
           )}
           {clientsPaginated.map((client: Students) => {
             let fotoAttachments = []
-            fotoAttachments = client.student_attachments.filter((attachment) =>
+            fotoAttachments = client?.student_attachments?.filter((attachment) =>
               attachment.file_name.includes('foto_')
             )
 
@@ -150,7 +97,7 @@ const StudentLists = () => {
                   />
                 </td>
                 <td data-label="Nama">{client.full_name}</td>
-                <td data-label="Batch">{client.batch_registration.batch_name}</td>
+                <td data-label="Batch">{client?.batch_registration?.batch_name}</td>
                 <td data-label="Asrama" className="lg:w-32">
                   {client.dormitory === 'yes' ? 'Iya' : 'Tidak'}
                 </td>
@@ -187,7 +134,10 @@ const StudentLists = () => {
                     <Button
                       color="info"
                       icon={mdiEye}
-                      onClick={() => setIsModalInfoActive(true)}
+                      onClick={() => {
+                        dispatch(setStudent(client))
+                        dispatch(showStudentDetailModal())
+                      }}
                       small
                     />
                     <Button

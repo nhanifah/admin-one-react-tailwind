@@ -32,7 +32,7 @@ const StudentList = () => {
         ></SectionTitleLineWithButton>
 
         <CardBox className="mb-6" hasTable>
-          <StudentLists />
+          <StudentLists progress={'success'} />
         </CardBox>
       </SectionMain>
     </>

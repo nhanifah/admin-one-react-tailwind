@@ -14,7 +14,7 @@ import { useStudentClients } from '../../hooks/requestData'
 import React from 'react'
 
 export default function BatchStudentsModal() {
-  const { updateProgress } = useStudentClients()
+  const { updateProgress } = useStudentClients('success')
   const dispatch = useAppDispatch()
   const modalStudents = useAppSelector((state) => state.batch.modalStudents)
   const selectedBatch = useAppSelector((state) => state.batch.batch_selected)
