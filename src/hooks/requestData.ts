@@ -93,8 +93,8 @@ export const useBatchInterviewClients = () => {
   }
 }
 
-export const useStudentClients = () => {
-  const { data, error } = useSWR('/api/student', fetcher)
+export const useStudentClients = (progress: string) => {
+  const { data, error } = useSWR(`/api/student/${progress}`, fetcher)
 
   const updateData = async (data: object) => {
     try {
