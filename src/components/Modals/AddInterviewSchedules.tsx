@@ -5,60 +5,61 @@ import CardBoxModal from '../../components/CardBox/Modal'
 import FormField from '../../components/Form/Field'
 import { useRef, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../../stores/hooks'
-import { closeModal } from '../../stores/batchSlice'
-import { batchSchema } from '../../utils/validator'
+import { batchSchema, interviewScheduleSchema } from '../../utils/validator'
 import toast from 'react-hot-toast'
-import { useBatchClients } from '../../hooks/requestData'
+import { useBatchClients, useInterviewScheduleClients } from '../../hooks/requestData'
 import React from 'react'
+import { closeAddModal } from '../../stores/interviewSlice'
 
 type errors = {
   message: string[]
 }
 
-export default function AddBatchModal() {
+export default function AddInterviewSchedules() {
   const dispatch = useAppDispatch()
-  const modal = useAppSelector((state) => state.batch.modal)
+  const addModal = useAppSelector((state) => state.interview.addModal)
   const formRef = useRef<any>()
   const [validationErrors, setValidationErrors] = useState([])
-  const { createData } = useBatchClients()
+  const { clients } = useBatchClients()
+  const { createInterview } = useInterviewScheduleClients()
 
   const handleModalAction = () => {
-    dispatch(closeModal(null))
+    dispatch(closeAddModal())
     // Reset the form
   }
 
   const handleSubmit = async (values, { resetForm }) => {
     try {
-      batchSchema.parse(values)
+      interviewScheduleSchema.parse(values)
     } catch (error) {
       console.log(error)
       setValidationErrors(error.errors)
       return
     }
 
-    const { status, data } = await createData(values)
+    const { status, data } = await createInterview(values)
     if (status == 200) {
       console.log(data)
       resetForm({
         values: {
-          batch_name: '',
-          quota: 0,
-          end_date: '',
+          batch_id: clients[0]?.id,
+          interview_location: '',
+          interview_date: '',
         },
       })
-      toast.success('Soal berhasil ditambahkan!')
+      toast.success('Jadwal  Interview berhasil ditambahkan!')
     } else {
       console.log(data)
-      toast.error('Soal gagal ditambahkan')
+      toast.error('Jadwal interview gagal ditambahkan')
     }
   }
 
   return (
     <CardBoxModal
-      title="Tambahkan Batch Baru"
+      title="Tambah jadwal interview"
       buttonColor="success"
       buttonLabel="Simpan"
-      isActive={modal}
+      isActive={addModal}
       onConfirm={() => formRef?.current?.handleSubmit()}
       onCancel={handleModalAction}
     >
@@ -82,9 +83,9 @@ export default function AddBatchModal() {
       </div>
       <Formik
         initialValues={{
-          batch_name: '',
-          quota: 0,
-          end_date: '',
+          batch_id: clients[0]?.id,
+          interview_location: '',
+          interview_date: '',
         }}
         onSubmit={handleSubmit}
         // onSubmit={handleSubmit}
@@ -92,14 +93,26 @@ export default function AddBatchModal() {
       >
         {({ setFieldValue, values }) => (
           <Form>
-            <FormField label="Nama batch" labelFor="batch_name">
-              <Field name="batch_name" placeholder="Nama batch" autoFocus />
+            <FormField label="Pilih Batch" labelFor="batch_id">
+              <Field
+                name="batch_id"
+                id="batch_id"
+                component="select"
+                className="py-0 rounded-full h-full"
+                onChange={(e) => setFieldValue('batch_id', e.target.value)}
+              >
+                {clients.map((item, index) => (
+                  <option key={index} className="capitalize" selected value={item.id}>
+                    {item.batch_name}
+                  </option>
+                ))}
+              </Field>
             </FormField>
-            <FormField label="Kuota Batch" labelFor="quota" icons={[mdiScoreboard]}>
-              <Field name="quota" placeholder="Kuota" type="number" min={0} />
+            <FormField label="Lokasi Interview" labelFor="interview_location">
+              <Field name="interview_location" />
             </FormField>
-            <FormField label="Batas Pendaftaran Batch" labelFor="end_date">
-              <Field name="end_date" type="date" />
+            <FormField label="Tanggal Interview" labelFor="interview_date">
+              <Field name="interview_date" type="datetime-local" />
             </FormField>
           </Form>
         )}

@@ -244,6 +244,28 @@ export const useSampleClients = () => {
   }
 }
 
+export const useInterviewScheduleClients = () => {
+  const createInterview = async (data) => {
+    try {
+      const response = await axios.post('/api/interview', data)
+      return {
+        status: response.status,
+        data: response.data,
+      }
+    } catch (error) {
+      console.log(error)
+      return {
+        status: error.response.status,
+        data: error.response.data,
+      }
+    }
+  }
+
+  return {
+    createInterview,
+  }
+}
+
 export const useSampleTransactions = () => {
   const { data, error } = useSWR('/data-sources/history.json', fetcher)
 

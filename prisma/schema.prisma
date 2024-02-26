@@ -137,7 +137,7 @@ model installments {
 }
 
 model interview_schedule {
-  id                 String              @id @db.Char(36)
+  id                 String              @id @default(uuid()) @db.Char(36)
   batch_id           String?             @db.Char(36)
   interview_date     DateTime?           @db.DateTime(0)
   interview_location String?             @db.VarChar(255)

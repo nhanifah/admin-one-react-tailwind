@@ -8,9 +8,10 @@ import SectionTitleLineWithButton from '../../../components/Section/TitleLineWit
 import { getPageTitle } from '../../../config'
 import Button from '../../../components/Button'
 import { useAppDispatch } from '../../../stores/hooks'
-import { showModal } from '../../../stores/batchSlice'
 import React from 'react'
 import InterviewTable from '../../../components/Table/Interview'
+import { showAddModal } from '../../../stores/interviewSlice'
+import AddInterviewSchedules from '../../../components/Modals/AddInterviewSchedules'
 
 const Interview = () => {
   const dispatch = useAppDispatch()
@@ -21,10 +22,12 @@ const Interview = () => {
         <title>{getPageTitle('Jadwal Interview')}</title>
       </Head>
 
+      <AddInterviewSchedules />
+
       <SectionMain>
         <SectionTitleLineWithButton icon={mdiBallotOutline} title="Jadwal Interview" main>
           <Button
-            onClick={() => dispatch(showModal(null))}
+            onClick={() => dispatch(showAddModal())}
             target="_blank"
             icon={mdiPlusBox}
             label="Tambahkan Jadwal Interview"
