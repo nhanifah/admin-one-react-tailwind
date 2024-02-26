@@ -66,6 +66,16 @@ export const useBankQuestionClients = () => {
   }
 }
 
+export const useBatchInterviewClients = () => {
+  const { data, error } = useSWR('/api/batch/interview', fetcher)
+
+  return {
+    clients: data?.data ?? [],
+    isLoading: !error && !data,
+    isError: error,
+  }
+}
+
 export const useStudentClients = () => {
   const { data, error } = useSWR('/api/student', fetcher)
 

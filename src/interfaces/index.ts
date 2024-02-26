@@ -132,15 +132,15 @@ export type Students = {
   created_at: Date
   updated_at: Date
   checked: boolean
-  batch_registration: {
+  batch_registration?: {
     id: string
     batch_name: string
   }
-  master_referral: {
+  master_referral?: {
     id: string
     referral_name: string
   }
-  student_attachments: {
+  student_attachments?: {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     filter: any
     id: string
@@ -171,5 +171,21 @@ export type BatchStudents = {
   batch_name: string
   quota: number
   end_date: string
+  students: Students[]
+}
+
+export type BatchRegistration = {
+  id: string
+  batch_name: string
+  quota: number
+  end_date: string
+  students: Students[]
+}
+
+export type InterviewSchedules = {
+  id: string
+  interview_date: string
+  interview_location: string
+  batch_registration?: BatchRegistration
   students: Students[]
 }

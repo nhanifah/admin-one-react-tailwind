@@ -19,6 +19,7 @@ const student: Students = {
   nik: '',
   province: '',
   city: '',
+  subdistrict: '',
   village: '',
   address_detail: '',
   batch_id: '',

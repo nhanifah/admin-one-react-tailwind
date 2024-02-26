@@ -1,5 +1,19 @@
 import { z } from 'zod'
 
+const studentSchema = z.object({
+  id: z.string(),
+})
+
+export const broadcastSchema = z.object({
+  students: z
+    .string()
+    .array()
+    .nonempty({ message: 'Minimal memilih 1 siswa untuk mengirim pesan broadcast!' }),
+  message: z
+    .string({ required_error: 'Pesan broadcast tidak boleh kosong!' })
+    .refine((value) => value.length > 0, { message: 'Pesan broadcast tidak boleh kosong!' }),
+})
+
 export const studentProgressSchema = z.object({
   selectedStudentsId: z
     .string()
@@ -56,7 +70,9 @@ export const questionSchema = z
   .refine(
     (schema) => {
       if (schema.questionType == 'multipleChoice') {
-        return schema?.option?.length > 0
+        if (schema.option) {
+          return schema?.option?.length > 0
+        }
       } else {
         return true
       }

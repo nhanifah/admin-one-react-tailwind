@@ -9,8 +9,13 @@ import { setIsModalActive } from '../../stores/modalSlice'
 import { answerCheckedSchema } from '../../utils/validator'
 import { studentAnswer } from '../../interfaces'
 import toast from 'react-hot-toast'
-import { useBankQuestionClients, useStudentPhyscotestAnswerClients } from '../../hooks/requestData'
+import { useStudentPhyscotestAnswerClients } from '../../hooks/requestData'
 import { resetAnswer, setChecked, setUnchecked } from '../../stores/answerSlice'
+import React from 'react'
+
+type errors = {
+  message: string[]
+}
 
 export default function AnswerModal() {
   const dispatch = useAppDispatch()
@@ -20,7 +25,7 @@ export default function AnswerModal() {
   const studentId = useAppSelector((state) => state.answer.studentId)
   const { createResult } = useStudentPhyscotestAnswerClients()
 
-  const formRef = useRef()
+  const formRef = useRef<any>()
 
   const [validationErrors, setValidationErrors] = useState([])
 
@@ -77,7 +82,7 @@ export default function AnswerModal() {
           onClick={() => setValidationErrors([])}
         />
         <ul>
-          {validationErrors.map((item, i) => (
+          {validationErrors.map((item: errors, i) => (
             <li key={`error-${i}`}>{item.message}</li>
           ))}
         </ul>

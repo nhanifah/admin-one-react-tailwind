@@ -19,7 +19,7 @@ export default function BatchStudentsModal() {
   const modalStudents = useAppSelector((state) => state.batch.modalStudents)
   const selectedBatch = useAppSelector((state) => state.batch.batch_selected)
   const selectedStudents = useAppSelector((state) => state.batch.students_selected)
-  const formRef = useRef()
+  const formRef = useRef<any>()
   const handleModalAction = () => {
     dispatch(closeModalStudents())
     // Reset the form

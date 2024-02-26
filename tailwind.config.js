@@ -39,6 +39,9 @@ module.exports = {
         'fade-out': 'fade-out 250ms ease-in-out',
         'fade-in': 'fade-in 250ms ease-in-out',
       },
+      screens: {
+        'custom-sm': '510px',
+      },
       colors: {
         main: {
           100: '#f8d0cd',

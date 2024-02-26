@@ -1,40 +1,53 @@
-import { mdiChatQuestion, mdiScoreboard, mdiWrench, mdiPlusCircle, mdiCloseBox } from '@mdi/js'
-import { Field, Form, Formik, FormikFormProps } from 'formik'
+import { Field, Form, Formik } from 'formik'
 import Button from '../../components/Button'
 import CardBoxModal from '../../components/CardBox/Modal'
 import FormField from '../../components/Form/Field'
 import { useRef, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../../stores/hooks'
-import { closeModal } from '../../stores/batchSlice'
-import { batchSchema } from '../../utils/validator'
+import { batchSchema, broadcastSchema } from '../../utils/validator'
 import toast from 'react-hot-toast'
 import { useBatchClients } from '../../hooks/requestData'
 import React from 'react'
+import { closeBroadcastModal } from '../../stores/interviewSlice'
+import { Students } from '../../interfaces'
 
-type errors = {
-  message: string[]
-}
-
-export default function AddBatchModal() {
+export default function BroadcastModal() {
   const dispatch = useAppDispatch()
-  const modal = useAppSelector((state) => state.batch.modal)
-  const formRef = useRef<HTMLFormElement>()
+  const selectedStudents = useAppSelector((state) => state.interview.students)
+  const broadcastModal = useAppSelector((state) => state.interview.broadcastModal)
+  const formRef = useRef<any>()
   const [validationErrors, setValidationErrors] = useState([])
   const { createData } = useBatchClients()
 
   const handleModalAction = () => {
-    dispatch(closeModal())
+    dispatch(closeBroadcastModal())
     // Reset the form
   }
 
   const handleSubmit = async (values, { resetForm }) => {
+    const checkedStudent: Students[] = []
+    const studentsId: string[] = []
+    selectedStudents.map((item, index) => {
+      if (item.checked) {
+        checkedStudent.push(item)
+        studentsId.push(item.id)
+      }
+    })
+
     try {
-      batchSchema.parse(values)
+      broadcastSchema.parse({
+        students: studentsId,
+        ...values,
+      })
     } catch (error) {
       console.log(error)
-      setValidationErrors(error.errors)
+      toast.error(error.errors[0].message)
       return
     }
+
+    toast.success(values.message)
+    // toast.success('HELLO')
+    return
 
     const { status, data } = await createData(values)
     if (status == 200) {
@@ -58,28 +71,10 @@ export default function AddBatchModal() {
       title="Tambahkan Batch Baru"
       buttonColor="success"
       buttonLabel="Simpan"
-      isActive={modal}
+      isActive={broadcastModal}
       onConfirm={() => formRef?.current?.handleSubmit()}
       onCancel={handleModalAction}
     >
-      <div
-        className={`${
-          validationErrors.length == 0 ? 'hidden' : ''
-        } bg-red-100 p-2.5 text-red-800 rounded-lg relative min-h-[60px]`}
-      >
-        <Button
-          icon={mdiCloseBox}
-          iconSize={20}
-          color="danger"
-          className="p-0 absolute right-4 top-2.5 bg-main-200"
-          onClick={() => setValidationErrors([])}
-        />
-        <ul>
-          {validationErrors.map((item: errors, i) => (
-            <li key={`error-${i}`}>{item.message}</li>
-          ))}
-        </ul>
-      </div>
       <Formik
         initialValues={{
           batch_name: '',
@@ -92,14 +87,8 @@ export default function AddBatchModal() {
       >
         {({ setFieldValue, values }) => (
           <Form>
-            <FormField label="Nama batch" labelFor="batch_name">
-              <Field name="batch_name" placeholder="Nama batch" autoFocus />
-            </FormField>
-            <FormField label="Kuota Batch" labelFor="quota" icons={[mdiScoreboard]}>
-              <Field name="quota" placeholder="Kuota" type="number" min={0} />
-            </FormField>
-            <FormField label="Batas Pendaftaran Batch" labelFor="end_date">
-              <Field name="end_date" type="date" />
+            <FormField hasTextareaHeight label="Pesan broadcast" labelFor="message">
+              <Field name="message" as="textarea" placeholder="Masukan pesan broadcast" autoFocus />
             </FormField>
           </Form>
         )}

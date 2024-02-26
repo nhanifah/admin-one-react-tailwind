@@ -1,5 +1,5 @@
 import { mdiChatQuestion, mdiScoreboard, mdiWrench, mdiPlusCircle, mdiCloseBox } from '@mdi/js'
-import { Field, Form, Formik } from 'formik'
+import { Field, Form, Formik, FormikProps, FormikValues, useFormikContext } from 'formik'
 import Button from '../../components/Button'
 import CardBoxModal from '../../components/CardBox/Modal'
 import FormField from '../../components/Form/Field'
@@ -13,17 +13,38 @@ import toast from 'react-hot-toast'
 import { useBankQuestionClients } from '../../hooks/requestData'
 import React from 'react'
 
+type errors = {
+  message: string[]
+}
+
+interface formValues {
+  questionType: string
+  question: string
+  option: string[]
+  answer: string
+  point: number | string
+  answerSelected: string
+}
+
+const initialValues: formValues = {
+  questionType: '',
+  question: '',
+  option: [],
+  answer: '',
+  point: 0,
+  answerSelected: '',
+}
+
 export default function AddQuestionModal() {
   const dispatch = useAppDispatch()
   const isModalActive = useAppSelector((state) => state.modal.isModalActive)
   const option = useAppSelector((state) => state.option.option)
   const { createData } = useBankQuestionClients()
-
-  const formRef = useRef()
+  const formRef = useRef<any>()
 
   const [isMultipleChoice, setIsMultipleChoice] = useState(false)
   const [isQuestTypeSelected, setIsQuestTypeSelected] = useState(false)
-  const [validationErrors, setValidationErrors] = useState([])
+  const [validationErrors, setValidationErrors] = useState<errors[]>([])
 
   const handleModalAction = () => {
     dispatch(setIsModalActive(false))
@@ -68,7 +89,7 @@ export default function AddQuestionModal() {
       buttonColor="success"
       buttonLabel="Simpan"
       isActive={isModalActive}
-      onConfirm={() => formRef?.current?.handleSubmit()}
+      onConfirm={() => formRef?.current?.submitForm()}
       onCancel={handleModalAction}
     >
       <div
@@ -89,18 +110,7 @@ export default function AddQuestionModal() {
           ))}
         </ul>
       </div>
-      <Formik
-        initialValues={{
-          questionType: '',
-          question: '',
-          option: [],
-          answer: '',
-          point: 0,
-          answerSelected: '',
-        }}
-        onSubmit={handleSubmit}
-        innerRef={formRef}
-      >
+      <Formik initialValues={initialValues} onSubmit={handleSubmit} innerRef={formRef}>
         {({ setFieldValue, values }) => (
           <Form>
             <FormField label="Tipe Pertanyaan" labelFor="questionType" icons={[mdiWrench]}>
