@@ -3,6 +3,7 @@ import { Students, InterviewSchedules } from '../interfaces'
 
 const interviewSchedules: InterviewSchedules = {
   id: '',
+  batch_id: '',
   interview_date: '',
   interview_location: '',
   students: [],
@@ -14,6 +15,8 @@ const initialState = {
   interviewSchedules,
   students,
   broadcastModal: false,
+  updateModal: false,
+  progressModal: false,
 }
 
 export const styleSlice = createSlice({
@@ -32,10 +35,30 @@ export const styleSlice = createSlice({
     closeBroadcastModal: (state) => {
       state.broadcastModal = false
     },
+    showUpdateModal: (state) => {
+      state.updateModal = true
+    },
+    closeUpdateModal: (state) => {
+      state.updateModal = false
+    },
+    showProgressModal: (state) => {
+      state.progressModal = true
+    },
+    closeProgressModal: (state) => {
+      state.progressModal = false
+    },
   },
 })
 
-export const { setInterviewSchedules, setStudents, showBroadcastModal, closeBroadcastModal } =
-  styleSlice.actions
+export const {
+  setInterviewSchedules,
+  setStudents,
+  showBroadcastModal,
+  closeBroadcastModal,
+  showUpdateModal,
+  closeUpdateModal,
+  showProgressModal,
+  closeProgressModal,
+} = styleSlice.actions
 
 export default styleSlice.reducer

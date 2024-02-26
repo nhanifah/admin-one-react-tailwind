@@ -184,6 +184,7 @@ export type BatchRegistration = {
 
 export type InterviewSchedules = {
   id: string
+  batch_id: string
   interview_date: string
   interview_location: string
   batch_registration?: BatchRegistration

@@ -1,10 +1,9 @@
 import { Field, Form, Formik } from 'formik'
-import Button from '../../components/Button'
 import CardBoxModal from '../../components/CardBox/Modal'
 import FormField from '../../components/Form/Field'
 import { useRef, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../../stores/hooks'
-import { batchSchema, broadcastSchema } from '../../utils/validator'
+import { broadcastSchema } from '../../utils/validator'
 import toast from 'react-hot-toast'
 import { useBatchClients } from '../../hooks/requestData'
 import React from 'react'
@@ -68,7 +67,7 @@ export default function BroadcastModal() {
 
   return (
     <CardBoxModal
-      title="Tambahkan Batch Baru"
+      title="Kirim Pesan Broadcast"
       buttonColor="success"
       buttonLabel="Simpan"
       isActive={broadcastModal}
@@ -77,12 +76,9 @@ export default function BroadcastModal() {
     >
       <Formik
         initialValues={{
-          batch_name: '',
-          quota: 0,
-          end_date: '',
+          message: '',
         }}
         onSubmit={handleSubmit}
-        // onSubmit={handleSubmit}
         innerRef={formRef}
       >
         {({ setFieldValue, values }) => (

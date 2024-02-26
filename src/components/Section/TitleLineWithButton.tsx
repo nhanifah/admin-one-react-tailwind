@@ -18,7 +18,7 @@ export default function SectionTitleLineWithButton({ icon, title, main = false, 
     <section
       className={`${
         main ? '' : 'pt-6'
-      } mb-6 flex custom-sm:flex-row custom-sm:items-center custom-sm:justify-between flex-col items-start gap-3`}
+      } mb-6 flex lg:flex-row lg:items-center lg:justify-between flex-col items-start gap-3`}
     >
       <div className="flex items-center justify-start">
         {icon && main && <IconRounded icon={icon} color="light" className="mr-3" bg />}

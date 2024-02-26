@@ -1,4 +1,4 @@
-import { mdiBallotOutline, mdiClockOutline, mdiBullhornVariant } from '@mdi/js'
+import { mdiBallotOutline, mdiClockOutline, mdiBullhornVariant, mdiUpdate } from '@mdi/js'
 import Head from 'next/head'
 import { ReactElement } from 'react'
 import CardBox from '../../../components/CardBox'
@@ -8,12 +8,17 @@ import SectionTitleLineWithButton from '../../../components/Section/TitleLineWit
 import { getPageTitle } from '../../../config'
 import Button from '../../../components/Button'
 import { useAppDispatch, useAppSelector } from '../../../stores/hooks'
-import { showModal } from '../../../stores/batchSlice'
 import React from 'react'
-import InterviewTable from '../../../components/Table/Interview'
 import InterviewStudents from '../../../components/Table/InterviewStudents'
-import { showBroadcastModal } from '../../../stores/interviewSlice'
+import {
+  showBroadcastModal,
+  showProgressModal,
+  showUpdateModal,
+} from '../../../stores/interviewSlice'
 import BroadcastModal from '../../../components/Modals/BroadcastModal'
+import UpdateInterviewScheduleModal from '../../../components/Modals/UpdateInterviewSchedule'
+import UpdateProgress from '../../../components/Modals/UpdateProgress'
+import StudentDetailModal from '../../../components/Modals/StudentDetailModal'
 
 const Interview = () => {
   const interviewSchedule = useAppSelector((state) => state.interview.interviewSchedules)
@@ -26,10 +31,13 @@ const Interview = () => {
       </Head>
 
       <BroadcastModal />
+      <UpdateInterviewScheduleModal />
+      <UpdateProgress />
+      <StudentDetailModal />
 
       <SectionMain>
         <SectionTitleLineWithButton icon={mdiBallotOutline} title="Daftar Siswa" main>
-          <div className="flex gap-3">
+          <div className="grid grid-cols-1 custom-sm:grid-cols-2 gap-3 sm:grid-cols-3">
             <Button
               onClick={() => dispatch(showBroadcastModal())}
               target="_blank"
@@ -40,11 +48,20 @@ const Interview = () => {
               small
             />
             <Button
-              onClick={() => dispatch(showModal(null))}
+              onClick={() => dispatch(showUpdateModal())}
               target="_blank"
               icon={mdiClockOutline}
               label="Ubah Jadwal Interview"
               color="contrast"
+              roundedFull
+              small
+            />
+            <Button
+              onClick={() => dispatch(showProgressModal())}
+              target="_blank"
+              icon={mdiUpdate}
+              label="Ubah Progress Siswa"
+              color="info"
               roundedFull
               small
             />
@@ -62,6 +79,7 @@ const Interview = () => {
                 day: 'numeric',
                 hour: '2-digit',
                 minute: '2-digit',
+                timeZone: 'UTC',
               })}
             </span>
           </h3>

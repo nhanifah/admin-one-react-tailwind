@@ -61,7 +61,6 @@ const TableBatchStudents = () => {
   }
 
   useEffect(() => {
-    console.log('CHanged')
     let checkCount = 0
     selectedStudents.map((item: Students, index) => {
       if (item.checked == true) {

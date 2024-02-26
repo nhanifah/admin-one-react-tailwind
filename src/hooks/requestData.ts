@@ -69,10 +69,27 @@ export const useBankQuestionClients = () => {
 export const useBatchInterviewClients = () => {
   const { data, error } = useSWR('/api/batch/interview', fetcher)
 
+  const updateStudentsSchedule = async (data: object) => {
+    try {
+      const response = await axios.put('/api/batch/interview/studentsSchedules', data)
+      return {
+        status: response.status,
+        data: response.data,
+      }
+    } catch (error) {
+      console.log(error.response.data)
+      return {
+        status: error.response.status,
+        data: error.response.data,
+      }
+    }
+  }
+
   return {
     clients: data?.data ?? [],
     isLoading: !error && !data,
     isError: error,
+    updateStudentsSchedule,
   }
 }
 

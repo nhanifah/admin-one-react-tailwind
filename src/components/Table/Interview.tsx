@@ -71,7 +71,6 @@ const InterviewTable = () => {
                     onClick={() => {
                       dispatch(setInterviewSchedules(data))
                       dispatch(setStudents(data.students))
-                      console.log(data)
                       router.push('/batch/interview/students')
                     }}
                   />

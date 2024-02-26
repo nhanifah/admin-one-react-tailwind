@@ -1,7 +1,13 @@
 import { z } from 'zod'
 
-const studentSchema = z.object({
-  id: z.string(),
+export const updateInterviewSchedulesSchema = z.object({
+  students: z
+    .string()
+    .array()
+    .nonempty({ message: 'Pilih siswa yang ingin diubah jadwal interviewnya' }),
+  shedule: z
+    .string({ required_error: 'Harus memilih jadwal interview' })
+    .refine((value) => value.length > 0, { message: 'Harus memilih jadwal interview' }),
 })
 
 export const broadcastSchema = z.object({

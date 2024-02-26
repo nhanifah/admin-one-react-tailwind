@@ -7,8 +7,8 @@ import Buttons from '../Buttons'
 import { useAppDispatch, useAppSelector } from '../../stores/hooks'
 import { Students } from '../../interfaces'
 import StudentAvatar from '../UserAvatar'
-import axios from 'axios'
 import { setStudents } from '../../stores/interviewSlice'
+import { setStudent, showStudentDetailModal } from '../../stores/batchSlice'
 
 const TableInterviewStudents = () => {
   const interviewSchedules = useAppSelector((state) => state.interview.interviewSchedules)
@@ -139,7 +139,16 @@ const TableInterviewStudents = () => {
                       }}
                       small
                     />
-                    <Button color="info" icon={mdiEye} small />
+                    <Button
+                      color="info"
+                      icon={mdiEye}
+                      small
+                      onClick={() => {
+                        console.log('Clicked')
+                        dispatch(setStudent(client))
+                        dispatch(showStudentDetailModal())
+                      }}
+                    />
                   </Buttons>
                 </td>
               </tr>

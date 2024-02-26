@@ -24,7 +24,7 @@ const TableBatch = () => {
     numPages = 1
   }
 
-  const pagesList = []
+  const pagesList: number[] = []
 
   for (let i = 0; i < numPages; i++) {
     pagesList.push(i)
@@ -64,7 +64,7 @@ const TableBatch = () => {
                     small
                     onClick={() => {
                       dispatch(selectBatch(data))
-                      dispatch(showModalStudents())
+                      dispatch(showModalStudents(null))
                     }}
                   />
                 </Buttons>
@@ -80,7 +80,7 @@ const TableBatch = () => {
               <Button
                 key={page}
                 active={page === currentPage}
-                label={page + 1}
+                label={String(page + 1)}
                 color={page === currentPage ? 'lightDark' : 'whiteDark'}
                 small
                 onClick={() => setCurrentPage(page)}
