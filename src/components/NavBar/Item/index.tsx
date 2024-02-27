@@ -50,7 +50,7 @@ export default function NavBarItem({ item }: Props) {
             ? 'bg-gray-100 dark:bg-slate-800 lg:bg-transparent lg:dark:bg-transparent p-3 lg:p-0'
             : ''
         }`}
-        onClick={handleMenuClick}
+        onClick={item.isLogout ? item.onClick : handleMenuClick}
       >
         {item.icon && <Icon path={item.icon} className="transition-colors" />}
         <span
