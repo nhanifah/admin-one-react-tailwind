@@ -14,6 +14,7 @@ import {
   mdiVuejs,
   mdiAccountBoxMultiple,
   mdiListBox,
+  mdiAccountArrowUp,
 } from '@mdi/js'
 import { MenuAsideItem } from './interfaces'
 
@@ -81,6 +82,11 @@ const menuAside: MenuAsideItem[] = [
         href: '/student/penalty',
       },
     ],
+  },
+  {
+    href: '/affiliate/list',
+    label: 'Affiliate',
+    icon: mdiAccountArrowUp,
   },
   {
     href: '/tables',
