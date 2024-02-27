@@ -6,7 +6,7 @@ const prisma = new PrismaClient({ log: ['query', 'error'] })
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method == 'PUT') {
     const body = req.body
-    const { id } = req.query
+    const { id }: any = req.query
     try {
       const interview_date = new Date(body.interview_date)
       interview_date.setHours(interview_date.getHours() + 7)

@@ -215,8 +215,8 @@ export const useBatchStudentsClients = (id: string) => {
   }
 }
 
-export const useStudentPhyscotestAnswerClients = () => {
-  const { data, error } = useSWR('/api/result', fetcher)
+export const useStudentPhyscotestAnswerClients = (checked: string = 'no') => {
+  const { data, error } = useSWR(`/api/result?checked=${checked}`, fetcher)
 
   const getAnswerByStudent = async (id: string) => {
     const response = await axios.get(`/api/answer/${id}`)

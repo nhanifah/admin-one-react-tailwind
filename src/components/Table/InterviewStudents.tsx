@@ -62,6 +62,7 @@ const TableInterviewStudents = () => {
       return item.id == id ? { ...item, checked: !item.checked } : item
     })
 
+    console.log(updated)
     dispatch(setStudents(updated))
   }
 

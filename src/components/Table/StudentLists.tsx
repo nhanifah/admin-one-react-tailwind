@@ -1,4 +1,4 @@
-import { mdiEye, mdiTrashCan, mdiWhatsapp, mdiCurrencyUsd, mdiMail } from '@mdi/js'
+import { mdiEye, mdiTrashCan, mdiWhatsapp, mdiCurrencyUsd } from '@mdi/js'
 import React, { useState } from 'react'
 import { useStudentClients } from '../../hooks/requestData'
 import { Students } from '../../interfaces'
@@ -6,9 +6,6 @@ import Button from '../Button'
 import Buttons from '../Buttons'
 import WideCardBoxModal from '../CardBox/WideModal'
 import StudentAvatar from '../UserAvatar'
-import FormField from '../Form/Field'
-import { Field, Form, Formik } from 'formik'
-import Divider from '../../components/Divider'
 import { useAppDispatch } from '../../stores/hooks'
 import { setStudent, showStudentDetailModal } from '../../stores/batchSlice'
 
@@ -34,11 +31,9 @@ const StudentLists = ({ progress }) => {
     pagesList.push(i)
   }
 
-  const [isModalInfoActive, setIsModalInfoActive] = useState(false)
   const [isModalTrashActive, setIsModalTrashActive] = useState(false)
 
   const handleModalAction = () => {
-    setIsModalInfoActive(false)
     setIsModalTrashActive(false)
   }
 
@@ -109,12 +104,7 @@ const StudentLists = ({ progress }) => {
               </td> */}
                 <td className="before:hidden lg:w-1 whitespace-nowrap">
                   <Buttons type="justify-start lg:justify-end" noWrap>
-                    <Button
-                      color="warning"
-                      icon={mdiCurrencyUsd}
-                      onClick={() => setIsModalInfoActive(true)}
-                      small
-                    />
+                    <Button color="warning" icon={mdiCurrencyUsd} small />
                     <Button
                       color="success"
                       icon={mdiWhatsapp}

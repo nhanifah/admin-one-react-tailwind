@@ -9,8 +9,8 @@ import { useAppDispatch } from '../../stores/hooks'
 import { setIsModalActive } from '../../stores/modalSlice'
 import { setAnswer, setStudentName, setStudentId } from '../../stores/answerSlice'
 
-const TableSampleClients = () => {
-  const { clients, getAnswerByStudent } = useStudentPhyscotestAnswerClients()
+const TableSampleClients = ({ checked = 'no' }) => {
+  const { clients, getAnswerByStudent } = useStudentPhyscotestAnswerClients(checked)
   const dispatch = useAppDispatch()
 
   const perPage = 50
@@ -25,7 +25,7 @@ const TableSampleClients = () => {
     numPages = Math.floor(numPages) + 1
   }
 
-  const pagesList = []
+  const pagesList: number[] = []
 
   for (let i = 0; i < numPages; i++) {
     pagesList.push(i)
@@ -45,7 +45,7 @@ const TableSampleClients = () => {
             <th>Nilai</th>
             <th>Dibuat</th>
             <th>Dikerjakan</th>
-            <th />
+            {checked == 'yes' ? '' : <th />}
           </tr>
         </thead>
         <tbody>
@@ -85,23 +85,27 @@ const TableSampleClients = () => {
                   })}
                 </small>
               </td>
-              <td className="before:hidden lg:w-1 whitespace-nowrap">
-                <Buttons type="justify-start lg:justify-end" noWrap>
-                  <Button
-                    color="info"
-                    icon={mdiEye}
-                    onClick={async () => {
-                      const response = await getAnswerByStudent(data.student_id)
-                      dispatch(setAnswer(response.data))
-                      dispatch(setStudentName(data.students.full_name))
-                      dispatch(setStudentId(data.students.id))
-                      console.log(response)
-                      dispatch(setIsModalActive(true))
-                    }}
-                    small
-                  />
-                </Buttons>
-              </td>
+              {checked == 'yes' ? (
+                ''
+              ) : (
+                <td className="before:hidden lg:w-1 whitespace-nowrap">
+                  <Buttons type="justify-start lg:justify-end" noWrap>
+                    <Button
+                      color="info"
+                      icon={mdiEye}
+                      onClick={async () => {
+                        const response = await getAnswerByStudent(data.student_id)
+                        dispatch(setAnswer(response.data))
+                        dispatch(setStudentName(data.students.full_name))
+                        dispatch(setStudentId(data.students.id))
+                        console.log(response)
+                        dispatch(setIsModalActive(true))
+                      }}
+                      small
+                    />
+                  </Buttons>
+                </td>
+              )}
             </tr>
           ))}
         </tbody>
@@ -113,7 +117,7 @@ const TableSampleClients = () => {
               <Button
                 key={page}
                 active={page === currentPage}
-                label={page + 1}
+                label={String(page + 1)}
                 color={page === currentPage ? 'lightDark' : 'whiteDark'}
                 small
                 onClick={() => setCurrentPage(page)}

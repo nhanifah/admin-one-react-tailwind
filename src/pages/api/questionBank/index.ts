@@ -13,8 +13,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           {
             type: cbt_questions_type[body.questionType],
             question_text: body.question,
-            option_text: JSON.stringify(body.option),
-            answer: body.answerSelected,
+            option_text: body.questionType == 'essay' ? null : JSON.stringify(body.option),
+            answer: body.questionType == 'essay' ? null : body.answerSelected,
             weight: parseInt(body.point),
             exam_id: '1e8c3b0d-a7e2-4e61-979a-1102189459a8',
           },
@@ -56,8 +56,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         data: {
           type: cbt_questions_type[body.questionType],
           question_text: body.question,
-          option_text: JSON.stringify(body.option),
-          answer: body.answerSelected,
+          option_text: body.questionType == 'essay' ? null : JSON.stringify(body.option),
+          answer: body.questionType == 'essay' ? null : body.answerSelected,
           weight: body.point,
         },
       })

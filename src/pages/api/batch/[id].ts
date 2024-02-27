@@ -5,7 +5,7 @@ const prisma = new PrismaClient({ log: ['query', 'error'] })
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method == 'GET') {
-    const { id } = req.query
+    const { id }: any = req.query
     const batch = await prisma.batch_registration.findMany({
       where: {
         id: {
@@ -31,7 +31,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(200).json({ data: batch })
   } else if (req.method == 'PUT') {
     const body = await req.body
-    const { id } = req.query
+    const { id }: any = req.query
     try {
       const batch = await prisma.batch_registration.update({
         where: {
