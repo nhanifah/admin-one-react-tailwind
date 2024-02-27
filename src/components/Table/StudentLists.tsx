@@ -1,4 +1,4 @@
-import { mdiEye, mdiTrashCan, mdiWhatsapp, mdiCurrencyUsd } from '@mdi/js'
+import { mdiEye, mdiPoliceBadge, mdiWhatsapp, mdiCurrencyUsd } from '@mdi/js'
 import React, { useState } from 'react'
 import { useStudentClients } from '../../hooks/requestData'
 import { Students } from '../../interfaces'
@@ -104,13 +104,13 @@ const StudentLists = ({ progress }) => {
               </td> */}
                 <td className="before:hidden lg:w-1 whitespace-nowrap">
                   <Buttons type="justify-start lg:justify-end" noWrap>
-                    <Button color="warning" icon={mdiCurrencyUsd} small />
+                    <Button color="warning" icon={mdiCurrencyUsd} onClick={() => {}} small />
                     <Button
                       color="success"
                       icon={mdiWhatsapp}
                       onClick={() => {
                         // sanitize phone number
-                        let whatsapp = client.guardian_phone
+                        let whatsapp = client.whatsapp_number
                         if (whatsapp.charAt(0) === '+') {
                           whatsapp = whatsapp.substring(1)
                         }
@@ -134,7 +134,7 @@ const StudentLists = ({ progress }) => {
                     />
                     <Button
                       color="danger"
-                      icon={mdiTrashCan}
+                      icon={mdiPoliceBadge}
                       onClick={() => setIsModalTrashActive(true)}
                       small
                     />

@@ -126,6 +126,7 @@ export type Students = {
   batch_id: string
   interview_schedule: string
   dormitory: string
+  installment: string
   guardian_name: string
   guardian_phone: string
   progress: string

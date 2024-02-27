@@ -68,7 +68,7 @@ model cbt_enrolled {
 model cbt_examination {
   id            String          @id @default(uuid()) @db.Char(36)
   name          String?         @db.VarChar(255)
-  minimal_value Int             @default(0)
+  minimal_value String?         @db.VarChar(255)
   leases_time   String?         @db.VarChar(255)
   created_at    DateTime?       @default(now()) @db.DateTime(0)
   updated_at    DateTime?       @default(now()) @db.DateTime(0)
@@ -78,7 +78,7 @@ model cbt_examination {
 }
 
 model cbt_questions {
-  id              String              @id @default(uuid()) @db.Char(36)
+  id              String              @id @db.Char(36)
   exam_id         String?             @db.Char(36)
   type            cbt_questions_type?
   question_text   String?             @db.Text

@@ -35,7 +35,7 @@ const menuNavBar: MenuNavBarItem[] = [
         isLogout: true,
         onClick: () => {
           console.log('signing out')
-          signOut()
+          signOut({ callbackUrl: '/login' })
         },
       },
     ],
@@ -60,7 +60,7 @@ const menuNavBar: MenuNavBarItem[] = [
     isLogout: true,
     onClick: () => {
       console.log('signing out')
-      signOut()
+      signOut({ callbackUrl: '/login' })
     },
   },
 ]

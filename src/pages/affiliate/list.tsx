@@ -9,11 +9,11 @@ import { getPageTitle } from '../../config'
 import StudentLists from '../../components/Table/StudentLists'
 import StudentDetailModal from '../../components/Modals/StudentDetailModal'
 
-const StudentList = () => {
+const AffiliateList = () => {
   return (
     <>
       <Head>
-        <title>{getPageTitle('Daftar Siswa')}</title>
+        <title>{getPageTitle('Daftar Affiliator')}</title>
       </Head>
 
       <StudentDetailModal />
@@ -21,7 +21,7 @@ const StudentList = () => {
       <SectionMain>
         <SectionTitleLineWithButton
           icon={mdiBallotOutline}
-          title="Daftar Siswa"
+          title="Daftar Affiliator"
           main
         ></SectionTitleLineWithButton>
 
@@ -33,8 +33,8 @@ const StudentList = () => {
   )
 }
 
-StudentList.getLayout = function getLayout(page: ReactElement) {
+AffiliateList.getLayout = function getLayout(page: ReactElement) {
   return <LayoutAuthenticated>{page}</LayoutAuthenticated>
 }
 
-export default StudentList
+export default AffiliateList
