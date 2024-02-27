@@ -25,5 +25,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     })
 
     return res.status(200).json({ data: batch })
+  } else if (req.method == 'PUT') {
+    const body = await req.body
+    const { id } = req.query
+    try {
+      const batch = await prisma.batch_registration.update({
+        where: {
+          id: id,
+        },
+        data: {
+          batch_name: body.batch_name,
+          quota: body.quota,
+          end_date: new Date(body.end_date),
+        },
+      })
+
+      return res.status(200).json({ data: batch })
+    } catch (error) {
+      console.log(error)
+      return res.status(400).json({ message: 'Update Failed', data: error })
+    }
   }
 }

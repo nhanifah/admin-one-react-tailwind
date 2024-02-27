@@ -57,6 +57,7 @@ export const styleSlice = createSlice({
     students_selected,
     studentDetailModal: false,
     student,
+    editModal: false,
   },
   reducers: {
     showModal: (state, action: PayloadAction<null>) => {
@@ -87,6 +88,12 @@ export const styleSlice = createSlice({
     setStudent: (state, action: PayloadAction<Students>) => {
       state.student = action.payload
     },
+    showEditModal: (state) => {
+      state.editModal = true
+    },
+    closeEditModal: (state) => {
+      state.editModal = false
+    },
   },
 })
 
@@ -100,6 +107,8 @@ export const {
   showStudentDetailModal,
   closeStudentDetailModal,
   setStudent,
+  showEditModal,
+  closeEditModal,
 } = styleSlice.actions
 
 export default styleSlice.reducer

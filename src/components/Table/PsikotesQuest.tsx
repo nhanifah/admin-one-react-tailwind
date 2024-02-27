@@ -21,8 +21,12 @@ import { questionSchema } from '../../utils/validator'
 import { addOption, initOption } from '../../stores/optionSlice'
 import { useAppDispatch } from '../../stores/hooks'
 
+type errors = {
+  message: string[]
+}
+
 const TableSampleClients = () => {
-  const formEditRef = useRef()
+  const formEditRef = useRef<any>()
   const dispatch = useAppDispatch()
   const { clients, deleteData, updateData } = useBankQuestionClients()
 
@@ -38,7 +42,7 @@ const TableSampleClients = () => {
     numPages = 1
   }
 
-  const pagesList = []
+  const pagesList: number[] = []
 
   for (let i = 0; i < numPages; i++) {
     pagesList.push(i)
@@ -48,7 +52,17 @@ const TableSampleClients = () => {
   const [isModalTrashActive, setIsModalTrashActive] = useState(false)
   const [isQuestTypeSelected, setIsQuestTypeSelected] = useState(false)
   const [isMultipleChoice, setIsMultipleChoice] = useState(false)
-  const [itemSelected, setItemSelected] = useState({})
+  const [itemSelected, setItemSelected] = useState<Quest>({
+    id: '',
+    type: '',
+    exam_id: '',
+    weight: 0,
+    question_text: '',
+    option_text: '',
+    answer: '',
+    created_at: new Date(),
+    updated_at: new Date(),
+  })
   const [validationErrors, setValidationErrors] = useState([])
 
   const handleModalAction = () => {
@@ -78,7 +92,17 @@ const TableSampleClients = () => {
           answerSelected: '',
         },
       })
-      setItemSelected({})
+      setItemSelected({
+        id: '',
+        type: '',
+        exam_id: '',
+        weight: 0,
+        question_text: '',
+        option_text: '',
+        answer: '',
+        created_at: new Date(),
+        updated_at: new Date(),
+      })
       setIsModalInfoActive(false)
       toast.success('Pertanyaan berhasil diedit')
     } else {
@@ -123,7 +147,7 @@ const TableSampleClients = () => {
             onClick={() => setValidationErrors([])}
           />
           <ul>
-            {validationErrors.map((item, i) => (
+            {validationErrors.map((item: errors, i) => (
               <li key={`error-${i}`}>{item.message}</li>
             ))}
           </ul>
@@ -284,7 +308,7 @@ const TableSampleClients = () => {
               <Button
                 key={page}
                 active={page === currentPage}
-                label={page + 1}
+                label={String(page + 1)}
                 color={page === currentPage ? 'lightDark' : 'whiteDark'}
                 small
                 onClick={() => setCurrentPage(page)}

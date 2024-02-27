@@ -1,13 +1,14 @@
 import { mdiTrashCan } from '@mdi/js'
-import { useFormikContext } from 'formik'
+import { FormikProps, FormikValues, useFormikContext } from 'formik'
 import { useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../../stores/hooks'
 import { popOption } from '../../stores/optionSlice'
+import React from 'react'
 
-const OptionSoal = ({ selectedOption = null }) => {
+const OptionSoal = ({ selectedOption = '' }) => {
   const dispatch = useAppDispatch()
   const option = useAppSelector((state) => state.option.option)
-  const { values, setFieldValue } = useFormikContext()
+  const { values, setFieldValue } = useFormikContext<any>()
   const [optionSelected, setOptionSelected] = useState(
     option.indexOf(selectedOption) == -1 ? null : option.indexOf(selectedOption)
   )
@@ -56,7 +57,7 @@ const OptionSoal = ({ selectedOption = null }) => {
                       setFieldValue('answerSelected', '')
                     }
                     dispatch(popOption(i))
-                    values.option.splice(i, 1)
+                    values?.option?.splice(i, 1)
                   }}
                 >
                   <svg className="w-6 h-6 text-white" viewBox="0 0 24 24">

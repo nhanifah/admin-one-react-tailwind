@@ -1,4 +1,4 @@
-import { mdiEye } from '@mdi/js'
+import { mdiEye, mdiPencil } from '@mdi/js'
 import React, { useState } from 'react'
 import { useBatchClients } from '../../hooks/requestData'
 import Button from '../Button'
@@ -6,7 +6,7 @@ import Buttons from '../Buttons'
 import AnswerModal from '../Modals/AnswerModal'
 import { useAppDispatch } from '../../stores/hooks'
 import { setIsModalActive } from '../../stores/modalSlice'
-import { selectBatch, showModalStudents } from '../../stores/batchSlice'
+import { selectBatch, showEditModal, showModalStudents } from '../../stores/batchSlice'
 
 const TableBatch = () => {
   const { clients } = useBatchClients()
@@ -65,6 +65,15 @@ const TableBatch = () => {
                     onClick={() => {
                       dispatch(selectBatch(data))
                       dispatch(showModalStudents(null))
+                    }}
+                  />
+                  <Button
+                    color="warning"
+                    icon={mdiPencil}
+                    small
+                    onClick={() => {
+                      dispatch(selectBatch(data))
+                      dispatch(showEditModal())
                     }}
                   />
                 </Buttons>

@@ -167,6 +167,23 @@ export const useBatchClients = () => {
     }
   }
 
+  const editData = async (id: string, data: any) => {
+    try {
+      const response = await axios.put(`/api/batch/${id}`, data)
+      mutate('/api/batch')
+      return {
+        status: response.status,
+        data: response.data,
+      }
+    } catch (error) {
+      console.log(error)
+      return {
+        status: error.response.status,
+        data: error.response.data,
+      }
+    }
+  }
+
   const getBatchStudents = async (id: string) => {
     // const response = await axios.get(`api/batch/${id}`){
     const response = await axios.get(`/api/batch/${id}`)
@@ -180,6 +197,7 @@ export const useBatchClients = () => {
     isError: error,
     createData,
     getBatchStudents,
+    editData,
   }
 }
 

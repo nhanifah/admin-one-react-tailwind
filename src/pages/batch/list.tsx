@@ -14,6 +14,7 @@ import AddBatchModal from '../../components/Modals/AddBatchModal'
 import BatchStudentsModal from '../../components/Modals/BatchStudentsModal'
 import React from 'react'
 import StudentDetailModal from '../../components/Modals/StudentDetailModal'
+import EditBatchModal from '../../components/Modals/EditBatchModal'
 
 const BatchList = () => {
   const dispatch = useAppDispatch()
@@ -26,6 +27,7 @@ const BatchList = () => {
       <AddBatchModal />
       <BatchStudentsModal />
       <StudentDetailModal />
+      <EditBatchModal />
 
       <SectionMain>
         <SectionTitleLineWithButton icon={mdiBallotOutline} title="Daftar Batch" main>
