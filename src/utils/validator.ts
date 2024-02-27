@@ -10,6 +10,18 @@ export const updateInterviewSchedulesSchema = z.object({
     .refine((value) => value.length > 0, { message: 'Harus memilih jadwal interview' }),
 })
 
+export const EditInterviewSchema = z.object({
+  interview_date: z.coerce.date({
+    required_error: 'Harus mengatur tanggal interview',
+    invalid_type_error: 'Format tanggal tidak valid',
+  }),
+  interview_location: z
+    .string({
+      required_error: 'Harus mengatur lokasi interview',
+    })
+    .refine((value) => value.length > 0, { message: 'Harus mengatur lokasi interview' }),
+})
+
 export const interviewScheduleSchema = z.object({
   batch_id: z
     .string({ required_error: 'Harus memilih batch' })

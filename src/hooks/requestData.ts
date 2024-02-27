@@ -266,6 +266,24 @@ export const useInterviewScheduleClients = () => {
   const createInterview = async (data) => {
     try {
       const response = await axios.post('/api/interview', data)
+      mutate('/api/batch/interview')
+      return {
+        status: response.status,
+        data: response.data,
+      }
+    } catch (error) {
+      console.log(error)
+      return {
+        status: error.response.status,
+        data: error.response.data,
+      }
+    }
+  }
+
+  const editInterview = async (id: string, data: any) => {
+    try {
+      const response = await axios.put(`/api/interview/${id}`, data)
+      mutate('/api/batch/interview')
       return {
         status: response.status,
         data: response.data,
@@ -281,6 +299,7 @@ export const useInterviewScheduleClients = () => {
 
   return {
     createInterview,
+    editInterview,
   }
 }
 

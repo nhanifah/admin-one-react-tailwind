@@ -12,6 +12,7 @@ import React from 'react'
 import InterviewTable from '../../../components/Table/Interview'
 import { showAddModal } from '../../../stores/interviewSlice'
 import AddInterviewSchedules from '../../../components/Modals/AddInterviewSchedules'
+import EditInterviewModal from '../../../components/Modals/EditInterviewModal'
 
 const Interview = () => {
   const dispatch = useAppDispatch()
@@ -23,6 +24,7 @@ const Interview = () => {
       </Head>
 
       <AddInterviewSchedules />
+      <EditInterviewModal />
 
       <SectionMain>
         <SectionTitleLineWithButton icon={mdiBallotOutline} title="Jadwal Interview" main>

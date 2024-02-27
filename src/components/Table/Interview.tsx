@@ -1,10 +1,10 @@
-import { mdiEye } from '@mdi/js'
+import { mdiEye, mdiPencil } from '@mdi/js'
 import React, { useState } from 'react'
 import { useBatchInterviewClients } from '../../hooks/requestData'
 import Button from '../Button'
 import Buttons from '../Buttons'
 import { useAppDispatch } from '../../stores/hooks'
-import { selectBatch, showModalStudents } from '../../stores/batchSlice'
+import { showEditModal } from '../../stores/interviewSlice'
 import { setInterviewSchedules, setStudents } from '../../stores/interviewSlice'
 import { useRouter } from 'next/navigation'
 import { InterviewSchedules } from '../../interfaces'
@@ -63,6 +63,15 @@ const InterviewTable = () => {
               <td data-label="Correct">{data?.batch_registration?.batch_name}</td>
               <td className="before:hidden lg:w-1 whitespace-nowrap">
                 <Buttons type="justify-start lg:justify-end" noWrap>
+                  <Button
+                    color="warning"
+                    icon={mdiPencil}
+                    small
+                    onClick={() => {
+                      dispatch(setInterviewSchedules(data))
+                      dispatch(showEditModal())
+                    }}
+                  />
                   <Button
                     color="info"
                     icon={mdiEye}
