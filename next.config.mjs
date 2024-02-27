@@ -22,7 +22,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'static.justboil.me',
+        hostname: 'cdn.lpk-harehare.id',
       },
     ],
   },

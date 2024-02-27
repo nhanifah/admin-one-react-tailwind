@@ -6,6 +6,7 @@ import Divider from '../Divider'
 import FormField from '../Form/Field'
 import { useAppDispatch, useAppSelector } from '../../stores/hooks'
 import { closeStudentDetailModal } from '../../stores/batchSlice'
+import Button from '../Button'
 
 export default function StudentDetailModal() {
   const studentDetailModal = useAppSelector((state) => state.batch.studentDetailModal)
@@ -62,6 +63,30 @@ export default function StudentDetailModal() {
           </FormField>
 
           <Divider />
+
+          {
+              (student?.installment === 'yes' ? 
+              <>
+              <FormField label="Informasi Pembayaran">
+                <Field value="Pembayaran ke-1" placeholder="Pembayaran ke-1" id="phone" className="cursor-not-allowed" disabled />
+                <Field value="Lunas" placeholder="Pembayaran ke-1" id="phone" className="cursor-not-allowed" disabled />
+              </FormField>
+              <FormField label="">
+                <Field value="Pembayaran ke-2" placeholder="Pembayaran ke-2" id="phone" className="cursor-not-allowed" disabled />
+                <Field value="Lunas" placeholder="Pembayaran ke-1" id="phone" className="cursor-not-allowed" disabled />
+              </FormField>
+              <FormField label="">
+                <Field value="Pembayaran ke-3" placeholder="Pembayaran ke-3" id="phone" className="cursor-not-allowed" disabled />
+                <Field value="Belum Lunas" placeholder="Pembayaran ke-1" id="phone" className="cursor-not-allowed" disabled />
+              </FormField>
+              </> : 
+              <FormField label="Informasi Pembayaran">
+                <Field value="Pembayaran ke-1" placeholder="Pembayaran ke-1" id="phone" className="cursor-not-allowed" disabled />
+                <Field value="Lunas" placeholder="Pembayaran ke-1" id="phone" className="cursor-not-allowed" disabled />
+                <Button outline color="info" label="Bayar" />
+              </FormField>
+              )
+            }
         </Form>
       </Formik>
     </WideCardBoxModal>

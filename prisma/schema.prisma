@@ -18,24 +18,33 @@ model admins {
   updated_at   DateTime     @default(now()) @db.DateTime(0)
   deleted_at   DateTime?    @db.DateTime(0)
   master_roles master_roles @relation(fields: [role], references: [id], onUpdate: Restrict, map: "admins_ibfk_1")
+  id           String       @id @db.Char(36)
+  name         String       @db.VarChar(255)
+  username     String       @unique(map: "username") @db.VarChar(255)
+  email        String       @unique(map: "email") @db.VarChar(255)
+  password     String       @db.VarChar(255)
+  role         String       @db.Char(36)
+  created_at   DateTime     @default(now()) @db.DateTime(0)
+  updated_at   DateTime     @default(now()) @db.DateTime(0)
+  deleted_at   DateTime?    @db.DateTime(0)
+  master_roles master_roles @relation(fields: [role], references: [id], onUpdate: Restrict, map: "admins_ibfk_1")
 
   @@index([role], map: "role")
 }
 
 model batch_registration {
-  id                 String               @id @default(uuid()) @db.Char(36)
+  id                 String               @id @unique(map: "id") @db.Char(36)
   batch_name         String?              @db.VarChar(255)
-  quota              Int                  
+  quota              String?              @db.VarChar(255)
   end_date           DateTime?            @db.DateTime(0)
   created_at         DateTime?            @default(now()) @db.DateTime(0)
   updated_at         DateTime?            @default(now()) @db.DateTime(0)
   deleted_at         DateTime?            @db.DateTime(0)
-  installments       installments[]
   interview_schedule interview_schedule[]
+  payments           payments[]
   students           students[]
 }
 
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model cbt_answers {
   question_id     String?        @db.Char(36)
@@ -47,12 +56,11 @@ model cbt_answers {
   cbt_questions   cbt_questions? @relation(fields: [question_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "cbt_answers_ibfk_1")
   students        students?      @relation(fields: [student_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "cbt_answers_ibfk_2")
 
-  @@index([student_id], map: "student_id")
   @@index([question_id], map: "question_id")
+  @@index([student_id], map: "student_id")
   @@ignore
 }
 
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model cbt_enrolled {
   id         String    @id @db.Char(36)
   student_id String?   @db.Char(36)
@@ -71,7 +79,7 @@ model cbt_enrolled {
 model cbt_examination {
   id            String          @id @db.Char(36)
   name          String?         @db.VarChar(255)
-  minimal_value Int             @default(0)
+  minimal_value String?         @db.VarChar(255)
   leases_time   String?         @db.VarChar(255)
   created_at    DateTime?       @default(now()) @db.DateTime(0)
   updated_at    DateTime?       @default(now()) @db.DateTime(0)
@@ -81,6 +89,8 @@ model cbt_examination {
 }
 
 model cbt_questions {
+  id              String              @id @db.Char(36)
+  exam_id         String?             @db.Char(36)
   id              String              @id @default(uuid()) @db.Char(36)
   exam_id         String?             @db.Char(36)
   type            cbt_questions_type?
@@ -113,12 +123,9 @@ model cbt_results {
   @@index([student_id], map: "student_id")
 }
 
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model installments {
   id                 String                 @id @db.Char(36)
-  student_id         String                 @db.Char(36)
-  package_id         String                 @db.Char(36)
-  batch_id           String                 @db.Char(36)
+  payment_id         String?                @db.Char(36)
   installment_number Int
   amount             Decimal                @db.Decimal(10, 2)
   category           String                 @db.VarChar(255)
@@ -127,17 +134,13 @@ model installments {
   payment_date       DateTime?              @db.DateTime(0)
   created_at         DateTime               @default(now()) @db.DateTime(0)
   updated_at         DateTime               @default(now()) @db.DateTime(0)
-  students           students               @relation(fields: [student_id], references: [id], onUpdate: Restrict, map: "installments_ibfk_1")
-  learning_packages  learning_packages      @relation(fields: [package_id], references: [id], onUpdate: Restrict, map: "installments_ibfk_2")
-  batch_registration batch_registration     @relation(fields: [batch_id], references: [id], onUpdate: Restrict, map: "installments_ibfk_3")
+  payments           payments?              @relation(fields: [payment_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "fk_payment_id")
 
-  @@index([batch_id], map: "batch_id")
-  @@index([package_id], map: "package_id")
-  @@index([student_id], map: "student_id")
+  @@index([payment_id], map: "payment_id_index")
 }
 
 model interview_schedule {
-  id                 String              @id @default(uuid()) @db.Char(36)
+  id                 String              @id @unique(map: "id") @db.Char(36)
   batch_id           String?             @db.Char(36)
   interview_date     DateTime?           @db.DateTime(0)
   interview_location String?             @db.VarChar(255)
@@ -151,17 +154,15 @@ model interview_schedule {
 }
 
 model learning_packages {
-  id           String         @id @db.Char(36)
-  name         String?        @db.VarChar(255)
-  description  String?        @db.Text
-  price        Decimal        @db.Decimal(10, 2)
-  created_at   DateTime       @default(now()) @db.DateTime(0)
-  updated_at   DateTime       @default(now()) @db.DateTime(0)
-  deleted_at   DateTime?      @db.DateTime(0)
-  installments installments[]
+  id          String    @id @db.Char(36)
+  name        String?   @db.VarChar(255)
+  description String?   @db.Text
+  price       Decimal   @db.Decimal(10, 2)
+  created_at  DateTime  @default(now()) @db.DateTime(0)
+  updated_at  DateTime  @default(now()) @db.DateTime(0)
+  deleted_at  DateTime? @db.DateTime(0)
 }
 
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model master_referral {
   id         String     @id @db.Char(36)
   name       String?    @db.VarChar(255)
@@ -181,6 +182,26 @@ model master_roles {
   admins     admins[]
 }
 
+model payments {
+  id                 String              @id @db.Char(36)
+  student_id         String?             @db.Char(36)
+  batch_id           String?             @db.Char(36)
+  amount             Decimal?            @db.Decimal(10, 2)
+  type               payments_type?
+  created_at         String?             @db.VarChar(255)
+  updated_at         DateTime?           @db.DateTime(0)
+  installments       installments[]
+  batch_registration batch_registration? @relation(fields: [batch_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "batch_fk")
+  students           students?           @relation(fields: [student_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "student_fk")
+
+  @@index([batch_id], map: "fk_batch_id")
+  @@index([student_id], map: "fk_student_id")
+}
+
+model sequelizemeta {
+  name String @id @unique(map: "name") @db.VarChar(255)
+}
+
 model student_attachments {
   id          String    @id @db.Char(36)
   student_id  String?   @db.Char(36)
@@ -190,7 +211,7 @@ model student_attachments {
   created_at  DateTime? @default(now()) @db.DateTime(0)
   updated_at  DateTime? @default(now()) @db.DateTime(0)
   deleted_at  DateTime? @db.DateTime(0)
-  students    students? @relation(fields: [student_id], references: [id], onDelete: Cascade, map: "student_attachments_ibfk_1")
+  students    students? @relation(fields: [student_id], references: [id], onDelete: Cascade, map: "fk_student")
 
   @@index([student_id], map: "fk_student")
 }
@@ -210,9 +231,8 @@ model student_punishments {
   @@index([student_id], map: "student_id")
 }
 
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
 model students {
-  id                  String                @id @db.Char(36)
+  id                  String                @id @unique(map: "id") @db.Char(36)
   full_name           String                @db.VarChar(255)
   whatsapp_number     String?               @unique(map: "whatsapp_number") @db.VarChar(255)
   email               String?               @unique(map: "email") @db.VarChar(255)
@@ -223,10 +243,11 @@ model students {
   village             String?               @db.VarChar(255)
   address_detail      String?               @db.VarChar(255)
   batch_id            String?               @db.Char(36)
+  interview_id        String?               @db.Char(36)
   dormitory           students_dormitory?
   installment         students_installment?
-  interview_id        String?               @default("") @db.Char(36)
   referral_id         String?               @db.Char(36)
+  birthdate           DateTime?             @db.Date
   guardian_name       String?               @db.VarChar(255)
   guardian_phone      String?               @db.VarChar(255)
   progress            students_progress?
@@ -235,20 +256,16 @@ model students {
   deleted_at          DateTime?             @db.DateTime(0)
   cbt_answers         cbt_answers[]         @ignore
   cbt_results         cbt_results[]
-  installments        installments[]
+  payments            payments[]
   student_attachments student_attachments[]
   student_punishments student_punishments[]
-  batch_registration  batch_registration?   @relation(fields: [batch_id], references: [id], onDelete: Cascade, map: "students_ibfk_1")
-  interview_schedule  interview_schedule?   @relation(fields: [interview_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "fk_interview_schedule")
-  master_referral     master_referral?      @relation(fields: [referral_id], references: [id], onDelete: Cascade, map: "students_ibfk_2")
+  batch_registration  batch_registration?   @relation(fields: [batch_id], references: [id], onDelete: Cascade, map: "fk_batch_registration")
+  interview_schedule  interview_schedule?   @relation(fields: [interview_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "fk_interview_id")
+  master_referral     master_referral?      @relation(fields: [referral_id], references: [id], onDelete: Cascade, map: "fk_refferal")
 
   @@index([batch_id], map: "fk_batch_registration")
-  @@index([interview_id], map: "fk_interview_schedule")
+  @@index([interview_id], map: "fk_interview_id")
   @@index([referral_id], map: "fk_refferal")
-}
-
-model sequelizemeta {
-  name String @id @unique(map: "name") @db.VarChar(255)
 }
 
 enum cbt_questions_type {
@@ -266,6 +283,11 @@ enum student_punishments_punishment_type {
 enum cbt_results_checked {
   yes
   no
+}
+
+enum payments_type {
+  pedidikan
+  belajar
 }
 
 enum installments_discount {
@@ -288,6 +310,7 @@ enum students_progress {
   psychotest
   assessment
   qualified
+  contract
   payment
   success
   blocked
