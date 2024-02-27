@@ -66,6 +66,7 @@ const StudentLists = ({ progress }) => {
             <th>Batch</th>
             <th>Asrama</th>
             <th>Asal</th>
+            <th>Progress</th>
             <th />
           </tr>
         </thead>
@@ -102,6 +103,7 @@ const StudentLists = ({ progress }) => {
                   {client.dormitory === 'yes' ? 'Iya' : 'Tidak'}
                 </td>
                 <td data-label="Asal">{client.province}</td>
+                <td data-label="Asal">{client.progress}</td>
                 {/* <td data-label="Progress" className="lg:w-1 whitespace-nowrap">
                 <small className="text-gray-500 dark:text-slate-400">{client.created}</small>
               </td> */}

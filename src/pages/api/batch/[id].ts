@@ -13,7 +13,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         },
       },
       include: {
-        students: true,
+        students: {
+          include: {
+            student_attachments: true,
+          },
+        },
       },
     })
 
