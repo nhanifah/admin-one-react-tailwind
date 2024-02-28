@@ -112,6 +112,12 @@ export type studentAnswer = {
   student_id: string
 }
 
+export type Affiliates = {
+  id: string
+  name: string
+  students: Students[]
+}
+
 export type Students = {
   id: string
   full_name: string
