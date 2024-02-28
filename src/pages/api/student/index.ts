@@ -1,6 +1,6 @@
 // crud student
 import { NextApiRequest, NextApiResponse } from 'next'
-import { PrismaClient, students_progress } from '@prisma/client'
+import { PrismaClient } from '@prisma/client'
 import { getSession } from 'next-auth/react'
 
 const prisma = new PrismaClient({ log: ['query', 'error'] })
