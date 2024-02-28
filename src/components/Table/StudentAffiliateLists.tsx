@@ -41,6 +41,7 @@ const StudentAffiliateLists = () => {
           <tr>
             <th />
             <th>Nama</th>
+            <th>Bidang Kerja</th>
             <th>Asrama</th>
             <th>Asal</th>
             <th>Progress</th>
@@ -74,11 +75,12 @@ const StudentAffiliateLists = () => {
                   />
                 </td>
                 <td data-label="Nama">{client.full_name}</td>
+                <td data-label="Bidang Kerja" className='capitalize'>{client.want_to_work}</td>
                 <td data-label="Asrama" className="lg:w-32">
                   {client.dormitory === 'yes' ? 'Iya' : 'Tidak'}
                 </td>
-                <td data-label="Asal">{client.province}</td>
-                <td data-label="Asal">{client.progress}</td>
+                <td data-label="Asal" className='capitalize'>{client.province.toLowerCase()}</td>
+                <td data-label="Progress" className='capitalize'>{client.progress.toLowerCase()}</td>
                 <td className="before:hidden lg:w-1 whitespace-nowrap">
                   <Buttons type="justify-start lg:justify-end" noWrap>
                     <Button
