@@ -7,6 +7,8 @@ import SectionMain from '../../components/Section/Main'
 import SectionTitleLineWithButton from '../../components/Section/TitleLineWithButton'
 import { getPageTitle } from '../../config'
 import TablePsikotesAnswer from '../../components/Table/PsikotesAnswer'
+import React from 'react'
+import Divider from '../../components/Divider'
 
 const UserAnswers = () => {
   return (
@@ -18,12 +20,21 @@ const UserAnswers = () => {
       <SectionMain>
         <SectionTitleLineWithButton
           icon={mdiBallotOutline}
-          title="Jawaban Peserta"
+          title="Jawaban Peserta Belum Dinilai"
           main
         ></SectionTitleLineWithButton>
 
         <CardBox className="mb-6" hasTable>
-          <TablePsikotesAnswer />
+          <TablePsikotesAnswer checked="no" />
+        </CardBox>
+        <Divider />
+        <SectionTitleLineWithButton
+          icon={mdiBallotOutline}
+          title="Jawaban Peserta Sudah Dinilai"
+          main
+        ></SectionTitleLineWithButton>
+        <CardBox className="mb-6" hasTable>
+          <TablePsikotesAnswer checked="yes" />
         </CardBox>
       </SectionMain>
     </>

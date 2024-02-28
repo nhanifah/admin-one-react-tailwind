@@ -11,6 +11,7 @@ import TablePsikotesQuest from '../../components/Table/PsikotesQuest'
 import { setIsModalActive } from '../../stores/modalSlice'
 import { useAppDispatch } from '../../stores/hooks'
 import AddQuestionModal from '../../components/Modals/AddQuestionModal'
+import React from 'react'
 
 const QuestionBank = () => {
   const dispatch = useAppDispatch()

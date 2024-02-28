@@ -5,7 +5,7 @@ const prisma = new PrismaClient({ log: ['query', 'error'] })
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method == 'GET') {
-    const { batch_id } = req.query
+    const { batch_id }: any = req.query
     const interview = await prisma.interview_schedule.findMany({
       where: {
         batch_id: {

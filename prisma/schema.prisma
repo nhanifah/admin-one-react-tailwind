@@ -8,17 +8,7 @@ datasource db {
 }
 
 model admins {
-  id           String       @id @db.Char(36)
-  name         String       @db.VarChar(255)
-  username     String       @unique(map: "username") @db.VarChar(255)
-  email        String       @unique(map: "email") @db.VarChar(255)
-  password     String       @db.VarChar(255)
-  role         String       @db.Char(36)
-  created_at   DateTime     @default(now()) @db.DateTime(0)
-  updated_at   DateTime     @default(now()) @db.DateTime(0)
-  deleted_at   DateTime?    @db.DateTime(0)
-  master_roles master_roles @relation(fields: [role], references: [id], onUpdate: Restrict, map: "admins_ibfk_1")
-  id           String       @id @db.Char(36)
+  id           String       @id @default(uuid()) @db.Char(36)
   name         String       @db.VarChar(255)
   username     String       @unique(map: "username") @db.VarChar(255)
   email        String       @unique(map: "email") @db.VarChar(255)
@@ -33,9 +23,9 @@ model admins {
 }
 
 model batch_registration {
-  id                 String               @id @unique(map: "id") @db.Char(36)
+  id                 String               @id @default(uuid()) @unique(map: "id") @db.Char(36)
   batch_name         String?              @db.VarChar(255)
-  quota              String?              @db.VarChar(255)
+  quota              Int                  @default(0)
   end_date           DateTime?            @db.DateTime(0)
   created_at         DateTime?            @default(now()) @db.DateTime(0)
   updated_at         DateTime?            @default(now()) @db.DateTime(0)
@@ -45,24 +35,23 @@ model batch_registration {
   students           students[]
 }
 
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 model cbt_answers {
-  question_id     String?        @db.Char(36)
-  student_id      String?        @db.Char(36)
-  selected_option String?        @db.Text
-  created_at      DateTime?      @default(now()) @db.DateTime(0)
-  updated_at      DateTime?      @default(now()) @db.DateTime(0)
-  deleted_at      DateTime?      @db.DateTime(0)
-  cbt_questions   cbt_questions? @relation(fields: [question_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "cbt_answers_ibfk_1")
-  students        students?      @relation(fields: [student_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "cbt_answers_ibfk_2")
+  question_id     String        @db.Char(36)
+  student_id      String        @db.Char(36)
+  selected_option String?       @db.Text
+  created_at      DateTime?     @default(now()) @db.DateTime(0)
+  updated_at      DateTime?     @default(now()) @db.DateTime(0)
+  deleted_at      DateTime?     @db.DateTime(0)
+  cbt_questions   cbt_questions @relation(fields: [question_id], references: [id], onUpdate: Restrict, map: "cbt_answers_ibfk_1")
+  students        students      @relation(fields: [student_id], references: [id], onUpdate: Restrict, map: "cbt_answers_ibfk_2")
 
+  @@id([question_id, student_id])
   @@index([question_id], map: "question_id")
   @@index([student_id], map: "student_id")
-  @@ignore
 }
 
 model cbt_enrolled {
-  id         String    @id @db.Char(36)
+  id         String    @id @default(uuid()) @db.Char(36)
   student_id String?   @db.Char(36)
   exam_id    String?   @db.Char(36)
   token      String?   @db.VarChar(255)
@@ -77,7 +66,7 @@ model cbt_enrolled {
 }
 
 model cbt_examination {
-  id            String          @id @db.Char(36)
+  id            String          @id @default(uuid()) @db.Char(36)
   name          String?         @db.VarChar(255)
   minimal_value String?         @db.VarChar(255)
   leases_time   String?         @db.VarChar(255)
@@ -91,8 +80,6 @@ model cbt_examination {
 model cbt_questions {
   id              String              @id @db.Char(36)
   exam_id         String?             @db.Char(36)
-  id              String              @id @default(uuid()) @db.Char(36)
-  exam_id         String?             @db.Char(36)
   type            cbt_questions_type?
   question_text   String?             @db.Text
   option_text     String?             @db.LongText
@@ -101,14 +88,14 @@ model cbt_questions {
   created_at      DateTime?           @default(now()) @db.DateTime(0)
   updated_at      DateTime?           @default(now()) @db.DateTime(0)
   deleted_at      DateTime?           @db.DateTime(0)
-  cbt_answers     cbt_answers[]       @ignore
+  cbt_answers     cbt_answers[]
   cbt_examination cbt_examination?    @relation(fields: [exam_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "cbt_questions_ibfk_1")
 
   @@index([exam_id], map: "exam_id")
 }
 
 model cbt_results {
-  id              String               @id @db.Char(36)
+  id              String               @id @default(uuid()) @db.Char(36)
   student_id      String?              @db.Char(36)
   exam_id         String?              @db.Char(36)
   total_points    Int?
@@ -124,7 +111,7 @@ model cbt_results {
 }
 
 model installments {
-  id                 String                 @id @db.Char(36)
+  id                 String                 @id @default(uuid()) @db.Char(36)
   payment_id         String?                @db.Char(36)
   installment_number Int
   amount             Decimal                @db.Decimal(10, 2)
@@ -140,7 +127,7 @@ model installments {
 }
 
 model interview_schedule {
-  id                 String              @id @unique(map: "id") @db.Char(36)
+  id                 String              @id @default(uuid()) @unique(map: "id") @db.Char(36)
   batch_id           String?             @db.Char(36)
   interview_date     DateTime?           @db.DateTime(0)
   interview_location String?             @db.VarChar(255)
@@ -153,20 +140,9 @@ model interview_schedule {
   @@index([batch_id], map: "batch_id")
 }
 
-model learning_packages {
-  id          String    @id @db.Char(36)
-  name        String?   @db.VarChar(255)
-  description String?   @db.Text
-  price       Decimal   @db.Decimal(10, 2)
-  created_at  DateTime  @default(now()) @db.DateTime(0)
-  updated_at  DateTime  @default(now()) @db.DateTime(0)
-  deleted_at  DateTime? @db.DateTime(0)
-}
-
 model master_referral {
-  id         String     @id @db.Char(36)
+  id         String     @id @default(uuid()) @db.Char(36)
   name       String?    @db.VarChar(255)
-  type       String?    @db.VarChar(255)
   created_at DateTime?  @default(now()) @db.DateTime(0)
   updated_at DateTime?  @default(now()) @db.DateTime(0)
   deleted_at DateTime?  @db.DateTime(0)
@@ -174,7 +150,7 @@ model master_referral {
 }
 
 model master_roles {
-  id         String   @id @db.Char(36)
+  id         String   @id @default(uuid()) @db.Char(36)
   name       String   @db.VarChar(255)
   access     String   @db.Text
   created_at DateTime @default(now()) @db.DateTime(0)
@@ -183,7 +159,7 @@ model master_roles {
 }
 
 model payments {
-  id                 String              @id @db.Char(36)
+  id                 String              @id @default(uuid()) @db.Char(36)
   student_id         String?             @db.Char(36)
   batch_id           String?             @db.Char(36)
   amount             Decimal?            @db.Decimal(10, 2)
@@ -199,11 +175,11 @@ model payments {
 }
 
 model sequelizemeta {
-  name String @id @unique(map: "name") @db.VarChar(255)
+  name String @id @default(uuid()) @unique(map: "name") @db.VarChar(255)
 }
 
 model student_attachments {
-  id          String    @id @db.Char(36)
+  id          String    @id @default(uuid()) @db.Char(36)
   student_id  String?   @db.Char(36)
   file_name   String    @db.VarChar(255)
   file_url    String    @db.VarChar(255)
@@ -217,7 +193,7 @@ model student_attachments {
 }
 
 model student_punishments {
-  id              String                               @id @db.Char(36)
+  id              String                               @id @default(uuid()) @db.Char(36)
   student_id      String                               @db.Char(36)
   punishment_type student_punishments_punishment_type?
   description     String?                              @db.Text
@@ -232,36 +208,37 @@ model student_punishments {
 }
 
 model students {
-  id                  String                @id @unique(map: "id") @db.Char(36)
-  full_name           String                @db.VarChar(255)
-  whatsapp_number     String?               @unique(map: "whatsapp_number") @db.VarChar(255)
-  email               String?               @unique(map: "email") @db.VarChar(255)
-  nik                 String?               @unique(map: "nik") @db.VarChar(255)
-  province            String?               @db.VarChar(255)
-  city                String?               @db.VarChar(255)
-  subdistrict         String?               @db.VarChar(255)
-  village             String?               @db.VarChar(255)
-  address_detail      String?               @db.VarChar(255)
-  batch_id            String?               @db.Char(36)
-  interview_id        String?               @db.Char(36)
+  id                  String                    @id @default(uuid()) @unique(map: "id") @db.Char(36)
+  full_name           String                    @db.VarChar(255)
+  whatsapp_number     String?                   @unique(map: "whatsapp_number") @db.VarChar(255)
+  email               String?                   @unique(map: "email") @db.VarChar(255)
+  nik                 String?                   @unique(map: "nik") @db.VarChar(255)
+  province            String?                   @db.VarChar(255)
+  city                String?                   @db.VarChar(255)
+  subdistrict         String?                   @db.VarChar(255)
+  village             String?                   @db.VarChar(255)
+  address_detail      String?                   @db.VarChar(255)
+  batch_id            String?                   @db.Char(36)
+  interview_id        String?                   @db.Char(36)
   dormitory           students_dormitory?
   installment         students_installment?
-  referral_id         String?               @db.Char(36)
-  birthdate           DateTime?             @db.Date
-  guardian_name       String?               @db.VarChar(255)
-  guardian_phone      String?               @db.VarChar(255)
+  referral_id         String?                   @db.Char(36)
+  referral_source     students_referral_source?
+  birthdate           DateTime?                 @db.Date
+  guardian_name       String?                   @db.VarChar(255)
+  guardian_phone      String?                   @db.VarChar(255)
   progress            students_progress?
-  created_at          DateTime?             @default(now()) @db.DateTime(0)
-  updated_at          DateTime?             @default(now()) @db.DateTime(0)
-  deleted_at          DateTime?             @db.DateTime(0)
-  cbt_answers         cbt_answers[]         @ignore
+  created_at          DateTime?                 @default(now()) @db.DateTime(0)
+  updated_at          DateTime?                 @default(now()) @db.DateTime(0)
+  deleted_at          DateTime?                 @db.DateTime(0)
+  cbt_answers         cbt_answers[]
   cbt_results         cbt_results[]
   payments            payments[]
   student_attachments student_attachments[]
   student_punishments student_punishments[]
-  batch_registration  batch_registration?   @relation(fields: [batch_id], references: [id], onDelete: Cascade, map: "fk_batch_registration")
-  interview_schedule  interview_schedule?   @relation(fields: [interview_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "fk_interview_id")
-  master_referral     master_referral?      @relation(fields: [referral_id], references: [id], onDelete: Cascade, map: "fk_refferal")
+  batch_registration  batch_registration?       @relation(fields: [batch_id], references: [id], onDelete: Cascade, map: "fk_batch_registration")
+  interview_schedule  interview_schedule?       @relation(fields: [interview_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "fk_interview_id")
+  master_referral     master_referral?          @relation(fields: [referral_id], references: [id], onDelete: Cascade, map: "fk_refferal")
 
   @@index([batch_id], map: "fk_batch_registration")
   @@index([interview_id], map: "fk_interview_id")
@@ -303,6 +280,16 @@ enum students_dormitory {
 enum students_installment {
   yes
   no
+}
+
+enum students_referral_source {
+  instagram
+  tiktok
+  youtube
+  facebook
+  website
+  friend
+  other
 }
 
 enum students_progress {

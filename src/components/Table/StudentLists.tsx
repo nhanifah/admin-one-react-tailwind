@@ -33,7 +33,6 @@ const StudentLists = ({ progress }) => {
 
   const [isModalTrashActive, setIsModalTrashActive] = useState(false)
 
-
   const handleModalAction = () => {
     setIsModalTrashActive(false)
   }
@@ -105,12 +104,7 @@ const StudentLists = ({ progress }) => {
               </td> */}
                 <td className="before:hidden lg:w-1 whitespace-nowrap">
                   <Buttons type="justify-start lg:justify-end" noWrap>
-                    <Button
-                      color="warning"
-                      icon={mdiCurrencyUsd}
-                      onClick={() => {}}
-                      small
-                    />
+                    <Button color="warning" icon={mdiCurrencyUsd} onClick={() => {}} small />
                     <Button
                       color="success"
                       icon={mdiWhatsapp}

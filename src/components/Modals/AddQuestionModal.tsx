@@ -51,6 +51,7 @@ export default function AddQuestionModal() {
     // Reset the form
     setIsMultipleChoice(false)
     setIsQuestTypeSelected(false)
+    dispatch(resetOption())
   }
 
   const handleSubmit = async (values, { resetForm }) => {

@@ -5,7 +5,7 @@ const prisma = new PrismaClient({ log: ['query', 'error'] })
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method == 'GET') {
-    const { id } = req.query
+    const { id }: any = req.query
 
     const students = await prisma.students.findMany({
       where: {

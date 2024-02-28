@@ -19,6 +19,7 @@ const initialState = {
   progressModal: false,
   addModal: false,
   editModal: false,
+  contractModal: false,
 }
 
 export const styleSlice = createSlice({
@@ -61,6 +62,12 @@ export const styleSlice = createSlice({
     closeEditModal: (state) => {
       state.editModal = false
     },
+    showContractModal: (state) => {
+      state.contractModal = true
+    },
+    closeContractModal: (state) => {
+      state.contractModal = false
+    },
   },
 })
 
@@ -77,6 +84,8 @@ export const {
   closeAddModal,
   showEditModal,
   closeEditModal,
+  showContractModal,
+  closeContractModal,
 } = styleSlice.actions
 
 export default styleSlice.reducer

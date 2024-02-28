@@ -19,11 +19,10 @@ export default function UpdateInterviewScheduleModal() {
   const interviewSchedule = useAppSelector((state) => state.interview.interviewSchedules)
   const progressModal = useAppSelector((state) => state.interview.progressModal)
   const formRef = useRef<any>()
-  const { updateProgress } = useStudentClients()
+  const { updateProgress } = useStudentClients('')
 
   const handleModalAction = () => {
     dispatch(closeProgressModal())
-    // Reset the form
   }
 
   const handleSubmit = async (values, { resetForm }) => {
@@ -47,7 +46,7 @@ export default function UpdateInterviewScheduleModal() {
       return
     }
 
-    const { status, data } = await updateProgress({ selectedStudents, ...values })
+    const { status, data } = await updateProgress({ selectedStudentsId: studentsId, ...values })
     if (status == 200) {
       console.log(data)
       const students = await axios.get(`/api/batch/interview/students/${interviewSchedule.id}`)

@@ -17,8 +17,12 @@ type MultipleChoiceAnswers = {
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method == 'GET') {
-    const body = await req.body
+    const { checked }: any = req.query
+
     const results = await prisma.cbt_results.findMany({
+      where: {
+        checked: checked,
+      },
       include: {
         cbt_examination: true,
         students: true,

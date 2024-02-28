@@ -18,8 +18,8 @@ import FormField from '../Form/Field'
 import FormOptionSoal from '../Form/OptionSoal'
 import toast from 'react-hot-toast'
 import { questionSchema } from '../../utils/validator'
-import { addOption, initOption } from '../../stores/optionSlice'
-import { useAppDispatch } from '../../stores/hooks'
+import { addOption, initOption, resetOption } from '../../stores/optionSlice'
+import { useAppDispatch, useAppSelector } from '../../stores/hooks'
 
 type errors = {
   message: string[]
@@ -29,6 +29,7 @@ const TableSampleClients = () => {
   const formEditRef = useRef<any>()
   const dispatch = useAppDispatch()
   const { clients, deleteData, updateData } = useBankQuestionClients()
+  const options = useAppSelector((state) => state.option.option)
 
   const perPage = 50
 
@@ -68,6 +69,19 @@ const TableSampleClients = () => {
   const handleModalAction = () => {
     setIsModalInfoActive(false)
     setIsModalTrashActive(false)
+    dispatch(resetOption())
+    setItemSelected({
+      id: '',
+      type: '',
+      exam_id: '',
+      weight: 0,
+      question_text: '',
+      option_text: '',
+      answer: '',
+      created_at: new Date(),
+      updated_at: new Date(),
+    })
+    console.log(options)
   }
 
   const handleUpdate = async (values, { resetForm }) => {
@@ -78,7 +92,7 @@ const TableSampleClients = () => {
       setValidationErrors(error.errors)
       return
     }
-    console.log(itemSelected)
+
     const { status, data } = await updateData({ id: itemSelected.id, ...values })
     if (status == 200) {
       console.log(data)
@@ -104,6 +118,8 @@ const TableSampleClients = () => {
         updated_at: new Date(),
       })
       setIsModalInfoActive(false)
+      dispatch(resetOption())
+
       toast.success('Pertanyaan berhasil diedit')
     } else {
       console.log(data)
@@ -211,7 +227,11 @@ const TableSampleClients = () => {
                           }}
                         />
                       </FormField>
-                      <FormOptionSoal selectedOption={itemSelected.answer} />
+                      {itemSelected.type == 'essay' ? (
+                        ''
+                      ) : (
+                        <FormOptionSoal selectedOption={itemSelected.answer} />
+                      )}
                     </>
                   )}
                 </>
