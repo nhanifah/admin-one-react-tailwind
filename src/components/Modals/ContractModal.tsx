@@ -32,7 +32,7 @@ export default function ContractModal() {
     try {
       studentProgressSchema.parse({
         selectedStudentsId: studentsId,
-        progress: 'payment',
+        progress: 'contract',
       })
     } catch (error) {
       console.log(error)
@@ -42,7 +42,7 @@ export default function ContractModal() {
 
     const { status, data } = await updateProgress({
       selectedStudentsId: studentsId,
-      progress: 'payment',
+      progress: 'contract',
     })
     if (status == 200) {
       console.log(data)

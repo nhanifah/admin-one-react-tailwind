@@ -6,6 +6,7 @@ import Buttons from '../Buttons'
 import CardBox from '.'
 import CardBoxComponentTitle from './Component/Title'
 import OverlayLayer from '../OverlayLayer'
+import React from 'react'
 
 type Props = {
   title: string

@@ -6,6 +6,7 @@ import optionReducer from './optionSlice'
 import answerReducer from './answerSlice'
 import batchReducer from './batchSlice'
 import interviewReducer from './interviewSlice'
+import studentReducer from './studentSlice'
 
 export const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ export const store = configureStore({
     answer: answerReducer,
     batch: batchReducer,
     interview: interviewReducer,
+    student: studentReducer,
   },
 })
 

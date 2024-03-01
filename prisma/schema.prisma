@@ -78,7 +78,7 @@ model cbt_examination {
 }
 
 model cbt_questions {
-  id              String              @id @db.Char(36)
+  id              String              @id @default(uuid()) @db.Char(36)
   exam_id         String?             @db.Char(36)
   type            cbt_questions_type?
   question_text   String?             @db.Text
@@ -164,7 +164,7 @@ model payments {
   batch_id           String?             @db.Char(36)
   amount             Decimal?            @db.Decimal(10, 2)
   type               payments_type?
-  created_at         String?             @db.VarChar(255)
+  created_at         DateTime?           @db.DateTime(0)
   updated_at         DateTime?           @db.DateTime(0)
   installments       installments[]
   batch_registration batch_registration? @relation(fields: [batch_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "batch_fk")
@@ -263,8 +263,8 @@ enum cbt_results_checked {
 }
 
 enum payments_type {
-  pedidikan
-  belajar
+  pendaftaran
+  pendidikan
 }
 
 enum installments_discount {

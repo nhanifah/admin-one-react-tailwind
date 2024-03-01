@@ -112,6 +112,13 @@ export type studentAnswer = {
   student_id: string
 }
 
+export type payment = {
+  student_id: string
+  batch_id: string
+  amount: number
+  type: string
+}
+
 export type Students = {
   id: string
   full_name: string
@@ -141,13 +148,14 @@ export type Students = {
     id: string
     referral_name: string
   }
-  student_attachments?: {
+  student_attachments: {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     filter: any
     id: string
     file_name: string
     file_url: string
-  }
+  }[]
+  payments?: payment[]
 }
 
 export type Client = {
