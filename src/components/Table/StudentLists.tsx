@@ -59,6 +59,7 @@ const StudentLists = ({ progress }) => {
             <th />
             <th>Nama</th>
             <th>Batch</th>
+            <th>Jenis Pekerjaan</th>
             <th>Asrama</th>
             <th>Asal</th>
             <th>Progress</th>
@@ -68,7 +69,7 @@ const StudentLists = ({ progress }) => {
         <tbody>
           {clients.length === 0 && (
             <tr>
-              <td colSpan={6} className="text-center py-6">
+              <td colSpan={7} className="text-center py-6">
                 <p className="text-gray-500 dark:text-slate-400">Data tidak ditemukan</p>
               </td>
             </tr>
@@ -94,11 +95,12 @@ const StudentLists = ({ progress }) => {
                 </td>
                 <td data-label="Nama">{client.full_name}</td>
                 <td data-label="Batch">{client?.batch_registration?.batch_name}</td>
+                <td data-label="Jenis Pekerjaan" className='capitalize'>{client.want_to_work}</td>
                 <td data-label="Asrama" className="lg:w-32">
                   {client.dormitory === 'yes' ? 'Iya' : 'Tidak'}
                 </td>
                 <td data-label="Asal">{client.province}</td>
-                <td data-label="Asal">{client.progress}</td>
+                <td data-label="Progress">{client.progress}</td>
                 {/* <td data-label="Progress" className="lg:w-1 whitespace-nowrap">
                 <small className="text-gray-500 dark:text-slate-400">{client.created}</small>
               </td> */}
