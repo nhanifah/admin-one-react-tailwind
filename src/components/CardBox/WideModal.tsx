@@ -18,6 +18,8 @@ type Props = {
   customEl?: ReactNode | string
   withButton?: ReactNode | string
   zIndex?: string
+  loading?: boolean
+  disabled?: boolean
 }
 
 const WideCardBoxModal = ({
@@ -28,6 +30,8 @@ const WideCardBoxModal = ({
   customEl,
   withButton,
   zIndex = 'z-40',
+  loading = false,
+  disabled = false,
 }: Props) => {
   if (!isActive) {
     return null

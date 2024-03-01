@@ -14,11 +14,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (req.method == 'GET') {
     // join relation with batch_registration & master_referral
     const { progress } = req.query
-    if (progress == 'success') {
+    if (progress == 'success' || progress == 'contract') {
       const students = await prisma.students.findMany({
         where: {
           progress: {
-            in: ['success', 'blocked', 'blacklist', 'hold'],
+            in: ['success', 'contract'],
           },
         },
         include: {

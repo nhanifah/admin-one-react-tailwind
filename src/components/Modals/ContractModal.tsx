@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import CardBoxModal from '../CardBox/Modal'
 import { useAppDispatch, useAppSelector } from '../../stores/hooks'
 import { closeContractModal, setStudents } from '../../stores/interviewSlice'
@@ -14,12 +14,14 @@ export default function ContractModal() {
   const selectedStudents = useAppSelector((state) => state.interview.students)
   const interviewSchedule = useAppSelector((state) => state.interview.interviewSchedules)
   const { updateProgress } = useStudentClients('')
+  const [loading, setLoading] = useState(false)
 
   const handleModalAction = () => {
     dispatch(closeContractModal())
   }
 
   const handleSubmit = async () => {
+    setLoading(true)
     const checkedStudent: Students[] = []
     const studentsId: string[] = []
     selectedStudents.map((item, index) => {
@@ -32,17 +34,18 @@ export default function ContractModal() {
     try {
       studentProgressSchema.parse({
         selectedStudentsId: studentsId,
-        progress: 'payment',
+        progress: 'contract',
       })
     } catch (error) {
       console.log(error)
       toast.error(error.errors[0].message)
+      setLoading(false)
       return
     }
 
     const { status, data } = await updateProgress({
       selectedStudentsId: studentsId,
-      progress: 'payment',
+      progress: 'contract',
     })
     if (status == 200) {
       console.log(data)
@@ -54,6 +57,7 @@ export default function ContractModal() {
       console.log(data)
       toast.error('Gagal membuat kontrak!')
     }
+    setLoading(false)
   }
 
   return (
@@ -64,6 +68,8 @@ export default function ContractModal() {
       isActive={contractModal}
       onConfirm={() => handleSubmit()}
       onCancel={handleModalAction}
+      loading={loading}
+      disabled={loading}
     >
       <div className="grid justify-center text-center">
         <p className="text-lg font-bold mb-5">Apa kamu yakin ingin membuat kontrak untuk siswa?</p>

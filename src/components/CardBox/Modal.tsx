@@ -6,6 +6,7 @@ import Buttons from '../Buttons'
 import CardBox from '.'
 import CardBoxComponentTitle from './Component/Title'
 import OverlayLayer from '../OverlayLayer'
+import React from 'react'
 
 type Props = {
   title: string
@@ -15,6 +16,8 @@ type Props = {
   children: ReactNode
   onConfirm: () => void
   onCancel?: () => void
+  loading?: boolean
+  disabled?: boolean
 }
 
 const CardBoxModal = ({
@@ -25,6 +28,8 @@ const CardBoxModal = ({
   children,
   onConfirm,
   onCancel,
+  loading = false,
+  disabled = false,
 }: Props) => {
   if (!isActive) {
     return null
@@ -32,7 +37,13 @@ const CardBoxModal = ({
 
   const footer = (
     <Buttons>
-      <Button label={buttonLabel} color={buttonColor} onClick={onConfirm} />
+      <Button
+        label={buttonLabel}
+        color={buttonColor}
+        onClick={onConfirm}
+        loading={loading}
+        disabled={loading}
+      />
       {!!onCancel && <Button label="Gagalkan" color={buttonColor} outline onClick={onCancel} />}
     </Buttons>
   )

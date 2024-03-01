@@ -21,6 +21,7 @@ export default function UpdateInterviewScheduleModal() {
   const updateModal = useAppSelector((state) => state.interview.updateModal)
   const formRef = useRef<any>()
   const { updateStudentsSchedule } = useBatchInterviewClients()
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     const getInterviewSchedules = async () => {
@@ -41,6 +42,7 @@ export default function UpdateInterviewScheduleModal() {
   }
 
   const handleSubmit = async (values, { resetForm }) => {
+    setLoading(true)
     const checkedStudent: Students[] = []
     const studentsId: string[] = []
     selectedStudents.map((item, index) => {
@@ -58,6 +60,7 @@ export default function UpdateInterviewScheduleModal() {
     } catch (error) {
       console.log(error)
       toast.error(error.errors[0].message)
+      setLoading(false)
       return
     }
 
@@ -75,6 +78,7 @@ export default function UpdateInterviewScheduleModal() {
       console.log(data)
       toast.error('Jadwal interview siswa gagal diubah!')
     }
+    setLoading(false)
   }
 
   return (
@@ -85,6 +89,8 @@ export default function UpdateInterviewScheduleModal() {
       isActive={updateModal}
       onConfirm={() => formRef?.current?.handleSubmit()}
       onCancel={handleModalAction}
+      loading={loading}
+      disabled={loading}
     >
       <Formik
         initialValues={{

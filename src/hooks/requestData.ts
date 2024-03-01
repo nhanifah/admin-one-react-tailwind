@@ -93,7 +93,7 @@ export const useBatchInterviewClients = () => {
   }
 }
 
-export const useStudentClients = (progress: string) => {
+export const useStudentClients = (progress: string = 'success') => {
   const { data, error } = useSWR(`/api/student/${progress}`, fetcher)
 
   const updateData = async (data: object) => {
@@ -106,6 +106,25 @@ export const useStudentClients = (progress: string) => {
       }
     } catch (error) {
       console.log(error.response.data)
+      return {
+        status: error.response.status,
+        data: error.response.data ?? 'Terjadi Kesalahan',
+      }
+    }
+  }
+
+  const uploadContractFile = async (data: any) => {
+    try {
+      const response = await axios.post('/api/student/uploadContract', data, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
+      mutate('/api/student/contract')
+      return {
+        status: response.status,
+        data: response.data,
+      }
+    } catch (error) {
+      console.log(error)
       return {
         status: error.response.status,
         data: error.response.data ?? 'Terjadi Kesalahan',
@@ -161,6 +180,7 @@ export const useStudentClients = (progress: string) => {
     updateData,
     deleteData,
     updateProgress,
+    uploadContractFile,
     postFile,
   }
 }

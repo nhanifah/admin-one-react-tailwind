@@ -10,15 +10,11 @@ const StudentAffiliateLists = () => {
   const studentData = useAppSelector((state) => state.affiliate.studentData)
   // const { clients } = useBatchStudentsClients(selectedBatch.id)
 
-
   const perPage = 50
 
   const [currentPage, setCurrentPage] = useState(0)
 
-  const clientsPaginated = studentData?.slice(
-    perPage * currentPage,
-    perPage * (currentPage + 1)
-  )
+  const clientsPaginated = studentData?.slice(perPage * currentPage, perPage * (currentPage + 1))
 
   let numPages = studentData.length / perPage
 
@@ -31,8 +27,6 @@ const StudentAffiliateLists = () => {
   for (let i = 0; i < numPages; i++) {
     pagesList.push(i)
   }
-  
-
 
   return (
     <>
@@ -57,7 +51,7 @@ const StudentAffiliateLists = () => {
             </tr>
           )}
           {clientsPaginated?.map((client: Students) => {
-            let fotoAttachments = []
+            let fotoAttachments: any[] = []
             fotoAttachments = client?.student_attachments?.filter((attachment) =>
               attachment.file_name.includes('foto_')
             )
@@ -75,12 +69,18 @@ const StudentAffiliateLists = () => {
                   />
                 </td>
                 <td data-label="Nama">{client.full_name}</td>
-                <td data-label="Bidang Kerja" className='capitalize'>{client.want_to_work}</td>
+                <td data-label="Bidang Kerja" className="capitalize">
+                  {client.want_to_work}
+                </td>
                 <td data-label="Asrama" className="lg:w-32">
                   {client.dormitory === 'yes' ? 'Iya' : 'Tidak'}
                 </td>
-                <td data-label="Asal" className='capitalize'>{client.province.toLowerCase()}</td>
-                <td data-label="Progress" className='capitalize'>{client.progress.toLowerCase()}</td>
+                <td data-label="Asal" className="capitalize">
+                  {client.province.toLowerCase()}
+                </td>
+                <td data-label="Progress" className="capitalize">
+                  {client.progress.toLowerCase()}
+                </td>
                 <td className="before:hidden lg:w-1 whitespace-nowrap">
                   <Buttons type="justify-start lg:justify-end" noWrap>
                     <Button

@@ -24,6 +24,7 @@ export default function AnswerModal() {
   const studentName = useAppSelector((state) => state.answer.studentName)
   const studentId = useAppSelector((state) => state.answer.studentId)
   const { createResult } = useStudentPhyscotestAnswerClients()
+  const [loading, setLoading] = useState(false)
 
   const formRef = useRef<any>()
 
@@ -35,11 +36,13 @@ export default function AnswerModal() {
   }
 
   const handleSubmit = async (values, { resetForm }) => {
+    setLoading(true)
     try {
       answerCheckedSchema.parse(values)
     } catch (error) {
       console.log(error.errors[0].message)
       toast.error(error.errors[0].message)
+      setLoading(false)
       return
     }
 
@@ -58,6 +61,7 @@ export default function AnswerModal() {
       console.log(data)
       toast.error('Hasil ujian gagal dinilai!')
     }
+    setLoading(false)
   }
 
   return (
@@ -68,6 +72,8 @@ export default function AnswerModal() {
       isActive={isModalActive}
       onConfirm={() => formRef?.current?.handleSubmit()}
       onCancel={handleModalAction}
+      loading={loading}
+      disabled={loading}
     >
       <div
         className={`${

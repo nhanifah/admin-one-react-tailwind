@@ -15,6 +15,7 @@ import LayoutAuthenticated from '../layouts/Authenticated'
 import SectionMain from '../components/Section/Main'
 import SectionTitleLineWithButton from '../components/Section/TitleLineWithButton'
 import { getPageTitle } from '../config'
+import React from 'react'
 
 const s3 = new S3({
   endpoint: 'https://nos.jkt-1.neo.id',

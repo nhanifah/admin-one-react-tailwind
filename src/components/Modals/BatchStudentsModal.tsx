@@ -8,7 +8,7 @@ import toast from 'react-hot-toast'
 import TableBatchStudents from '../Table/BatchStudents'
 import { Field, Form, Formik } from 'formik'
 import Button from '../Button'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { studentProgressSchema } from '../../utils/validator'
 import { useStudentClients } from '../../hooks/requestData'
 import React from 'react'
@@ -24,6 +24,7 @@ export default function BatchStudentsModal() {
     dispatch(closeModalStudents())
     // Reset the form
   }
+  const [loading, setLoading] = useState(false)
 
   const updateButton = () => {
     return (
@@ -36,12 +37,15 @@ export default function BatchStudentsModal() {
         small
         className="mr-3"
         onClick={() => formRef.current.handleSubmit()}
+        loading={loading}
+        disabled={loading}
       />
     )
   }
 
   const handleSubmit = async (values, { resetForm }) => {
     // console.log(selectedStudents)
+    setLoading(true)
 
     const selectedStudentsId: string[] = []
     selectedStudents.map((item, index) => {
@@ -58,6 +62,7 @@ export default function BatchStudentsModal() {
       console.log(error)
       // setValidationErrors(error.errors)
       toast.error(error.errors[0].message)
+      setLoading(false)
       return
     }
 
@@ -70,6 +75,7 @@ export default function BatchStudentsModal() {
       console.log(data)
       toast.error('progress siswa gagal diupdate!')
     }
+    setLoading(false)
   }
 
   const selectEl = () => {
