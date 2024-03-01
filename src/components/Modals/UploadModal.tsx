@@ -37,8 +37,10 @@ export default function UploadModal() {
     dispatch(closeUploadModal())
     setFiles([])
   }
+  const [loading, setLoading] = useState(false)
 
   const handleSubmit = async () => {
+    setLoading(true)
     try {
       schema.parse({
         id: student.id,
@@ -47,6 +49,7 @@ export default function UploadModal() {
     } catch (error) {
       console.log(error)
       toast.error(error.errors[0].message)
+      setLoading(false)
       return
     }
     const formData = new FormData()
@@ -62,6 +65,8 @@ export default function UploadModal() {
       console.log(data)
       toast.error('Kontrak gagal diupload')
     }
+
+    setLoading(false)
   }
 
   return (
@@ -72,6 +77,8 @@ export default function UploadModal() {
       isActive={uploadModal}
       onConfirm={handleSubmit}
       onCancel={handleModalAction}
+      loading={loading}
+      disabled={loading}
     >
       <FilePond
         instantUpload={false}

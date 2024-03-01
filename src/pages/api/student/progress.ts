@@ -14,7 +14,6 @@ type InstallmentParams = {
   payment_id: string
   installment_number: number
   amount: number
-  category: string
   discount: installments_discount
   due_date: Date
   payment_date?: Date
@@ -93,7 +92,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                   due_date: new Date(),
                   discount: installments_discount['no'],
                   installment_number: i,
-                  category: '',
                 }
                 installment_params.push(params)
               }
@@ -107,7 +105,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                   due_date: new Date(),
                   discount: installments_discount['no'],
                   installment_number: i,
-                  category: '',
                 }
                 installment_params.push(params)
               }
@@ -119,7 +116,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 due_date: new Date(),
                 discount: installments_discount['no'],
                 installment_number: 1,
-                category: '',
               }
               installment_params.push(params)
               return

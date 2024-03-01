@@ -3,7 +3,7 @@
 import { Field, Form, Formik } from 'formik'
 import CardBoxModal from '../../components/CardBox/Modal'
 import FormField from '../../components/Form/Field'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { useAppDispatch, useAppSelector } from '../../stores/hooks'
 import { studentProgressSchema } from '../../utils/validator'
 import toast from 'react-hot-toast'
@@ -20,12 +20,14 @@ export default function UpdateInterviewScheduleModal() {
   const progressModal = useAppSelector((state) => state.interview.progressModal)
   const formRef = useRef<any>()
   const { updateProgress } = useStudentClients('')
+  const [loading, setLoading] = useState(false)
 
   const handleModalAction = () => {
     dispatch(closeProgressModal())
   }
 
   const handleSubmit = async (values, { resetForm }) => {
+    setLoading(true)
     const checkedStudent: Students[] = []
     const studentsId: string[] = []
     selectedStudents.map((item, index) => {
@@ -43,6 +45,7 @@ export default function UpdateInterviewScheduleModal() {
     } catch (error) {
       console.log(error)
       toast.error(error.errors[0].message)
+      setLoading(false)
       return
     }
 
@@ -57,6 +60,7 @@ export default function UpdateInterviewScheduleModal() {
       console.log(data)
       toast.error('progress siswa gagal diupdate!')
     }
+    setLoading(false)
   }
 
   return (
@@ -67,6 +71,8 @@ export default function UpdateInterviewScheduleModal() {
       isActive={progressModal}
       onConfirm={() => formRef?.current?.handleSubmit()}
       onCancel={handleModalAction}
+      loading={loading}
+      disabled={loading}
     >
       <Formik
         initialValues={{

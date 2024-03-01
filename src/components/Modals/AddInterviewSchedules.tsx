@@ -22,6 +22,7 @@ export default function AddInterviewSchedules() {
   const [validationErrors, setValidationErrors] = useState([])
   const { clients } = useBatchClients()
   const { createInterview } = useInterviewScheduleClients()
+  const [loading, setLoading] = useState(false)
 
   const handleModalAction = () => {
     dispatch(closeAddModal())
@@ -29,11 +30,13 @@ export default function AddInterviewSchedules() {
   }
 
   const handleSubmit = async (values, { resetForm }) => {
+    setLoading(true)
     try {
       interviewScheduleSchema.parse(values)
     } catch (error) {
       console.log(error)
       setValidationErrors(error.errors)
+      setLoading(false)
       return
     }
 
@@ -52,6 +55,7 @@ export default function AddInterviewSchedules() {
       console.log(data)
       toast.error('Jadwal interview gagal ditambahkan')
     }
+    setLoading(false)
   }
 
   return (
@@ -62,6 +66,8 @@ export default function AddInterviewSchedules() {
       isActive={addModal}
       onConfirm={() => formRef?.current?.handleSubmit()}
       onCancel={handleModalAction}
+      loading={loading}
+      disabled={loading}
     >
       <div
         className={`${

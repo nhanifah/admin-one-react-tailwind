@@ -45,6 +45,7 @@ export default function AddQuestionModal() {
   const [isMultipleChoice, setIsMultipleChoice] = useState(false)
   const [isQuestTypeSelected, setIsQuestTypeSelected] = useState(false)
   const [validationErrors, setValidationErrors] = useState<errors[]>([])
+  const [loading, setLoading] = useState(false)
 
   const handleModalAction = () => {
     dispatch(setIsModalActive(false))
@@ -55,11 +56,13 @@ export default function AddQuestionModal() {
   }
 
   const handleSubmit = async (values, { resetForm }) => {
+    setLoading(true)
     try {
       questionSchema.parse(values)
     } catch (error) {
       console.log(error)
       setValidationErrors(error.errors)
+      setLoading(false)
       return
     }
 
@@ -82,6 +85,7 @@ export default function AddQuestionModal() {
       console.log(data)
       toast.error('Soal gagal ditambahkan')
     }
+    setLoading(false)
   }
 
   return (
@@ -92,6 +96,8 @@ export default function AddQuestionModal() {
       isActive={isModalActive}
       onConfirm={() => formRef?.current?.submitForm()}
       onCancel={handleModalAction}
+      loading={loading}
+      disabled={loading}
     >
       <div
         className={`${

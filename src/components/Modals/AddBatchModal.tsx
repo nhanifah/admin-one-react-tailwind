@@ -21,6 +21,7 @@ export default function AddBatchModal() {
   const formRef = useRef<any>()
   const [validationErrors, setValidationErrors] = useState([])
   const { createData } = useBatchClients()
+  const [loading, setLoading] = useState(false)
 
   const handleModalAction = () => {
     dispatch(closeModal(null))
@@ -28,11 +29,13 @@ export default function AddBatchModal() {
   }
 
   const handleSubmit = async (values, { resetForm }) => {
+    setLoading(true)
     try {
       batchSchema.parse(values)
     } catch (error) {
       console.log(error)
       setValidationErrors(error.errors)
+      setLoading(false)
       return
     }
 
@@ -51,6 +54,7 @@ export default function AddBatchModal() {
       console.log(data)
       toast.error('Soal gagal ditambahkan')
     }
+    setLoading(false)
   }
 
   return (
@@ -61,6 +65,8 @@ export default function AddBatchModal() {
       isActive={modal}
       onConfirm={() => formRef?.current?.handleSubmit()}
       onCancel={handleModalAction}
+      loading={loading}
+      disabled={loading}
     >
       <div
         className={`${

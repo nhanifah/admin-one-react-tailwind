@@ -22,17 +22,20 @@ export default function EditBatchModal() {
   const formRef = useRef<any>()
   const [validationErrors, setValidationErrors] = useState([])
   const { editData } = useBatchClients()
+  const [loading, setLoading] = useState(false)
 
   const handleModalAction = () => {
     dispatch(closeEditModal())
   }
 
   const handleSubmit = async (values, { resetForm }) => {
+    setLoading(true)
     try {
       batchSchema.parse(values)
     } catch (error) {
       console.log(error)
       setValidationErrors(error.errors)
+      setLoading(false)
       return
     }
 
@@ -45,6 +48,7 @@ export default function EditBatchModal() {
       console.log(data)
       toast.error('Batch gagal di Update!')
     }
+    setLoading(false)
   }
 
   return (
@@ -55,6 +59,8 @@ export default function EditBatchModal() {
       isActive={editModal}
       onConfirm={() => formRef?.current?.handleSubmit()}
       onCancel={handleModalAction}
+      loading={loading}
+      disabled={loading}
     >
       <div
         className={`${
