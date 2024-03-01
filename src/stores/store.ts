@@ -6,6 +6,7 @@ import optionReducer from './optionSlice'
 import answerReducer from './answerSlice'
 import batchReducer from './batchSlice'
 import interviewReducer from './interviewSlice'
+import affiliateReducer from './affiliateSlice'
 import studentReducer from './studentSlice'
 
 export const store = configureStore({
@@ -17,6 +18,7 @@ export const store = configureStore({
     answer: answerReducer,
     batch: batchReducer,
     interview: interviewReducer,
+    affiliate: affiliateReducer,
     student: studentReducer,
   },
 })

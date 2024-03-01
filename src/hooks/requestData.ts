@@ -175,6 +175,17 @@ export const useStudentClients = (progress: string = 'success') => {
   }
 }
 
+export const useAffiliateClients = () => {
+  const { data, error } = useSWR(`/api/affiliate`, fetcher)
+
+
+  return {
+    clients: data?.data ?? [],
+    isLoading: !error && !data,
+    isError: error,
+  }
+}
+
 export const useBatchClients = () => {
   const { data, error } = useSWR('/api/batch', fetcher)
 

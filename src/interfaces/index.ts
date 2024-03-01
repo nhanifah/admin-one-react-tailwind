@@ -112,6 +112,12 @@ export type studentAnswer = {
   student_id: string
 }
 
+export type Affiliates = {
+  id: string
+  name: string
+  students: Students[]
+}
+
 export type payment = {
   student_id: string
   batch_id: string
@@ -137,6 +143,10 @@ export type Students = {
   guardian_name: string
   guardian_phone: string
   progress: string
+  want_to_work: string
+  gender: string
+  last_education: string
+  work_now: string
   created_at: Date
   updated_at: Date
   checked: boolean

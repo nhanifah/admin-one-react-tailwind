@@ -8,7 +8,7 @@ datasource db {
 }
 
 model admins {
-  id           String       @id @default(uuid()) @db.Char(36)
+  id           String       @id @default(dbgenerated("(uuid())")) @db.Char(36)
   name         String       @db.VarChar(255)
   username     String       @unique(map: "username") @db.VarChar(255)
   email        String       @unique(map: "email") @db.VarChar(255)
@@ -23,9 +23,9 @@ model admins {
 }
 
 model batch_registration {
-  id                 String               @id @default(uuid()) @unique(map: "id") @db.Char(36)
-  batch_name         String?              @db.VarChar(255)
-  quota              Int                  @default(0)
+  id                 String               @id @unique(map: "id") @default(dbgenerated("(uuid())")) @db.Char(36)
+  batch_name         Int?
+  quota              String?              @db.VarChar(255)
   end_date           DateTime?            @db.DateTime(0)
   created_at         DateTime?            @default(now()) @db.DateTime(0)
   updated_at         DateTime?            @default(now()) @db.DateTime(0)
@@ -51,7 +51,7 @@ model cbt_answers {
 }
 
 model cbt_enrolled {
-  id         String    @id @default(uuid()) @db.Char(36)
+  id         String    @id @default(dbgenerated("(uuid())")) @db.Char(36)
   student_id String?   @db.Char(36)
   exam_id    String?   @db.Char(36)
   token      String?   @db.VarChar(255)
@@ -66,7 +66,7 @@ model cbt_enrolled {
 }
 
 model cbt_examination {
-  id            String          @id @default(uuid()) @db.Char(36)
+  id            String          @id @default(dbgenerated("(uuid())")) @db.Char(36)
   name          String?         @db.VarChar(255)
   minimal_value String?         @db.VarChar(255)
   leases_time   String?         @db.VarChar(255)
@@ -78,7 +78,7 @@ model cbt_examination {
 }
 
 model cbt_questions {
-  id              String              @id @default(uuid()) @db.Char(36)
+  id              String              @id @default(dbgenerated("(uuid())")) @db.Char(36)
   exam_id         String?             @db.Char(36)
   type            cbt_questions_type?
   question_text   String?             @db.Text
@@ -95,7 +95,7 @@ model cbt_questions {
 }
 
 model cbt_results {
-  id              String               @id @default(uuid()) @db.Char(36)
+  id              String               @id @default(dbgenerated("(uuid())")) @db.Char(36)
   student_id      String?              @db.Char(36)
   exam_id         String?              @db.Char(36)
   total_points    Int?
@@ -111,11 +111,10 @@ model cbt_results {
 }
 
 model installments {
-  id                 String                 @id @default(uuid()) @db.Char(36)
+  id                 String                 @id @default(dbgenerated("(uuid())")) @db.Char(36)
   payment_id         String?                @db.Char(36)
   installment_number Int
   amount             Decimal                @db.Decimal(10, 2)
-  category           String                 @db.VarChar(255)
   discount           installments_discount? @default(no)
   due_date           DateTime?              @db.DateTime(0)
   payment_date       DateTime?              @db.DateTime(0)
@@ -127,7 +126,7 @@ model installments {
 }
 
 model interview_schedule {
-  id                 String              @id @default(uuid()) @unique(map: "id") @db.Char(36)
+  id                 String              @id @unique(map: "id") @default(dbgenerated("(uuid())")) @db.Char(36)
   batch_id           String?             @db.Char(36)
   interview_date     DateTime?           @db.DateTime(0)
   interview_location String?             @db.VarChar(255)
@@ -140,8 +139,18 @@ model interview_schedule {
   @@index([batch_id], map: "batch_id")
 }
 
+model learning_packages {
+  id          String    @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  name        String?   @db.VarChar(255)
+  description String?   @db.Text
+  price       Decimal   @db.Decimal(10, 2)
+  created_at  DateTime  @default(now()) @db.DateTime(0)
+  updated_at  DateTime  @default(now()) @db.DateTime(0)
+  deleted_at  DateTime? @db.DateTime(0)
+}
+
 model master_referral {
-  id         String     @id @default(uuid()) @db.Char(36)
+  id         String     @id @default(dbgenerated("(uuid())")) @db.Char(36)
   name       String?    @db.VarChar(255)
   created_at DateTime?  @default(now()) @db.DateTime(0)
   updated_at DateTime?  @default(now()) @db.DateTime(0)
@@ -150,7 +159,7 @@ model master_referral {
 }
 
 model master_roles {
-  id         String   @id @default(uuid()) @db.Char(36)
+  id         String   @id @default(dbgenerated("(uuid())")) @db.Char(36)
   name       String   @db.VarChar(255)
   access     String   @db.Text
   created_at DateTime @default(now()) @db.DateTime(0)
@@ -159,7 +168,7 @@ model master_roles {
 }
 
 model payments {
-  id                 String              @id @default(uuid()) @db.Char(36)
+  id                 String              @id @default(dbgenerated("(uuid())")) @db.Char(36)
   student_id         String?             @db.Char(36)
   batch_id           String?             @db.Char(36)
   amount             Decimal?            @db.Decimal(10, 2)
@@ -175,11 +184,11 @@ model payments {
 }
 
 model sequelizemeta {
-  name String @id @default(uuid()) @unique(map: "name") @db.VarChar(255)
+  name String @id @unique(map: "name") @default("") @db.VarChar(255)
 }
 
 model student_attachments {
-  id          String    @id @default(uuid()) @db.Char(36)
+  id          String    @id @default(dbgenerated("(uuid())")) @db.Char(36)
   student_id  String?   @db.Char(36)
   file_name   String    @db.VarChar(255)
   file_url    String    @db.VarChar(255)
@@ -193,7 +202,7 @@ model student_attachments {
 }
 
 model student_punishments {
-  id              String                               @id @default(uuid()) @db.Char(36)
+  id              String                               @id @default(dbgenerated("(uuid())")) @db.Char(36)
   student_id      String                               @db.Char(36)
   punishment_type student_punishments_punishment_type?
   description     String?                              @db.Text
@@ -208,8 +217,9 @@ model student_punishments {
 }
 
 model students {
-  id                  String                    @id @default(uuid()) @unique(map: "id") @db.Char(36)
+  id                  String                    @id @unique(map: "id") @default(dbgenerated("(uuid())")) @db.Char(36)
   full_name           String                    @db.VarChar(255)
+  gender              students_gender?
   whatsapp_number     String?                   @unique(map: "whatsapp_number") @db.VarChar(255)
   email               String?                   @unique(map: "email") @db.VarChar(255)
   nik                 String?                   @unique(map: "nik") @db.VarChar(255)
@@ -218,6 +228,9 @@ model students {
   subdistrict         String?                   @db.VarChar(255)
   village             String?                   @db.VarChar(255)
   address_detail      String?                   @db.VarChar(255)
+  last_education      String?                   @db.VarChar(255)
+  work_now            String?                   @db.VarChar(255)
+  want_to_work        students_want_to_work?
   batch_id            String?                   @db.Char(36)
   interview_id        String?                   @db.Char(36)
   dormitory           students_dormitory?
@@ -250,6 +263,11 @@ enum cbt_questions_type {
   multipleChoice
 }
 
+enum students_gender {
+  male
+  female
+}
+
 enum student_punishments_punishment_type {
   suspension
   warning
@@ -265,6 +283,12 @@ enum cbt_results_checked {
 enum payments_type {
   pendaftaran
   pendidikan
+}
+
+enum students_want_to_work {
+  nurse
+  food
+  other
 }
 
 enum installments_discount {
@@ -284,8 +308,8 @@ enum students_installment {
 
 enum students_referral_source {
   instagram
-  tiktok
   youtube
+  tiktok
   facebook
   website
   friend

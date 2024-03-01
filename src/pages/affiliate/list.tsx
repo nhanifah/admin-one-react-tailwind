@@ -6,8 +6,8 @@ import LayoutAuthenticated from '../../layouts/Authenticated'
 import SectionMain from '../../components/Section/Main'
 import SectionTitleLineWithButton from '../../components/Section/TitleLineWithButton'
 import { getPageTitle } from '../../config'
-import StudentLists from '../../components/Table/StudentLists'
-import StudentDetailModal from '../../components/Modals/StudentDetailModal'
+import AffiliateLists from '../../components/Table/AffiliateLists'
+import AffiliateStudentLists from '../../components/Modals/AffiliateStudentLists'
 
 const AffiliateList = () => {
   return (
@@ -16,7 +16,7 @@ const AffiliateList = () => {
         <title>{getPageTitle('Daftar Affiliator')}</title>
       </Head>
 
-      <StudentDetailModal />
+      <AffiliateStudentLists />
 
       <SectionMain>
         <SectionTitleLineWithButton
@@ -26,7 +26,7 @@ const AffiliateList = () => {
         ></SectionTitleLineWithButton>
 
         <CardBox className="mb-6" hasTable>
-          <StudentLists progress={'success'} />
+          <AffiliateLists />
         </CardBox>
       </SectionMain>
     </>

@@ -9,23 +9,41 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const session = await getSession({ req })
 
   if (!session) {
-    // return res.status(401).json({ message: 'Unauthorized' });
+    return res.status(401).json({ message: 'Unauthorized' })
   }
 
   if (req.method == 'GET') {
     // join relation with batch_registration & master_referral
-    const affiliate = await prisma.master_referral.findMany({
-      include: {
-        students: {
-          include: {
-            student_attachments: true,
+    const { progress } = req.query
+    if (progress == 'success') {
+      const students = await prisma.students.findMany({
+        where: {
+          progress: {
+            in: ['success', 'blocked', 'blacklist', 'hold'],
           },
         },
-
-      },
-    })
-    return res.status(200).json({ data: affiliate })
-
+        include: {
+          batch_registration: true,
+          master_referral: true,
+          student_attachments: true,
+        },
+      })
+      return res.status(200).json({ data: students })
+    } else {
+      const students = await prisma.students.findMany({
+        where: {
+          progress: {
+            in: ['registering', 'psychotest', 'assessment', 'qualified', 'payment'],
+          },
+        },
+        include: {
+          batch_registration: true,
+          master_referral: true,
+          student_attachments: true,
+        },
+      })
+      return res.status(200).json({ data: students })
+    }
   } else if (req.method == 'PUT') {
     const body = await req.body
 
