@@ -145,6 +145,15 @@ export const useStudentClients = (progress: string) => {
     }
   }
 
+  const postFile = async (formData: FormData) => {
+    const res = await fetch('/api/student/upload', {
+      method: 'POST',
+      body: formData
+    });
+    mutate(`/api/student/${progress}`)
+    return res.json();
+  }
+
   return {
     clients: data?.data ?? [],
     isLoading: !error && !data,
@@ -152,6 +161,7 @@ export const useStudentClients = (progress: string) => {
     updateData,
     deleteData,
     updateProgress,
+    postFile,
   }
 }
 

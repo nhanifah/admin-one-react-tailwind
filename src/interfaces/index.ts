@@ -70,7 +70,7 @@ export type Quest = {
 }
 
 export type Student = {
-  id: string
+  id?: string
   full_name: string
   email: string
   nik: string
@@ -87,6 +87,11 @@ export type Student = {
   guardian_name: string
   guardian_phone: string
   progress: string
+  birthdate?: Date
+  process_batch?: number
+  process_referral?: string
+  process_birthdate?: string
+  want_to_work?: string
 }
 
 export type StudentSikotes = {

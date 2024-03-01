@@ -28,6 +28,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         },
       })
       return res.status(200).json({ data: students })
+    } else if (progress == 'dataSiswa') {
+      const students = await prisma.students.findMany({
+        where: {
+          progress: {
+            in: ['success'],
+          },
+        },
+        include: {
+          batch_registration: true,
+          master_referral: true,
+          student_attachments: true,
+        },
+      })
+      return res.status(200).json({ data: students })
     } else {
       const students = await prisma.students.findMany({
         where: {
