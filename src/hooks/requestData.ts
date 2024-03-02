@@ -167,10 +167,10 @@ export const useStudentClients = (progress: string = 'success') => {
   const postFile = async (formData: FormData) => {
     const res = await fetch('/api/student/upload', {
       method: 'POST',
-      body: formData
-    });
+      body: formData,
+    })
     mutate(`/api/student/${progress}`)
-    return res.json();
+    return res.json()
   }
 
   return {
@@ -185,9 +185,31 @@ export const useStudentClients = (progress: string = 'success') => {
   }
 }
 
+export const useInstallmentClients = () => {
+  const handlePay = async (installmentId: string) => {
+    try {
+      const response = await axios.put(`/api/installments/${installmentId}`)
+      mutate('/api/student/dataSiswa')
+      return {
+        status: response.status,
+        data: response.data,
+      }
+    } catch (error) {
+      console.log(error)
+      return {
+        status: error.response.status,
+        data: error.response.data ?? 'Terjadi Kesalahan',
+      }
+    }
+  }
+
+  return {
+    handlePay,
+  }
+}
+
 export const useAffiliateClients = () => {
   const { data, error } = useSWR(`/api/affiliate`, fetcher)
-
 
   return {
     clients: data?.data ?? [],

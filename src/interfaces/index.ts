@@ -123,11 +123,22 @@ export type Affiliates = {
   students: Students[]
 }
 
+export type installments = {
+  id: string
+  payment_id: string
+  installment_number: number
+  amount: number
+  discount: string
+  due_date: Date
+  payment_date: Date
+}
+
 export type payment = {
   student_id: string
   batch_id: string
   amount: number
   type: string
+  installments: installments[]
 }
 
 export type Students = {

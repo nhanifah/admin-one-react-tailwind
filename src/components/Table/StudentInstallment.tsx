@@ -9,7 +9,7 @@ import StudentAvatar from '../UserAvatar'
 import { useAppDispatch } from '../../stores/hooks'
 import { setStudent, showStudentDetailModal } from '../../stores/batchSlice'
 
-const StudentLists = ({ progress }) => {
+const StudentInstallmentTable = ({ progress }) => {
   const dispatch = useAppDispatch()
   const { clients } = useStudentClients(progress)
 
@@ -108,7 +108,6 @@ const StudentLists = ({ progress }) => {
               </td> */}
                 <td className="before:hidden lg:w-1 whitespace-nowrap">
                   <Buttons type="justify-start lg:justify-end" noWrap>
-                    <Button color="warning" icon={mdiCurrencyUsd} onClick={() => {}} small />
                     <Button
                       color="success"
                       icon={mdiWhatsapp}
@@ -134,12 +133,6 @@ const StudentLists = ({ progress }) => {
                         dispatch(setStudent(client))
                         dispatch(showStudentDetailModal())
                       }}
-                      small
-                    />
-                    <Button
-                      color="danger"
-                      icon={mdiPoliceBadge}
-                      onClick={() => setIsModalTrashActive(true)}
                       small
                     />
                   </Buttons>
@@ -172,4 +165,4 @@ const StudentLists = ({ progress }) => {
   )
 }
 
-export default StudentLists
+export default StudentInstallmentTable

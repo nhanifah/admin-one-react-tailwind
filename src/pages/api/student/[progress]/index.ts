@@ -25,6 +25,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           batch_registration: true,
           master_referral: true,
           student_attachments: true,
+          payments: {
+            include: {
+              installments: true,
+            },
+          },
         },
       })
       return res.status(200).json({ data: students })
@@ -39,6 +44,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           batch_registration: true,
           master_referral: true,
           student_attachments: true,
+          payments: {
+            include: {
+              installments: true,
+            },
+          },
         },
       })
       return res.status(200).json({ data: students })

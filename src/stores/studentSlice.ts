@@ -4,12 +4,16 @@ interface initialState {
   uploadModal: boolean
   contractModal: boolean
   contractFiles: any
+  paymentModal: boolean
+  installmentId: string
 }
 
 const initialState: initialState = {
   uploadModal: false,
   contractModal: false,
   contractFiles: null,
+  paymentModal: false,
+  installmentId: '',
 }
 
 export const styleSlice = createSlice({
@@ -31,6 +35,15 @@ export const styleSlice = createSlice({
     setContractFiles: (state, action: PayloadAction<any>) => {
       state.contractFiles = action.payload
     },
+    showPaymentModal: (state) => {
+      state.paymentModal = true
+    },
+    closePaymentModal: (state) => {
+      state.paymentModal = false
+    },
+    setInstallmentId: (state, action: PayloadAction<string>) => {
+      state.installmentId = action.payload
+    },
   },
 })
 
@@ -40,6 +53,9 @@ export const {
   showContractModal,
   closeContractModal,
   setContractFiles,
+  showPaymentModal,
+  closePaymentModal,
+  setInstallmentId,
 } = styleSlice.actions
 
 export default styleSlice.reducer
