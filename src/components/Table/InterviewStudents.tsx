@@ -1,7 +1,7 @@
 'use client'
 
 import { mdiEye, mdiWhatsapp } from '@mdi/js'
-import React, { useEffect, useState } from 'react'
+import React, { ReactNode, useEffect, useState } from 'react'
 import Button from '../Button'
 import Buttons from '../Buttons'
 import { useAppDispatch, useAppSelector } from '../../stores/hooks'
@@ -10,9 +10,13 @@ import StudentAvatar from '../UserAvatar'
 import { setStudents } from '../../stores/interviewSlice'
 import { setStudent, showStudentDetailModal } from '../../stores/batchSlice'
 
-const TableInterviewStudents = () => {
-  const interviewSchedules = useAppSelector((state) => state.interview.interviewSchedules)
-  const selectedStudents = useAppSelector((state) => state.interview.students)
+type Props = {
+  children?: ReactNode
+  selectedStudents: Students[]
+}
+
+const TableInterviewStudents = ({ selectedStudents = [] }: Props) => {
+  // const selectedStudents = useAppSelector((state) => state.interview.students)
   const [checkAll, setCheckAll] = useState(false)
 
   useEffect(() => {
