@@ -24,8 +24,8 @@ model admins {
 
 model batch_registration {
   id                 String               @id @unique(map: "id") @default(dbgenerated("(uuid())")) @db.Char(36)
-  batch_name         Int?                 @db.Int
-  quota              Int              
+  batch_name         String?              @db.VarChar(255)
+  quota              Int?
   end_date           DateTime?            @db.DateTime(0)
   created_at         DateTime?            @default(now()) @db.DateTime(0)
   updated_at         DateTime?            @default(now()) @db.DateTime(0)
@@ -68,7 +68,7 @@ model cbt_enrolled {
 model cbt_examination {
   id            String          @id @default(dbgenerated("(uuid())")) @db.Char(36)
   name          String?         @db.VarChar(255)
-  minimal_value Int             
+  minimal_value String?         @db.VarChar(255)
   leases_time   String?         @db.VarChar(255)
   created_at    DateTime?       @default(now()) @db.DateTime(0)
   updated_at    DateTime?       @default(now()) @db.DateTime(0)
@@ -111,7 +111,7 @@ model cbt_results {
 }
 
 model installments {
-  id                 String                 @id @default(uuid()) @db.Char(36)
+  id                 String                 @id @default(dbgenerated("(uuid())")) @db.Char(36)
   payment_id         String?                @db.Char(36)
   installment_number Int
   amount             Decimal                @db.Decimal(10, 2)
@@ -168,12 +168,12 @@ model master_roles {
 }
 
 model payments {
-  id                 String              @id @default(uuid()) @db.Char(36)
+  id                 String              @id @default(dbgenerated("(uuid())")) @db.Char(36)
   student_id         String?             @db.Char(36)
   batch_id           String?             @db.Char(36)
   amount             Decimal?            @db.Decimal(10, 2)
   type               payments_type?
-  created_at         DateTime?           @db.DateTime(0)
+  created_at         String?             @db.VarChar(255)
   updated_at         DateTime?           @db.DateTime(0)
   installments       installments[]
   batch_registration batch_registration? @relation(fields: [batch_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "batch_fk")
@@ -280,20 +280,20 @@ enum cbt_results_checked {
   no
 }
 
+enum installments_discount {
+  yes
+  no
+}
+
 enum payments_type {
-  pendaftaran
-  pendidikan
+  pedidikan
+  belajar
 }
 
 enum students_want_to_work {
   nurse
   food
   other
-}
-
-enum installments_discount {
-  yes
-  no
 }
 
 enum students_dormitory {
