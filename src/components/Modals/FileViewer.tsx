@@ -34,9 +34,10 @@ export default function FileViewer() {
     >
       {contractFiles?.file_url ? (
         ext == 'pdf' ? (
-          <Worker workerUrl="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js">
-            <Viewer fileUrl={contractFiles.file_url} plugins={[zoomPluginInstance]} />
-          </Worker>
+          // <Worker workerUrl="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js">
+          //   <Viewer fileUrl={contractFiles.file_url} plugins={[zoomPluginInstance]} />
+          // </Worker>
+          <iframe src={`${contractFiles.file_url}`} width="100%" height="500px"></iframe>
         ) : (
           <div>
             <img className="mx-auto" src={contractFiles.file_url} alt="Contract" />
