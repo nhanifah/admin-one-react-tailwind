@@ -11,6 +11,7 @@ export type MenuAsideItem = {
   color?: ColorButtonKey
   isLogout?: boolean
   menu?: MenuAsideItem[]
+  disabled?: boolean
   onClick?: () => void
 }
 

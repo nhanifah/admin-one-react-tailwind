@@ -69,7 +69,7 @@ const StudentInstallmentTable = ({ progress }) => {
         <tbody>
           {clients.length === 0 && (
             <tr>
-              <td colSpan={7} className="text-center py-6">
+              <td colSpan={8} className="text-center py-6">
                 <p className="text-gray-500 dark:text-slate-400">Data tidak ditemukan</p>
               </td>
             </tr>

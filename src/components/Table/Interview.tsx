@@ -45,6 +45,13 @@ const InterviewTable = () => {
           </tr>
         </thead>
         <tbody>
+          {clients.length === 0 && (
+            <tr>
+              <td colSpan={6} className="text-center py-6">
+                <p className="text-gray-500 dark:text-slate-400">Data tidak ditemukan</p>
+              </td>
+            </tr>
+          )}
           {clientsPaginated.map((data: InterviewSchedules, index: number) => (
             <tr key={data.id}>
               <td data-label="CreatedAt">

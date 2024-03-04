@@ -161,9 +161,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 skipDuplicates: true,
             });
         
-            console.log('Data berhasil diimpor:', xlDataWithBatchIds);
+            // console.log('Data berhasil diimpor:', xlDataWithBatchIds);
         
-            return res.status(200).json({ status: 'success', message: 'Data berhasil diimport', data: xlDataWithBatchIds });
+            return res.status(200).json({ status: 'success', message: 'Data berhasil diimport' });
         } catch (error) {
             console.error('Terjadi kesalahan saat memproses data:', error);
             return res.status(500).json({ status: 'error', message: 'Terjadi kesalahan saat memproses data.', error: error.message});
