@@ -50,7 +50,7 @@ const menuNavBar: MenuNavBarItem[] = [
     icon: mdiHelpCircle,
     label: 'Help & Support',
     isDesktopNoLabel: true,
-    href: 'https://github.com/justboil/admin-one-react-tailwind',
+    href: 'https://dashboard.lpk-harehare.id',
     target: '_blank',
   },
   {

@@ -26,7 +26,7 @@ const FormsPage = () => {
       <SectionMain>
         <SectionTitleLineWithButton icon={mdiBallotOutline} title="Formik forms example" main>
           <Button
-            href="https://github.com/justboil/admin-one-react-tailwind"
+            href="https://dashboard.lpk-harehare.id"
             target="_blank"
             icon={mdiGithub}
             label="Star on GitHub"
