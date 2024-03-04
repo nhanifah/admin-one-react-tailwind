@@ -106,22 +106,25 @@ const TableInterviewStudents = ({ selectedStudents = [] }: Props) => {
             </tr>
           )}
           {clientsPaginated?.map((client: Students, index: number) => {
+            let fotoAttachments: any[] = []
+            fotoAttachments = client?.student_attachments?.filter((attachment) =>
+              attachment.file_name.includes('foto_')
+            )
+
             return (
               <tr key={client.id}>
-                <td>
-                  <input
-                    type="checkbox"
-                    checked={client.checked}
-                    onChange={(e) => handleCheck(e, client.id)}
-                  />
-                </td>
                 <td className="border-b-0 lg:w-6 before:hidden">
                   <StudentAvatar
-                    imgUrl={'https://lpk-harehare.nos.jkt-1.neo.id/avatar.jpg'}
+                    imgUrl={
+                      fotoAttachments.length != 0
+                        ? fotoAttachments[0]['file_url']
+                        : 'https://lpk-harehare.nos.jkt-1.neo.id/avatar.jpg'
+                    }
                     alt={client.full_name}
                     className="w-24 h-24 mx-auto lg:w-6 lg:h-6"
                   />
                 </td>
+
                 <td data-label="Nama">{client.full_name}</td>
                 <td data-label="Asal">{client.progress}</td>
                 <td className="before:hidden lg:w-1 whitespace-nowrap">

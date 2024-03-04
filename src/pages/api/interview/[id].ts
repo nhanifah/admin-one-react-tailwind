@@ -11,7 +11,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         id: id,
       },
       include: {
-        students: true,
+        students: {
+          include: {
+            student_attachments: true,
+          },
+        },
       },
     })
 
