@@ -69,7 +69,7 @@ const StudentLists = ({ progress }) => {
         <tbody>
           {clients.length === 0 && (
             <tr>
-              <td colSpan={7} className="text-center py-6">
+              <td colSpan={8} className="text-center py-6">
                 <p className="text-gray-500 dark:text-slate-400">Data tidak ditemukan</p>
               </td>
             </tr>
@@ -108,7 +108,7 @@ const StudentLists = ({ progress }) => {
               </td> */}
                 <td className="before:hidden lg:w-1 whitespace-nowrap">
                   <Buttons type="justify-start lg:justify-end" noWrap>
-                    <Button color="warning" icon={mdiCurrencyUsd} onClick={() => {}} small />
+                    <Button color="warning" icon={mdiCurrencyUsd} onClick={() => {}} small disabled />
                     <Button
                       color="success"
                       icon={mdiWhatsapp}
@@ -140,6 +140,7 @@ const StudentLists = ({ progress }) => {
                       color="danger"
                       icon={mdiPoliceBadge}
                       onClick={() => setIsModalTrashActive(true)}
+                      disabled
                       small
                     />
                   </Buttons>
@@ -164,7 +165,7 @@ const StudentLists = ({ progress }) => {
             ))}
           </Buttons>
           <small className="mt-6 md:mt-0">
-            Page {currentPage + 1} of {numPages}
+            Halaman {currentPage + 1} dari {numPages}
           </small>
         </div>
       </div>

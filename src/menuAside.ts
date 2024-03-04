@@ -80,6 +80,7 @@ const menuAside: MenuAsideItem[] = [
       {
         label: 'Sanksi Siswa',
         href: '/student/penalty',
+        disabled: true,
       },
     ],
   },

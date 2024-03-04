@@ -42,6 +42,13 @@ const TableBatch = () => {
           </tr>
         </thead>
         <tbody>
+          {clients.length === 0 && (
+            <tr>
+              <td colSpan={6} className="text-center py-6">
+                <p className="text-gray-500 dark:text-slate-400">Data tidak ditemukan</p>
+              </td>
+            </tr>
+          )}
           {clientsPaginated.map((data, index: number) => (
             <tr key={data.id}>
               <td data-label="Name">{data.batch_name}</td>
@@ -97,7 +104,7 @@ const TableBatch = () => {
             ))}
           </Buttons>
           <small className="mt-6 md:mt-0">
-            Page {currentPage + 1} of {numPages}
+            Halaman {currentPage + 1} dari {numPages}
           </small>
         </div>
       </div>

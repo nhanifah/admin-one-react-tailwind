@@ -336,7 +336,7 @@ const TableSampleClients = () => {
             ))}
           </Buttons>
           <small className="mt-6 md:mt-0">
-            Page {currentPage + 1} of {numPages}
+            Halaman {currentPage + 1} dari {numPages}
           </small>
         </div>
       </div>

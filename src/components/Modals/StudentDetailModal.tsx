@@ -64,7 +64,7 @@ export default function StudentDetailModal() {
 
           <Divider />
 
-          {
+          {/* {
               (student?.installment === 'yes' ? 
               <>
               <FormField label="Informasi Pembayaran">
@@ -86,7 +86,7 @@ export default function StudentDetailModal() {
                 <Button outline color="info" label="Bayar" />
               </FormField>
               )
-            }
+            } */}
         </Form>
       </Formik>
     </WideCardBoxModal>
