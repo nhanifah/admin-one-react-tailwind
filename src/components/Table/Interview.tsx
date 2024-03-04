@@ -8,6 +8,7 @@ import { showEditModal } from '../../stores/interviewSlice'
 import { setInterviewSchedules, setStudents } from '../../stores/interviewSlice'
 import { useRouter } from 'next/navigation'
 import { InterviewSchedules } from '../../interfaces'
+import Link from 'next/link'
 
 const InterviewTable = () => {
   const { clients } = useBatchInterviewClients()
@@ -79,17 +80,19 @@ const InterviewTable = () => {
                       dispatch(showEditModal())
                     }}
                   />
-                  <Button
-                    color="info"
-                    icon={mdiEye}
-                    small
-                    label={'Daftar Siswa'}
-                    onClick={() => {
-                      dispatch(setInterviewSchedules(data))
-                      dispatch(setStudents(data.students))
-                      router.push('/batch/interview/students')
-                    }}
-                  />
+                  <Link href={`/batch/interview/${data.id}`}>
+                    <Button
+                      color="info"
+                      icon={mdiEye}
+                      small
+                      label={'Daftar Siswa'}
+                      onClick={() => {
+                        dispatch(setInterviewSchedules(data))
+                        dispatch(setStudents(data.students))
+                        // router.push('/batch/interview/students')
+                      }}
+                    />
+                  </Link>
                 </Buttons>
               </td>
             </tr>

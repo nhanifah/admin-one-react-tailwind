@@ -4,7 +4,23 @@ import { PrismaClient, cbt_questions_type } from '@prisma/client'
 const prisma = new PrismaClient({ log: ['query', 'error'] })
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method == 'PUT') {
+  if (req.method == 'GET') {
+    const { id }: any = req.query
+    const interview = await prisma.interview_schedule.findUnique({
+      where: {
+        id: id,
+      },
+      include: {
+        students: {
+          include: {
+            student_attachments: true,
+          },
+        },
+      },
+    })
+
+    return res.status(200).json({ data: interview })
+  } else if (req.method == 'PUT') {
     const body = req.body
     const { id }: any = req.query
     try {

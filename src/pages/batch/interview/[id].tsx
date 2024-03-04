@@ -6,7 +6,7 @@ import {
   mdiFileSign,
 } from '@mdi/js'
 import Head from 'next/head'
-import { ReactElement } from 'react'
+import { ReactElement, useEffect } from 'react'
 import CardBox from '../../../components/CardBox'
 import LayoutAuthenticated from '../../../layouts/Authenticated'
 import SectionMain from '../../../components/Section/Main'
@@ -27,9 +27,18 @@ import UpdateInterviewScheduleModal from '../../../components/Modals/UpdateInter
 import UpdateProgress from '../../../components/Modals/UpdateProgress'
 import StudentDetailModal from '../../../components/Modals/StudentDetailModal'
 import ContractModal from '../../../components/Modals/ContractModal'
+import { useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/router'
+import {
+  useInterviewScheduleByIdClients,
+  useInterviewScheduleClients,
+} from '../../../hooks/requestData'
 
 const Interview = () => {
-  const interviewSchedule = useAppSelector((state) => state.interview.interviewSchedules)
+  const router = useRouter()
+  const { id } = router.query
+  const { interviewSchedule } = useInterviewScheduleByIdClients(id)
+  // const interviewSchedule = useAppSelector((state) => state.interview.interviewSchedules)
   const dispatch = useAppDispatch()
 
   return (
@@ -101,7 +110,7 @@ const Interview = () => {
               })}
             </span>
           </h3>
-          <InterviewStudents />
+          <InterviewStudents selectedStudents={interviewSchedule.students} />
         </CardBox>
       </SectionMain>
     </>

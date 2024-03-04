@@ -343,6 +343,22 @@ export const useInterviewScheduleClients = () => {
     }
   }
 
+  const getInterviewById = async (id: any) => {
+    try {
+      const response = await axios.get(`/api/interview/${id}`)
+      return {
+        status: response.status,
+        data: response.data,
+      }
+    } catch (error) {
+      console.log(error)
+      return {
+        status: error.response.status,
+        data: error.response.data,
+      }
+    }
+  }
+
   const editInterview = async (id: string, data: any) => {
     try {
       const response = await axios.put(`/api/interview/${id}`, data)
@@ -363,6 +379,17 @@ export const useInterviewScheduleClients = () => {
   return {
     createInterview,
     editInterview,
+    getInterviewById,
+  }
+}
+
+export const useInterviewScheduleByIdClients = (id: any) => {
+  const { data, error } = useSWR(`/api/interview/${id}`, fetcher)
+
+  return {
+    interviewSchedule: data?.data ?? [],
+    isLoading: !error && !data,
+    isError: error,
   }
 }
 
