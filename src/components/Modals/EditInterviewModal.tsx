@@ -51,6 +51,10 @@ export default function EditBatchModal() {
     setLoading(false)
   }
 
+  // convert selectedInterview.interview_date from 2024-03-10T10:00:00.000Z to 2024-03-10T10:00
+  let interviewDate = selectedInterview.interview_date.split('.')[0]
+  interviewDate = interviewDate.slice(0, -3)
+
   return (
     <CardBoxModal
       title="Edit Interview"
@@ -80,14 +84,14 @@ export default function EditBatchModal() {
       </div>
       <Formik
         initialValues={{
-          interview_date: selectedInterview.interview_date,
+          interview_date: interviewDate,
           interview_location: selectedInterview.interview_location,
         }}
         onSubmit={handleSubmit}
         // onSubmit={handleSubmit}
         innerRef={formRef}
       >
-        {({ setFieldValue, values }) => (
+        {() => (
           <Form>
             <FormField label="Tanggal Interview" labelFor="interview_date">
               <Field name="interview_date" type="datetime-local" />

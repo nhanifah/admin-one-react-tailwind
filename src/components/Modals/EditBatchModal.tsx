@@ -51,6 +51,8 @@ export default function EditBatchModal() {
     setLoading(false)
   }
 
+  let endDate = selectedBatch.end_date.split('T')[0]
+
   return (
     <CardBoxModal
       title="Ubah Batch"
@@ -84,7 +86,7 @@ export default function EditBatchModal() {
         initialValues={{
           batch_name: selectedBatch.batch_name,
           quota: selectedBatch.quota,
-          end_date: '',
+          end_date: endDate,
         }}
         onSubmit={handleSubmit}
         // onSubmit={handleSubmit}

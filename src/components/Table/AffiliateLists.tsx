@@ -78,7 +78,7 @@ const AffiliateLists = () => {
               <tr key={client.id}>
                 <td data-label="#">{index + 1}</td>
                 <td data-label="Nama">{client.name}</td>
-                <td data-label="Jumlah Calon Siswa">{client.students.length} Peserta</td>
+                <td data-label="Jumlah Calon Siswa">{client.students.filter((student) => student.progress != 'success').length} Peserta</td>
                 <td data-label="Jumlah Siswa">{client.students.filter((student) => student.progress === 'success').length} Peserta</td>
                 <td data-label="Jumlah Siswa Kaigo">{
                   client.students.filter((student) => {

@@ -6,7 +6,6 @@ import Buttons from '../Buttons'
 import { useAppDispatch } from '../../stores/hooks'
 import { showEditModal } from '../../stores/interviewSlice'
 import { setInterviewSchedules, setStudents } from '../../stores/interviewSlice'
-import { useRouter } from 'next/navigation'
 import { InterviewSchedules } from '../../interfaces'
 import Link from 'next/link'
 
@@ -14,7 +13,6 @@ const InterviewTable = () => {
   const { clients } = useBatchInterviewClients()
   const dispatch = useAppDispatch()
 
-  const router = useRouter()
 
   const perPage = 50
 
@@ -53,7 +51,7 @@ const InterviewTable = () => {
               </td>
             </tr>
           )}
-          {clientsPaginated.map((data: InterviewSchedules, index: number) => (
+          {clientsPaginated.map((data: InterviewSchedules) => (
             <tr key={data.id}>
               <td data-label="CreatedAt">
                 <small className="text-gray-500 dark:text-slate-400">
@@ -64,6 +62,7 @@ const InterviewTable = () => {
                     day: 'numeric',
                     hour: '2-digit',
                     minute: '2-digit',
+                    timeZone: 'UTC',
                   })}
                 </small>
               </td>
