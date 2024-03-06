@@ -8,6 +8,7 @@ import WideCardBoxModal from '../CardBox/WideModal'
 import StudentAvatar from '../UserAvatar'
 import { useAppDispatch } from '../../stores/hooks'
 import { setStudent, showStudentDetailModal } from '../../stores/batchSlice'
+import { showTraskripModal } from '../../stores/studentSlice'
 
 const StudentLists = ({ progress }) => {
   const dispatch = useAppDispatch()
@@ -147,6 +148,12 @@ const StudentLists = ({ progress }) => {
                       icon={mdiPoliceBadge}
                       onClick={() => setIsModalTrashActive(true)}
                       disabled
+                      small
+                    />
+                    <Button
+                      color="contrast"
+                      label="Lihat transkrip"
+                      onClick={() => dispatch(showTraskripModal())}
                       small
                     />
                   </Buttons>

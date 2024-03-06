@@ -6,6 +6,7 @@ interface initialState {
   contractFiles: any
   paymentModal: boolean
   installmentId: string
+  transkripModal: boolean
 }
 
 const initialState: initialState = {
@@ -14,6 +15,7 @@ const initialState: initialState = {
   contractFiles: null,
   paymentModal: false,
   installmentId: '',
+  transkripModal: false,
 }
 
 export const styleSlice = createSlice({
@@ -44,6 +46,12 @@ export const styleSlice = createSlice({
     setInstallmentId: (state, action: PayloadAction<string>) => {
       state.installmentId = action.payload
     },
+    showTraskripModal: (state) => {
+      state.transkripModal = true
+    },
+    closeTraskripModal: (state) => {
+      state.transkripModal = false
+    },
   },
 })
 
@@ -56,6 +64,8 @@ export const {
   showPaymentModal,
   closePaymentModal,
   setInstallmentId,
+  showTraskripModal,
+  closeTraskripModal,
 } = styleSlice.actions
 
 export default styleSlice.reducer

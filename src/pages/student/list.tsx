@@ -12,30 +12,31 @@ import Button from '../../components/Button'
 import Buttons from '../../components/Buttons'
 import { toast } from 'react-hot-toast'
 import { useStudentClients } from '../../hooks/requestData'
+import TranskripViewer from '../../components/Modals/TranskripViewer'
 
 const StudentList = () => {
-  const fileRef = useRef<HTMLInputElement>(null);
+  const fileRef = useRef<HTMLInputElement>(null)
 
-  const { postFile } = useStudentClients('success');
+  const { postFile } = useStudentClients('success')
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
+    const files = e.target.files
     if (files && files.length > 0) {
-      const file = files[0];
-      const formData = new FormData();
-      formData.append('file', file);
-      const res = await postFile(formData);
+      const file = files[0]
+      const formData = new FormData()
+      formData.append('file', file)
+      const res = await postFile(formData)
       // console.log(res);
 
       if (res.status == 'success') {
-        toast.success(res.message);
+        toast.success(res.message)
       } else {
-        console.log(res);
-        toast.error('Gagal mengimpor data');
+        console.log(res)
+        toast.error('Gagal mengimpor data')
       }
 
       // reset the input
-      e.target.value = '';
+      e.target.value = ''
     }
   }
 
@@ -46,27 +47,26 @@ const StudentList = () => {
       </Head>
 
       <StudentDetailModal />
+      <TranskripViewer />
 
       <SectionMain>
-        <SectionTitleLineWithButton
-          icon={mdiBallotOutline}
-          title="Daftar Siswa"
-          main
-        >
-          <form className='hidden'>
-            <input type="file" name='file' ref={fileRef} onChange={handleFileChange} />
+        <SectionTitleLineWithButton icon={mdiBallotOutline} title="Daftar Siswa" main>
+          <form className="hidden">
+            <input type="file" name="file" ref={fileRef} onChange={handleFileChange} />
           </form>
           <Buttons>
             <Button
-              href='https://lpk-harehare.nos.jkt-1.neo.id/Import%20File%20-%20Siswa%20LPK.xlsx'
-              icon={ mdiDownload }
+              href="https://lpk-harehare.nos.jkt-1.neo.id/Import%20File%20-%20Siswa%20LPK.xlsx"
+              icon={mdiDownload}
               label="Unduh Sampel Excel"
               color="contrast"
               roundedFull
               small
             />
             <Button
-              onClick={() => { fileRef.current && fileRef.current.click(); }}
+              onClick={() => {
+                fileRef.current && fileRef.current.click()
+              }}
               icon={mdiMicrosoftExcel}
               label="Impor dari Excel"
               color="success"
