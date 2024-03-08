@@ -7,6 +7,7 @@ interface initialState {
   paymentModal: boolean
   installmentId: string
   transkripModal: boolean
+  transkripFiles: any
 }
 
 const initialState: initialState = {
@@ -16,6 +17,7 @@ const initialState: initialState = {
   paymentModal: false,
   installmentId: '',
   transkripModal: false,
+  transkripFiles: null,
 }
 
 export const styleSlice = createSlice({
@@ -52,6 +54,9 @@ export const styleSlice = createSlice({
     closeTraskripModal: (state) => {
       state.transkripModal = false
     },
+    setTranskripFiles: (state, action: PayloadAction<any>) => {
+      state.transkripFiles = action.payload
+    },
   },
 })
 
@@ -66,6 +71,7 @@ export const {
   setInstallmentId,
   showTraskripModal,
   closeTraskripModal,
+  setTranskripFiles,
 } = styleSlice.actions
 
 export default styleSlice.reducer

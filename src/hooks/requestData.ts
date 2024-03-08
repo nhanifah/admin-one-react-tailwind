@@ -118,7 +118,7 @@ export const useStudentClients = (progress: string = 'success') => {
       const response = await axios.post('/api/student/uploadContract', data, {
         headers: { 'Content-Type': 'multipart/form-data' },
       })
-      mutate('/api/student/contract')
+      mutate('/api/student')
       return {
         status: response.status,
         data: response.data,

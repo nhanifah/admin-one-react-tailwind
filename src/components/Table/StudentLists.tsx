@@ -8,7 +8,8 @@ import WideCardBoxModal from '../CardBox/WideModal'
 import StudentAvatar from '../UserAvatar'
 import { useAppDispatch } from '../../stores/hooks'
 import { setStudent, showStudentDetailModal } from '../../stores/batchSlice'
-import { showTraskripModal } from '../../stores/studentSlice'
+import { setTranskripFiles, showTraskripModal } from '../../stores/studentSlice'
+import { getTranskripFiles } from '../../utils/helpers'
 
 const StudentLists = ({ progress }) => {
   const dispatch = useAppDispatch()
@@ -80,6 +81,8 @@ const StudentLists = ({ progress }) => {
             fotoAttachments = client?.student_attachments?.filter((attachment) =>
               attachment.file_name.includes('foto_')
             )
+
+            const transkripAttachments = getTranskripFiles(client.student_attachments)
 
             return (
               <tr key={client.id}>
@@ -153,7 +156,10 @@ const StudentLists = ({ progress }) => {
                     <Button
                       color="contrast"
                       label="Lihat transkrip"
-                      onClick={() => dispatch(showTraskripModal())}
+                      onClick={() => {
+                        dispatch(setTranskripFiles(transkripAttachments[0]))
+                        dispatch(showTraskripModal())
+                      }}
                       small
                     />
                   </Buttons>

@@ -1,24 +1,26 @@
-import React, { useRef } from 'react'
+import { Viewer, Worker } from '@react-pdf-viewer/core'
+import { zoomPlugin } from '@react-pdf-viewer/zoom'
+import '@react-pdf-viewer/core/lib/styles/index.css'
+import '@react-pdf-viewer/zoom/lib/styles/index.css'
+import React from 'react'
 import { useAppDispatch, useAppSelector } from '../../stores/hooks'
+import { closeTraskripModal, showUploadModal } from '../../stores/studentSlice'
 import CardBoxModal from '../CardBox/Modal'
-import { closeTraskripModal } from '../../stores/studentSlice'
 import { getExtFile } from '../../utils/helpers'
-import { Document, Page, pdfjs } from 'react-pdf'
 
-import 'react-pdf/dist/Page/AnnotationLayer.css'
-pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`
-
-export default function TranskripViewer() {
+export default function FileViewer() {
   const dispatch = useAppDispatch()
+  const zoomPluginInstance = zoomPlugin({
+    enableShortcuts: true,
+  })
   //   const student = useAppSelector((state) => state.batch.student)
-  const contractFiles = useAppSelector((state) => state.student.contractFiles)
-  const ext = getExtFile(contractFiles?.file_url ? contractFiles?.file_url : '')
+  const transkripFiles = useAppSelector((state) => state.student.transkripFiles)
+  const ext = getExtFile(transkripFiles?.file_url ? transkripFiles?.file_url : '')
   console.log(ext)
   const modal = useAppSelector((state) => state.student.transkripModal)
   const handleModalAction = () => {
     dispatch(closeTraskripModal())
   }
-
   return (
     <CardBoxModal
       title="Dokumen Kontrak"
@@ -28,14 +30,20 @@ export default function TranskripViewer() {
       onConfirm={handleModalAction}
       onCancel={handleModalAction}
     >
-      <div className="p-2.5 shadow-lg">
-        <Document
-          className={'w-full '}
-          file={'https://lpk-harehare.nos.jkt-1.neo.id/contract_010324_3213213213213212.pdf'}
-        >
-          <Page pageNumber={1} />
-        </Document>
-      </div>
+      {transkripFiles?.file_url ? (
+        ext == 'pdf' ? (
+          // <Worker workerUrl="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.worker.min.js">
+          //   <Viewer fileUrl={transkripFiles.file_url} plugins={[zoomPluginInstance]} />
+          // </Worker>
+          <iframe src={`${transkripFiles.file_url}`} width="100%" height="500px"></iframe>
+        ) : (
+          <div>
+            <img className="mx-auto" src={transkripFiles.file_url} alt="Contract" />
+          </div>
+        )
+      ) : (
+        ''
+      )}
     </CardBoxModal>
   )
 }

@@ -3,9 +3,8 @@ import { zoomPlugin } from '@react-pdf-viewer/zoom'
 import '@react-pdf-viewer/core/lib/styles/index.css'
 import '@react-pdf-viewer/zoom/lib/styles/index.css'
 import React from 'react'
-import { useStudentClients } from '../../hooks/requestData'
 import { useAppDispatch, useAppSelector } from '../../stores/hooks'
-import { closeUploadModal } from '../../stores/studentSlice'
+import { showUploadModal } from '../../stores/studentSlice'
 import CardBoxModal from '../CardBox/Modal'
 import { closeContractModal } from '../../stores/studentSlice'
 import { getExtFile } from '../../utils/helpers'
@@ -30,7 +29,11 @@ export default function FileViewer() {
       buttonLabel="Tutup"
       isActive={modal}
       onConfirm={handleModalAction}
+      cancelLabel="Update"
       onCancel={handleModalAction}
+      onUpdate={() => {
+        dispatch(showUploadModal())
+      }}
     >
       {contractFiles?.file_url ? (
         ext == 'pdf' ? (

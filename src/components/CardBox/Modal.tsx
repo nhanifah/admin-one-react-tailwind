@@ -18,6 +18,9 @@ type Props = {
   onCancel?: () => void
   loading?: boolean
   disabled?: boolean
+  cancelLabel?: string
+  onUpdate?: () => void
+  zIndex?: string
 }
 
 const CardBoxModal = ({
@@ -30,6 +33,9 @@ const CardBoxModal = ({
   onCancel,
   loading = false,
   disabled = false,
+  cancelLabel = 'Gagalkan',
+  onUpdate,
+  zIndex = 'z-40',
 }: Props) => {
   if (!isActive) {
     return null
@@ -44,14 +50,16 @@ const CardBoxModal = ({
         loading={loading}
         disabled={loading}
       />
-      {!!onCancel && <Button label="Gagalkan" color={buttonColor} outline onClick={onCancel} />}
+      {!!onCancel && (
+        <Button label={cancelLabel} color={buttonColor} outline onClick={onUpdate ?? onCancel} />
+      )}
     </Buttons>
   )
 
   return (
     <OverlayLayer onClick={onCancel} className={onCancel ? 'cursor-pointer' : ''}>
       <CardBox
-        className={`transition-transform shadow-lg max-h-modal overflow-y-scroll no-scrollbar w-11/12 md:w-3/5 lg:w-2/5 xl:w-4/12 z-50`}
+        className={`transition-transform shadow-lg max-h-modal overflow-y-scroll no-scrollbar w-11/12 md:w-3/5 lg:w-2/5 xl:w-4/12 ${zIndex}`}
         isModal
         footer={footer}
       >

@@ -9,19 +9,18 @@ import { Students } from '../../interfaces'
 import StudentAvatar from '../UserAvatar'
 import { setStudents } from '../../stores/interviewSlice'
 import { setStudent, showStudentDetailModal } from '../../stores/batchSlice'
+import { useInterviewScheduleByIdClients } from '../../hooks/requestData'
 
 type Props = {
   children?: ReactNode
-  selectedStudents: Students[]
+  interviewId: any
 }
 
-const TableInterviewStudents = ({ selectedStudents = [] }: Props) => {
+const TableInterviewStudents = ({ interviewId }: Props) => {
   // const selectedStudents = useAppSelector((state) => state.interview.students)
+  const { interviewSchedule } = useInterviewScheduleByIdClients(interviewId)
+  const selectedStudents = interviewSchedule?.students ?? []
   const [checkAll, setCheckAll] = useState(false)
-
-  useEffect(() => {
-    console.table(selectedStudents)
-  }, [])
 
   const dispatch = useAppDispatch()
 
@@ -113,6 +112,13 @@ const TableInterviewStudents = ({ selectedStudents = [] }: Props) => {
 
             return (
               <tr key={client.id}>
+                <td>
+                  <input
+                    type="checkbox"
+                    checked={client.checked}
+                    onChange={(e) => handleCheck(e, client.id)}
+                  />
+                </td>
                 <td className="border-b-0 lg:w-6 before:hidden">
                   <StudentAvatar
                     imgUrl={

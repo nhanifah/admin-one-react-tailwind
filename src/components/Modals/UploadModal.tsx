@@ -13,6 +13,7 @@ import { useStudentClients } from '../../hooks/requestData'
 import 'filepond/dist/filepond.min.css'
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css'
 import 'filepond-plugin-pdf-preview/dist/filepond-plugin-pdf-preview.min.css'
+import { closeContractModal } from '../../stores/studentSlice'
 
 registerPlugin(FilePondPluginImagePreview)
 registerPlugin(FilePondPluginPdfPreview)
@@ -35,6 +36,7 @@ export default function UploadModal() {
   const [files, setFiles] = useState<any>()
   const handleModalAction = () => {
     dispatch(closeUploadModal())
+
     setFiles([])
   }
   const [loading, setLoading] = useState(false)
@@ -60,6 +62,7 @@ export default function UploadModal() {
     if (status == 200) {
       console.log(data)
       toast.success('Kontrak berhasil diupload!')
+      dispatch(closeContractModal())
       handleModalAction()
     } else {
       console.log(data)
@@ -79,6 +82,7 @@ export default function UploadModal() {
       onCancel={handleModalAction}
       loading={loading}
       disabled={loading}
+      zIndex="z-50"
     >
       <FilePond
         instantUpload={false}

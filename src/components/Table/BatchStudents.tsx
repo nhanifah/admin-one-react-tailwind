@@ -124,7 +124,7 @@ const TableBatchStudents = () => {
             </tr>
           )}
           {clientsPaginated?.map((client: Students, index: number) => {
-            let fotoAttachments = []
+            let fotoAttachments: any[] = []
             fotoAttachments = client?.student_attachments?.filter((attachment) =>
               attachment.file_name.includes('foto_')
             )

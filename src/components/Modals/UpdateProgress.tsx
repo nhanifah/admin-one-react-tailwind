@@ -12,6 +12,7 @@ import React from 'react'
 import { closeProgressModal, setStudents } from '../../stores/interviewSlice'
 import { Students } from '../../interfaces'
 import axios from 'axios'
+import { mutate } from 'swr'
 
 export default function UpdateInterviewScheduleModal() {
   const dispatch = useAppDispatch()
@@ -52,8 +53,9 @@ export default function UpdateInterviewScheduleModal() {
     const { status, data } = await updateProgress({ selectedStudentsId: studentsId, ...values })
     if (status == 200) {
       console.log(data)
-      const students = await axios.get(`/api/batch/interview/students/${interviewSchedule.id}`)
-      dispatch(setStudents(students.data))
+      // const students = await axios.get(`/api/batch/interview/students/${interviewSchedule.id}`)
+      mutate(`/api/interview/${interviewSchedule.id}`)
+      // dispatch(setStudents(students.data))
       dispatch(closeProgressModal())
       toast.success(`${data.data.count} progress siswa berhasil diupdate!`)
     } else {

@@ -110,7 +110,7 @@ const Interview = () => {
               })}
             </span>
           </h3>
-          <InterviewStudents selectedStudents={interviewSchedule.students} />
+          <InterviewStudents interviewId={id} />
         </CardBox>
       </SectionMain>
     </>

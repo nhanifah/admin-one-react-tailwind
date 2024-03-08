@@ -19,8 +19,8 @@ const StudentAgreement = () => {
       </Head>
 
       <StudentDetailModal />
-      <UploadModal />
       <FileViewer />
+      <UploadModal />
 
       <SectionMain>
         <SectionTitleLineWithButton
