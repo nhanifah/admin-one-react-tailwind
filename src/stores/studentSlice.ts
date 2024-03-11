@@ -8,6 +8,7 @@ interface initialState {
   installmentId: string
   transkripModal: boolean
   transkripFiles: any
+  uploadTranskripModal: boolean
 }
 
 const initialState: initialState = {
@@ -18,6 +19,7 @@ const initialState: initialState = {
   installmentId: '',
   transkripModal: false,
   transkripFiles: null,
+  uploadTranskripModal: false,
 }
 
 export const styleSlice = createSlice({
@@ -57,6 +59,12 @@ export const styleSlice = createSlice({
     setTranskripFiles: (state, action: PayloadAction<any>) => {
       state.transkripFiles = action.payload
     },
+    showUploadTranksripModal: (state) => {
+      state.uploadTranskripModal = true
+    },
+    closeUploadTranskripModal: (state) => {
+      state.uploadTranskripModal = false
+    },
   },
 })
 
@@ -72,6 +80,8 @@ export const {
   showTraskripModal,
   closeTraskripModal,
   setTranskripFiles,
+  showUploadTranksripModal,
+  closeUploadTranskripModal,
 } = styleSlice.actions
 
 export default styleSlice.reducer

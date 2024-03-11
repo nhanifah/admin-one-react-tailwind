@@ -4,9 +4,14 @@ import '@react-pdf-viewer/core/lib/styles/index.css'
 import '@react-pdf-viewer/zoom/lib/styles/index.css'
 import React from 'react'
 import { useAppDispatch, useAppSelector } from '../../stores/hooks'
-import { closeTraskripModal, showUploadModal } from '../../stores/studentSlice'
+import {
+  closeTraskripModal,
+  showUploadModal,
+  showUploadTranksripModal,
+} from '../../stores/studentSlice'
 import CardBoxModal from '../CardBox/Modal'
 import { getExtFile } from '../../utils/helpers'
+import Button from '../Button'
 
 export default function FileViewer() {
   const dispatch = useAppDispatch()
@@ -23,12 +28,13 @@ export default function FileViewer() {
   }
   return (
     <CardBoxModal
-      title="Dokumen Kontrak"
+      title="Dokumen Transkrip"
       buttonColor="info"
       buttonLabel="Tutup"
       isActive={modal}
       onConfirm={handleModalAction}
       onCancel={handleModalAction}
+      withCancel={false}
     >
       {transkripFiles?.file_url ? (
         ext == 'pdf' ? (
@@ -42,7 +48,22 @@ export default function FileViewer() {
           </div>
         )
       ) : (
-        ''
+        <div className="text-center grid gap-5 justify-center pt-5">
+          <div className="">
+            <p className="text-lg">Siswa belum mengupload Dokumen Transkrip Nilai</p>
+          </div>
+          <div className="">
+            <Button
+              label="Upload"
+              color="danger"
+              className="w-fit px-10"
+              onClick={() => {
+                console.log('ASDDS')
+                dispatch(showUploadTranksripModal())
+              }}
+            />
+          </div>
+        </div>
       )}
     </CardBoxModal>
   )

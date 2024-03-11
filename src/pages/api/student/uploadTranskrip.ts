@@ -26,7 +26,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     })
 
     try {
-      const response = await uploadFile(files.files[0], student?.nik, 'contract')
+      const response = await uploadFile(files.files[0], student?.nik, 'transkrip')
       if (response == 'Failed Upload') {
         throw 'Failed Upload'
       }

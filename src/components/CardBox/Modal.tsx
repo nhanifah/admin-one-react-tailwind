@@ -15,12 +15,13 @@ type Props = {
   isActive: boolean
   children: ReactNode
   onConfirm: () => void
-  onCancel?: () => void
+  onCancel?: () => any
   loading?: boolean
   disabled?: boolean
   cancelLabel?: string
   onUpdate?: () => void
   zIndex?: string
+  withCancel?: boolean
 }
 
 const CardBoxModal = ({
@@ -36,6 +37,7 @@ const CardBoxModal = ({
   cancelLabel = 'Gagalkan',
   onUpdate,
   zIndex = 'z-40',
+  withCancel = true,
 }: Props) => {
   if (!isActive) {
     return null
@@ -50,7 +52,7 @@ const CardBoxModal = ({
         loading={loading}
         disabled={loading}
       />
-      {!!onCancel && (
+      {!!onCancel && withCancel && (
         <Button label={cancelLabel} color={buttonColor} outline onClick={onUpdate ?? onCancel} />
       )}
     </Buttons>

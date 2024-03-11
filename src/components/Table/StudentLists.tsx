@@ -158,6 +158,7 @@ const StudentLists = ({ progress }) => {
                       label="Lihat transkrip"
                       onClick={() => {
                         dispatch(setTranskripFiles(transkripAttachments[0]))
+                        dispatch(setStudent(client))
                         dispatch(showTraskripModal())
                       }}
                       small

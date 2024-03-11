@@ -13,6 +13,7 @@ import Buttons from '../../components/Buttons'
 import { toast } from 'react-hot-toast'
 import { useStudentClients } from '../../hooks/requestData'
 import TranskripViewer from '../../components/Modals/TranskripViewer'
+import UploadTranskripModal from '../../components/Modals/UploadTranskripModal'
 
 const StudentList = () => {
   const fileRef = useRef<HTMLInputElement>(null)
@@ -48,6 +49,7 @@ const StudentList = () => {
 
       <StudentDetailModal />
       <TranskripViewer />
+      <UploadTranskripModal />
 
       <SectionMain>
         <SectionTitleLineWithButton icon={mdiBallotOutline} title="Daftar Siswa" main>

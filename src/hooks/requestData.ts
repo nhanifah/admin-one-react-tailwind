@@ -132,6 +132,25 @@ export const useStudentClients = (progress: string = 'success') => {
     }
   }
 
+  const uploadTranskripFile = async (data: any) => {
+    try {
+      const response = await axios.post('/api/student/uploadTranskrip', data, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
+      mutate('/api/student/dataSiswa')
+      return {
+        status: response.status,
+        data: response.data,
+      }
+    } catch (error) {
+      console.log(error)
+      return {
+        status: error.response.status,
+        data: error.response.data ?? 'Terjadi Kesalahan',
+      }
+    }
+  }
+
   const updateProgress = async (data: object) => {
     try {
       const response = await axios.put('/api/student/progress', data)
@@ -181,6 +200,7 @@ export const useStudentClients = (progress: string = 'success') => {
     deleteData,
     updateProgress,
     uploadContractFile,
+    uploadTranskripFile,
     postFile,
   }
 }
