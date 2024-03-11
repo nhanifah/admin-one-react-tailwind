@@ -22,7 +22,8 @@ const client: any = new S3Client(config)
 export const uploadFile = async (
   file: any,
   fileName: string | null | undefined,
-  category: string
+  category: string,
+  name: string | null | undefined = null
 ) => {
   try {
     // const buffer = Buffer.from(await file)
@@ -31,7 +32,7 @@ export const uploadFile = async (
     const path = `${category}_${moment().format('DDMMYY')}_${fileName}.${fileType.ext}`
     const params = {
       Bucket: process.env.AWS_S3_BUCKET,
-      Key: path,
+      Key: name ? name : path,
       Body: stream,
       ContentType: fileType.mime,
     }
@@ -40,8 +41,8 @@ export const uploadFile = async (
     await client.send(command)
 
     return {
-      path: path,
-      url: `${process.env.AWS_S3_URL_ACCESS}${path}`,
+      path: name ? name : path,
+      url: `${process.env.AWS_S3_URL_ACCESS}${name ? name : path}`,
     }
   } catch (error) {
     console.log(error)

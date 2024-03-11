@@ -8,6 +8,8 @@ import SectionTitleLineWithButton from '../../../components/Section/TitleLineWit
 import { getPageTitle } from '../../../config'
 import StudentLists from '../../../components/Table/StudentLists'
 import StudentDetailModal from '../../../components/Modals/StudentDetailModal'
+import TranskripViewer from '../../../components/Modals/TranskripViewer'
+import UploadTranskripModal from '../../../components/Modals/UploadTranskripModal'
 
 const StudentList = () => {
   return (
@@ -17,6 +19,8 @@ const StudentList = () => {
       </Head>
 
       <StudentDetailModal />
+      <TranskripViewer />
+      <UploadTranskripModal />
 
       <SectionMain>
         <SectionTitleLineWithButton
