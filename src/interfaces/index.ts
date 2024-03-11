@@ -198,8 +198,8 @@ export type Client = {
 }
 
 export type UserForm = {
-  name: string
-  email: string
+  name: string | null | undefined
+  email: string | null | undefined
 }
 
 export type BatchStudents = {

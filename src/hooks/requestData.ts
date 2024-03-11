@@ -423,3 +423,40 @@ export const useSampleTransactions = () => {
     isError: error,
   }
 }
+
+export const useAdminClients = () => {
+  const updateData = async (data: any) => {
+    try {
+      const response = await axios.put('/api/admin', data)
+      return {
+        status: response.status,
+        data: response.data,
+      }
+    } catch (error) {
+      return {
+        status: error.response.status,
+        data: error.response.data,
+      }
+    }
+  }
+
+  const updatePassword = async (data: any) => {
+    try {
+      const response = await axios.put('/api/admin/password', data)
+      return {
+        status: response.status,
+        data: response.data,
+      }
+    } catch (error) {
+      return {
+        status: error.response.status,
+        data: error.response.data,
+      }
+    }
+  }
+
+  return {
+    updateData,
+    updatePassword,
+  }
+}

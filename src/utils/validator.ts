@@ -1,5 +1,20 @@
 import { z } from 'zod'
 
+export const updateProfileSchema = z.object({
+  name: z
+    .string({
+      invalid_type_error: 'Masukan nama dengan benar!',
+      required_error: 'Nama tidak boleh kosong!',
+    })
+    .refine((value) => value.length > 0, { message: 'Nama tidak boleh kosong' }),
+  email: z
+    .string({
+      invalid_type_error: 'Masukan email dengan benar!',
+      required_error: 'Email tidak boleh kosong!',
+    })
+    .email({ message: 'Format email salah!' }),
+})
+
 export const updateInterviewSchedulesSchema = z.object({
   students: z
     .string()
@@ -122,5 +137,35 @@ export const questionSchema = z
     },
     {
       message: 'Belum memilih jawaban yang benar',
+    }
+  )
+
+export const passwordSchema = z
+  .object({
+    currentPassword: z
+      .string({
+        invalid_type_error: 'Format password salah!',
+        required_error: 'Password tidak boleh kosong!',
+      })
+      .min(1, 'Password tidak boleh kosong!'),
+    newPassword: z
+      .string({
+        invalid_type_error: 'Format password salah!',
+        required_error: 'Password tidak boleh kosong!',
+      })
+      .min(1, 'Password tidak boleh kosong!'),
+    newPasswordConfirmation: z
+      .string({
+        invalid_type_error: 'Format password salah!',
+        required_error: 'Konfirmasi Password tidak boleh kosong!',
+      })
+      .min(1, 'Konfirmasi Password tidak boleh kosong!'),
+  })
+  .refine(
+    (schema) => {
+      return schema.newPassword == schema.newPasswordConfirmation
+    },
+    {
+      message: 'Konfirmasi Password tidak sama!',
     }
   )
