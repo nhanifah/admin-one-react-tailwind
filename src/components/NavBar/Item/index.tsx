@@ -5,9 +5,10 @@ import { mdiChevronUp, mdiChevronDown } from '@mdi/js'
 import Divider from '../../Divider'
 import Icon from '../../Icon'
 import NavBarMenuList from '../MenuList'
-import { useAppDispatch, useAppSelector } from '../../../stores/hooks'
+import { useAppDispatch } from '../../../stores/hooks'
 import { MenuNavBarItem } from '../../../interfaces'
 import { setDarkMode } from '../../../stores/darkModeSlice'
+import { useSession } from 'next-auth/react'
 
 type Props = {
   item: MenuNavBarItem
@@ -15,8 +16,11 @@ type Props = {
 
 export default function NavBarItem({ item }: Props) {
   const dispatch = useAppDispatch()
+  // read session from next-auth
+  const { data: session } = useSession()
 
-  const userName = useAppSelector((state) => state.main.userName)
+  // const userName = useAppSelector((state) => state.main.userName)
+  const userName = session?.user?.name
 
   const [isDropdownActive, setIsDropdownActive] = useState(false)
 
