@@ -83,7 +83,7 @@ const ProfilePage = () => {
       email: session?.user?.email,
     }
 
-    const { status, data } = await updatePassword(values)
+    const { status, data } = await updatePassword(payload)
     if (status == 200) {
       console.log(data)
       resetForm({

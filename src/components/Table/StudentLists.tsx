@@ -10,6 +10,7 @@ import { useAppDispatch } from '../../stores/hooks'
 import { setStudent, showStudentDetailModal } from '../../stores/batchSlice'
 import { setTranskripFiles, showTraskripModal } from '../../stores/studentSlice'
 import { getTranskripFiles } from '../../utils/helpers'
+import { showPunishmentModal } from '../../stores/punishmentSlice'
 
 const StudentLists = ({ progress }) => {
   const dispatch = useAppDispatch()
@@ -149,8 +150,10 @@ const StudentLists = ({ progress }) => {
                     <Button
                       color="danger"
                       icon={mdiPoliceBadge}
-                      onClick={() => setIsModalTrashActive(true)}
-                      disabled
+                      onClick={() => {
+                        dispatch(setStudent(client))
+                        dispatch(showPunishmentModal())
+                      }}
                       small
                     />
                     <Button

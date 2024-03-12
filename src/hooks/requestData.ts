@@ -460,3 +460,24 @@ export const useAdminClients = () => {
     updatePassword,
   }
 }
+
+export const usePunishmentClients = () => {
+  const addPunishment = async (data: any) => {
+    try {
+      const response = await axios.post('/api/student/punishment', data)
+      return {
+        status: response.status,
+        data: response.data,
+      }
+    } catch (error) {
+      return {
+        status: error.response.status,
+        data: error.response.data,
+      }
+    }
+  }
+
+  return {
+    addPunishment,
+  }
+}

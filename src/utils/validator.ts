@@ -1,5 +1,30 @@
 import { z } from 'zod'
 
+export const punishmentSchema = z.object({
+  type: z
+    .string({
+      invalid_type_error: 'Pilih tipe sanksi!',
+      required_error: 'Pilih tipe sanksi!',
+    })
+    .min(1, { message: 'Pilih tipe sanksi' }),
+  description: z
+    .string({
+      invalid_type_error: 'Masukan deskripsi sanksi!',
+      required_error: 'Masukan deskripsi sanksi!',
+    })
+    .min(1, { message: 'Masukan deskripsi sanksi' }),
+  start_date: z.coerce.date({
+    errorMap: (issue, { defaultError }) => ({
+      message: issue.code === 'invalid_date' ? 'Harus mengatur durasi sanksi!' : defaultError,
+    }),
+  }),
+  end_date: z.coerce.date({
+    errorMap: (issue, { defaultError }) => ({
+      message: issue.code === 'invalid_date' ? 'Harus mengatur durasi sanksi!' : defaultError,
+    }),
+  }),
+})
+
 export const updateProfileSchema = z.object({
   name: z
     .string({
