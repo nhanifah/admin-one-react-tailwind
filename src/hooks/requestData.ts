@@ -477,7 +477,27 @@ export const usePunishmentClients = () => {
     }
   }
 
+  const uploadPunishmentAttachment = async (data: any) => {
+    try {
+      const response = await axios.post('/api/student/punishment/attachment', data, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
+      mutate('/api/student/punishments')
+      return {
+        status: response.status,
+        data: response.data,
+      }
+    } catch (error) {
+      console.log(error)
+      return {
+        status: error.response.status,
+        data: error.response.data ?? 'Terjadi Kesalahan',
+      }
+    }
+  }
+
   return {
     addPunishment,
+    uploadPunishmentAttachment,
   }
 }

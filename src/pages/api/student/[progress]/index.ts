@@ -30,6 +30,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
               installments: true,
             },
           },
+          student_punishments: true,
         },
       })
       return res.status(200).json({ data: students })
@@ -49,8 +50,34 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
               installments: true,
             },
           },
+          student_punishments: true,
         },
       })
+      return res.status(200).json({ data: students })
+    } else if (progress == 'punishments') {
+      const students = await prisma.students.findMany({
+        where: {
+          student_punishments: {
+            some: {
+              student_id: {
+                not: undefined,
+              },
+            },
+          },
+        },
+        include: {
+          batch_registration: true,
+          master_referral: true,
+          student_attachments: true,
+          payments: {
+            include: {
+              installments: true,
+            },
+          },
+          student_punishments: true,
+        },
+      })
+
       return res.status(200).json({ data: students })
     } else {
       const students = await prisma.students.findMany({
@@ -63,6 +90,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           batch_registration: true,
           master_referral: true,
           student_attachments: true,
+          payments: {
+            include: {
+              installments: true,
+            },
+          },
+          student_punishments: true,
         },
       })
       return res.status(200).json({ data: students })

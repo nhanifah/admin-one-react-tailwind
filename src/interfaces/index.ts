@@ -182,7 +182,17 @@ export type Students = {
     file_name: string
     file_url: string
   }[]
+  student_punishments: StudentPunishment[]
   payments?: payment[]
+}
+
+export type StudentPunishment = {
+  id: string
+  student_id: string
+  description: string
+  punishment_type: string
+  start_date: string | Date
+  end_date: string | Date
 }
 
 export type Client = {

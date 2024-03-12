@@ -46,6 +46,7 @@ const student: Students = {
     file_name: '',
     file_url: '',
   },
+  student_punishments: [],
 }
 
 export const styleSlice = createSlice({

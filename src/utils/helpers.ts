@@ -14,3 +14,15 @@ export const getTranskripFiles = (attachments: any[]) => {
 
   return files
 }
+
+export const getPunishmentFiles = (attachments: any[]) => {
+  let files = attachments.filter(
+    (attachment) =>
+      attachment.file_name.includes('suspension_') ||
+      attachment.file_name.includes('warning_') ||
+      attachment.file_name.includes('expulsion_') ||
+      attachment.file_name.includes('other_')
+  )
+
+  return files
+}

@@ -1,16 +1,9 @@
-import { mdiEye, mdiWhatsapp, mdiTrashCan } from '@mdi/js'
+import { mdiEye, mdiWhatsapp } from '@mdi/js'
 import React, { useEffect, useState } from 'react'
-import { useBatchStudentsClients } from '../../hooks/requestData'
 import Button from '../Button'
 import Buttons from '../Buttons'
 import { useAppDispatch, useAppSelector } from '../../stores/hooks'
-import {
-  closeModalStudents,
-  setStudent,
-  setStudentsSelected,
-  showModalStudents,
-  showStudentDetailModal,
-} from '../../stores/batchSlice'
+import { setStudent, setStudentsSelected, showStudentDetailModal } from '../../stores/batchSlice'
 import { BatchStudents, Students } from '../../interfaces'
 import StudentAvatar from '../UserAvatar'
 import axios from 'axios'
