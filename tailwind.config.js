@@ -40,6 +40,7 @@ module.exports = {
         'fade-in': 'fade-in 250ms ease-in-out',
       },
       screens: {
+        'custom-lg': '906px',
         'custom-sm': '510px',
       },
       colors: {

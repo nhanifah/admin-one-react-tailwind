@@ -1,7 +1,7 @@
 'use client'
 
 import { mdiEye, mdiWhatsapp } from '@mdi/js'
-import React, { ReactNode, useEffect, useState } from 'react'
+import React, { ReactNode, useEffect, useMemo, useState } from 'react'
 import Button from '../Button'
 import Buttons from '../Buttons'
 import { useAppDispatch, useAppSelector } from '../../stores/hooks'
@@ -10,6 +10,7 @@ import StudentAvatar from '../UserAvatar'
 import { setStudents } from '../../stores/interviewSlice'
 import { setStudent, showStudentDetailModal } from '../../stores/batchSlice'
 import { useInterviewScheduleByIdClients } from '../../hooks/requestData'
+import { searchFunction } from '../../utils/helpers'
 
 type Props = {
   children?: ReactNode
@@ -21,6 +22,7 @@ const TableInterviewStudents = ({ interviewId }: Props) => {
   const { interviewSchedule } = useInterviewScheduleByIdClients(interviewId)
   const selectedStudents = interviewSchedule?.students ?? []
   const [checkAll, setCheckAll] = useState(false)
+  const [query, setQuery] = useState('')
 
   const dispatch = useAppDispatch()
 
@@ -28,7 +30,11 @@ const TableInterviewStudents = ({ interviewId }: Props) => {
 
   const [currentPage, setCurrentPage] = useState(0)
 
-  const clientsPaginated = selectedStudents?.slice(
+  const filteredClients: any = useMemo(
+    () => searchFunction(selectedStudents, query),
+    [selectedStudents, query]
+  )
+  const clientsPaginated = filteredClients?.slice(
     perPage * currentPage,
     perPage * (currentPage + 1)
   )
@@ -48,16 +54,16 @@ const TableInterviewStudents = ({ interviewId }: Props) => {
   useEffect(() => {
     console.log('CHanged')
     let checkCount = 0
-    selectedStudents.map((item: Students, index) => {
+    filteredClients.map((item: Students, index) => {
       if (item.checked == true) {
         checkCount += 1
       }
     })
-    setCheckAll(checkCount == selectedStudents.length)
-  }, [selectedStudents])
+    setCheckAll(checkCount == filteredClients.length)
+  }, [filteredClients])
 
   const handleCheck = (e: React.ChangeEvent<HTMLInputElement>, id: string) => {
-    const updated: Students[] = selectedStudents.map((item: Students, index) => {
+    const updated: Students[] = filteredClients.map((item: Students, index) => {
       console.log(!item.checked, 'L')
       if (item.checked) {
         setCheckAll(false)
@@ -71,6 +77,42 @@ const TableInterviewStudents = ({ interviewId }: Props) => {
 
   return (
     <>
+      <div className="grid grid-cols-3 gap-4 items-start">
+        <form className="custom-lg:col-span-1 col-span-3 ">
+          <label
+            htmlFor="default-search"
+            className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
+          >
+            Search
+          </label>
+          <div className="relative">
+            <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+              <svg
+                className="w-4 h-4 text-gray-500 dark:text-gray-400"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+                />
+              </svg>
+            </div>
+            <input
+              type="search"
+              id="default-search"
+              className="block w-full ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder="Cari . . ."
+              onChange={(e) => setQuery(e.target.value)}
+            />
+          </div>
+        </form>
+      </div>
       <table>
         <thead>
           <tr>
@@ -79,7 +121,7 @@ const TableInterviewStudents = ({ interviewId }: Props) => {
                 type="checkbox"
                 onChange={(e) => {
                   setCheckAll(e.target.checked)
-                  const updated = selectedStudents.map((item, index) => {
+                  const updated = filteredClients.map((item, index) => {
                     return {
                       ...item,
                       checked: e.target.checked,

@@ -15,11 +15,7 @@ export default function SectionTitleLineWithButton({ icon, title, main = false, 
   const hasChildren = !!Children.count(children)
 
   return (
-    <section
-      className={`${
-        main ? '' : 'pt-6'
-      } mb-6 flex lg:flex-row lg:items-center lg:justify-between flex-col items-start gap-3`}
-    >
+    <section className={`${main ? '' : 'pt-6'} mb-6 flex items-center justify-between gap-3`}>
       <div className="flex items-center justify-start">
         {icon && main && <IconRounded icon={icon} color="light" className="mr-3" bg />}
         {icon && !main && <Icon path={icon} className="mr-2" size="20" />}

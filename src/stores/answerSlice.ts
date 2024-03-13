@@ -44,7 +44,7 @@ export const styleSlice = createSlice({
       state.studentName = action.payload
     },
 
-    setStudentId: (state, action: PayloadAction<string>) => {
+    setStudentId: (state, action: PayloadAction<any>) => {
       state.studentId = action.payload
     },
   },

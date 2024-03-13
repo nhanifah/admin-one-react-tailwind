@@ -26,3 +26,27 @@ export const getPunishmentFiles = (attachments: any[]) => {
 
   return files
 }
+
+export const searchFunction = (data, query) => {
+  return data.filter((item) => {
+    const values = Object.values(item)
+    if (
+      values.some((value: any) => {
+        if (typeof value == 'string' && value !== null) {
+          return value?.toLowerCase().includes(query.toLowerCase())
+        }
+      })
+    ) {
+      return true
+    }
+
+    for (const value of values) {
+      if (typeof value === 'object' && value !== null) {
+        if (searchFunction([value], query).length > 0) {
+          return true
+        }
+      }
+    }
+    return false
+  })
+}
