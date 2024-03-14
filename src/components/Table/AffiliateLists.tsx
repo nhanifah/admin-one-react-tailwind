@@ -8,6 +8,7 @@ import WideCardBoxModal from '../CardBox/WideModal'
 import { useAppDispatch } from '../../stores/hooks'
 import { setStudentData, showModal } from '../../stores/affiliateSlice'
 import { searchFunction } from '../../utils/helpers'
+import CardBox from '../CardBox'
 
 const AffiliateLists = () => {
   const dispatch = useAppDispatch()
@@ -71,85 +72,87 @@ const AffiliateLists = () => {
           </div>
         </form>
       </div>
-      <table>
-        <thead>
-          <tr>
-            <th className="w-2">#</th>
-            <th>Nama</th>
-            <th>Jumlah Calon Siswa</th>
-            <th>Jumlah Siswa</th>
-            <th>Jumlah Siswa Kaigo</th>
-            <th className="w-32" />
-          </tr>
-        </thead>
-        <tbody>
-          {clients.length === 0 && (
+      <CardBox className="mb-6 mt-4" hasTable>
+        <table>
+          <thead>
             <tr>
-              <td colSpan={6} className="text-center py-6">
-                <p className="text-gray-500 dark:text-slate-400">Data tidak ditemukan</p>
-              </td>
+              <th className="w-2">#</th>
+              <th>Nama</th>
+              <th>Jumlah Calon Siswa</th>
+              <th>Jumlah Siswa</th>
+              <th>Jumlah Siswa Kaigo</th>
+              <th className="w-32" />
             </tr>
-          )}
-          {clientsPaginated.map((client: Affiliates, index: number) => {
-            return (
-              <tr key={client.id}>
-                <td data-label="#">{index + 1}</td>
-                <td data-label="Nama">{client.name}</td>
-                <td data-label="Jumlah Calon Siswa">
-                  {client.students.filter((student) => student.progress != 'success').length}{' '}
-                  Peserta
-                </td>
-                <td data-label="Jumlah Siswa">
-                  {client.students.filter((student) => student.progress === 'success').length}{' '}
-                  Peserta
-                </td>
-                <td data-label="Jumlah Siswa Kaigo">
-                  {
-                    client.students.filter((student) => {
-                      return student.progress === 'success' && student.want_to_work === 'nurse'
-                    }).length
-                  }{' '}
-                  Peserta
-                </td>
-                <td data-label="Action">
-                  <Buttons>
-                    <Button
-                      className="w-full"
-                      label="Lihat"
-                      icon={mdiEye}
-                      color="contrast"
-                      small
-                      onClick={() => {
-                        dispatch(setStudentData(client.students))
-                        dispatch(showModal(true))
-                      }}
-                    />
-                  </Buttons>
+          </thead>
+          <tbody>
+            {clients.length === 0 && (
+              <tr>
+                <td colSpan={6} className="text-center py-6">
+                  <p className="text-gray-500 dark:text-slate-400">Data tidak ditemukan</p>
                 </td>
               </tr>
-            )
-          })}
-        </tbody>
-      </table>
-      <div className="p-3 lg:px-6 border-t border-gray-100 dark:border-slate-800">
-        <div className="flex flex-col md:flex-row items-center justify-between py-3 md:py-0">
-          <Buttons>
-            {pagesList.map((page) => (
-              <Button
-                key={page}
-                active={page === currentPage}
-                label={String(page + 1)}
-                color={page === currentPage ? 'lightDark' : 'whiteDark'}
-                small
-                onClick={() => setCurrentPage(page)}
-              />
-            ))}
-          </Buttons>
-          <small className="mt-6 md:mt-0">
-            Halaman {currentPage + 1} dari {numPages}
-          </small>
+            )}
+            {clientsPaginated.map((client: Affiliates, index: number) => {
+              return (
+                <tr key={client.id}>
+                  <td data-label="#">{index + 1}</td>
+                  <td data-label="Nama">{client.name}</td>
+                  <td data-label="Jumlah Calon Siswa">
+                    {client.students.filter((student) => student.progress != 'success').length}{' '}
+                    Peserta
+                  </td>
+                  <td data-label="Jumlah Siswa">
+                    {client.students.filter((student) => student.progress === 'success').length}{' '}
+                    Peserta
+                  </td>
+                  <td data-label="Jumlah Siswa Kaigo">
+                    {
+                      client.students.filter((student) => {
+                        return student.progress === 'success' && student.want_to_work === 'nurse'
+                      }).length
+                    }{' '}
+                    Peserta
+                  </td>
+                  <td data-label="Action">
+                    <Buttons>
+                      <Button
+                        className="w-full"
+                        label="Lihat"
+                        icon={mdiEye}
+                        color="contrast"
+                        small
+                        onClick={() => {
+                          dispatch(setStudentData(client.students))
+                          dispatch(showModal(true))
+                        }}
+                      />
+                    </Buttons>
+                  </td>
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
+        <div className="p-3 lg:px-6 border-t border-gray-100 dark:border-slate-800">
+          <div className="flex flex-col md:flex-row items-center justify-between py-3 md:py-0">
+            <Buttons>
+              {pagesList.map((page) => (
+                <Button
+                  key={page}
+                  active={page === currentPage}
+                  label={String(page + 1)}
+                  color={page === currentPage ? 'lightDark' : 'whiteDark'}
+                  small
+                  onClick={() => setCurrentPage(page)}
+                />
+              ))}
+            </Buttons>
+            <small className="mt-6 md:mt-0">
+              Halaman {currentPage + 1} dari {numPages}
+            </small>
+          </div>
         </div>
-      </div>
+      </CardBox>
     </>
   )
 }

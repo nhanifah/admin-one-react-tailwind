@@ -11,6 +11,7 @@ import { setStudents } from '../../stores/interviewSlice'
 import { setStudent, showStudentDetailModal } from '../../stores/batchSlice'
 import { useInterviewScheduleByIdClients } from '../../hooks/requestData'
 import { searchFunction } from '../../utils/helpers'
+import CardBox from '../CardBox'
 
 type Props = {
   children?: ReactNode
@@ -113,124 +114,140 @@ const TableInterviewStudents = ({ interviewId }: Props) => {
           </div>
         </form>
       </div>
-      <table>
-        <thead>
-          <tr>
-            <th>
-              <input
-                type="checkbox"
-                onChange={(e) => {
-                  setCheckAll(e.target.checked)
-                  const updated = filteredClients.map((item, index) => {
-                    return {
-                      ...item,
-                      checked: e.target.checked,
-                    }
-                  })
-                  dispatch(setStudents(updated))
-                }}
-                checked={checkAll}
-              />
-            </th>
-            <th />
-            <th>Nama</th>
-            <th>Progress</th>
-            <th />
-          </tr>
-        </thead>
-        <tbody>
-          {selectedStudents?.length === 0 && (
+      <CardBox className="mb-6 mt-4" hasTable>
+        <h3 className="text-base font-bold mb-4 p-2.5">
+          <span>Jadwal Interview : </span>
+          <span className="block custom-sm:inline">
+            {new Date(interviewSchedule.interview_date).toLocaleDateString('id-ID', {
+              weekday: 'long',
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit',
+              timeZone: 'UTC',
+            })}
+          </span>
+        </h3>
+        <table>
+          <thead>
             <tr>
-              <td colSpan={6} className="text-center py-6">
-                <p className="text-gray-500 dark:text-slate-400">Data tidak ditemukan</p>
-              </td>
+              <th>
+                <input
+                  type="checkbox"
+                  onChange={(e) => {
+                    setCheckAll(e.target.checked)
+                    const updated = filteredClients.map((item, index) => {
+                      return {
+                        ...item,
+                        checked: e.target.checked,
+                      }
+                    })
+                    dispatch(setStudents(updated))
+                  }}
+                  checked={checkAll}
+                />
+              </th>
+              <th />
+              <th>Nama</th>
+              <th>Progress</th>
+              <th />
             </tr>
-          )}
-          {clientsPaginated?.map((client: Students, index: number) => {
-            let fotoAttachments: any[] = []
-            fotoAttachments = client?.student_attachments?.filter((attachment) =>
-              attachment.file_name.includes('foto_')
-            )
-
-            return (
-              <tr key={client.id}>
-                <td>
-                  <input
-                    type="checkbox"
-                    checked={client.checked}
-                    onChange={(e) => handleCheck(e, client.id)}
-                  />
-                </td>
-                <td className="border-b-0 lg:w-6 before:hidden">
-                  <StudentAvatar
-                    imgUrl={
-                      fotoAttachments.length != 0
-                        ? fotoAttachments[0]['file_url']
-                        : 'https://lpk-harehare.nos.jkt-1.neo.id/avatar.jpg'
-                    }
-                    alt={client.full_name}
-                    className="w-24 h-24 mx-auto lg:w-6 lg:h-6"
-                  />
-                </td>
-
-                <td data-label="Nama">{client.full_name}</td>
-                <td data-label="Asal">{client.progress}</td>
-                <td className="before:hidden lg:w-1 whitespace-nowrap">
-                  <Buttons type="justify-start lg:justify-end" noWrap>
-                    <Button
-                      color="success"
-                      icon={mdiWhatsapp}
-                      onClick={() => {
-                        // sanitize phone number
-                        let whatsapp = client.whatsapp_number
-                        if (whatsapp.charAt(0) === '+') {
-                          whatsapp = whatsapp.substring(1)
-                        }
-                        whatsapp = whatsapp.replace(/[\s\-_.,]/g, '')
-                        if (whatsapp.startsWith('08')) {
-                          whatsapp = '62' + whatsapp.substring(1)
-                        }
-
-                        window.open(`https://wa.me/${whatsapp}`)
-                      }}
-                      small
-                    />
-                    <Button
-                      color="info"
-                      icon={mdiEye}
-                      small
-                      onClick={() => {
-                        console.log('Clicked')
-                        dispatch(setStudent(client))
-                        dispatch(showStudentDetailModal())
-                      }}
-                    />
-                  </Buttons>
+          </thead>
+          <tbody>
+            {selectedStudents?.length === 0 && (
+              <tr>
+                <td colSpan={6} className="text-center py-6">
+                  <p className="text-gray-500 dark:text-slate-400">Data tidak ditemukan</p>
                 </td>
               </tr>
-            )
-          })}
-        </tbody>
-      </table>
-      <div className="p-3 lg:px-6 border-t border-gray-100 dark:border-slate-800">
-        <div className="flex flex-col md:flex-row items-center justify-between py-3 md:py-0">
-          <Buttons>
-            {pagesList.map((page) => (
-              <Button
-                key={page}
-                active={page === currentPage}
-                label={String(page + 1)}
-                color={page === currentPage ? 'lightDark' : 'whiteDark'}
-                small
-                onClick={() => setCurrentPage(page)}
-              />
-            ))}
-          </Buttons>
-          <small className="mt-6 md:mt-0">
-            Halaman {currentPage + 1} dari {numPages}
-          </small>
+            )}
+            {clientsPaginated?.map((client: Students, index: number) => {
+              let fotoAttachments: any[] = []
+              fotoAttachments = client?.student_attachments?.filter((attachment) =>
+                attachment.file_name.includes('foto_')
+              )
+
+              return (
+                <tr key={client.id}>
+                  <td>
+                    <input
+                      type="checkbox"
+                      checked={client.checked}
+                      onChange={(e) => handleCheck(e, client.id)}
+                    />
+                  </td>
+                  <td className="border-b-0 lg:w-6 before:hidden">
+                    <StudentAvatar
+                      imgUrl={
+                        fotoAttachments.length != 0
+                          ? fotoAttachments[0]['file_url']
+                          : 'https://lpk-harehare.nos.jkt-1.neo.id/avatar.jpg'
+                      }
+                      alt={client.full_name}
+                      className="w-24 h-24 mx-auto lg:w-6 lg:h-6"
+                    />
+                  </td>
+
+                  <td data-label="Nama">{client.full_name}</td>
+                  <td data-label="Asal">{client.progress}</td>
+                  <td className="before:hidden lg:w-1 whitespace-nowrap">
+                    <Buttons type="justify-start lg:justify-end" noWrap>
+                      <Button
+                        color="success"
+                        icon={mdiWhatsapp}
+                        onClick={() => {
+                          // sanitize phone number
+                          let whatsapp = client.whatsapp_number
+                          if (whatsapp.charAt(0) === '+') {
+                            whatsapp = whatsapp.substring(1)
+                          }
+                          whatsapp = whatsapp.replace(/[\s\-_.,]/g, '')
+                          if (whatsapp.startsWith('08')) {
+                            whatsapp = '62' + whatsapp.substring(1)
+                          }
+
+                          window.open(`https://wa.me/${whatsapp}`)
+                        }}
+                        small
+                      />
+                      <Button
+                        color="info"
+                        icon={mdiEye}
+                        small
+                        onClick={() => {
+                          console.log('Clicked')
+                          dispatch(setStudent(client))
+                          dispatch(showStudentDetailModal())
+                        }}
+                      />
+                    </Buttons>
+                  </td>
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
+        <div className="p-3 lg:px-6 border-t border-gray-100 dark:border-slate-800">
+          <div className="flex flex-col md:flex-row items-center justify-between py-3 md:py-0">
+            <Buttons>
+              {pagesList.map((page) => (
+                <Button
+                  key={page}
+                  active={page === currentPage}
+                  label={String(page + 1)}
+                  color={page === currentPage ? 'lightDark' : 'whiteDark'}
+                  small
+                  onClick={() => setCurrentPage(page)}
+                />
+              ))}
+            </Buttons>
+            <small className="mt-6 md:mt-0">
+              Halaman {currentPage + 1} dari {numPages}
+            </small>
+          </div>
         </div>
-      </div>
+      </CardBox>
     </>
   )
 }

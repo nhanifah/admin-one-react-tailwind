@@ -29,9 +29,7 @@ const StudentPenalty = () => {
           main
         ></SectionTitleLineWithButton>
 
-        <CardBox className="mb-6" hasTable>
-          <StudentPunishmentList progress={'punishments'} />
-        </CardBox>
+        <StudentPunishmentList progress={'punishments'} />
       </SectionMain>
     </>
   )

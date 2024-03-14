@@ -25,9 +25,7 @@ const AffiliateList = () => {
           main
         ></SectionTitleLineWithButton>
 
-        <CardBox className="mb-6" hasTable>
-          <AffiliateLists />
-        </CardBox>
+        <AffiliateLists />
       </SectionMain>
     </>
   )

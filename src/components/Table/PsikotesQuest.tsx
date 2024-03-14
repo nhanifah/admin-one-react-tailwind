@@ -21,6 +21,7 @@ import { questionSchema } from '../../utils/validator'
 import { addOption, initOption, resetOption } from '../../stores/optionSlice'
 import { useAppDispatch, useAppSelector } from '../../stores/hooks'
 import { searchFunction } from '../../utils/helpers'
+import CardBox from '../CardBox'
 
 type errors = {
   message: string[]
@@ -292,93 +293,95 @@ const TableSampleClients = () => {
           </div>
         </form>
       </div>
-      <table>
-        <thead>
-          <tr>
-            <th>
-              <center>#</center>
-            </th>
-            <th>Pertanyaan</th>
-            <th>Jawaban</th>
-            <th>Tipe Soal</th>
-            <th>Dibuat</th>
-            <th />
-          </tr>
-        </thead>
-        <tbody>
-          {clients.length === 0 && (
+      <CardBox className="mb-6 mt-4" hasTable>
+        <table>
+          <thead>
             <tr>
-              <td colSpan={6} className="text-center">
-                <p className="text-gray-500 dark:text-slate-400">Tidak ada data</p>
-              </td>
+              <th>
+                <center>#</center>
+              </th>
+              <th>Pertanyaan</th>
+              <th>Jawaban</th>
+              <th>Tipe Soal</th>
+              <th>Dibuat</th>
+              <th />
             </tr>
-          )}
-          {clientsPaginated.map((quest: Quest, index: number) => (
-            <tr key={quest.id}>
-              <td className="border-b-0 lg:w-6 before:hidden">
-                <td data-label="Number">{index + 1}</td>
-              </td>
-              <td data-label="Question">{quest.question_text}</td>
-              <td data-label="Correct">{quest.answer != null ? quest.answer : '-'}</td>
-              <td data-label="Type">{quest.type}</td>
-              <td data-label="Created" className="lg:w-1 whitespace-nowrap">
-                <small className="text-gray-500 dark:text-slate-400">
-                  {new Date(quest.created_at).toLocaleDateString('id-ID', {
-                    weekday: 'long',
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                  })}
-                </small>
-              </td>
-              <td className="before:hidden lg:w-1 whitespace-nowrap">
-                <Buttons type="justify-start lg:justify-end" noWrap>
-                  <Button
-                    color="info"
-                    icon={mdiPencil}
-                    onClick={() => {
-                      setItemSelected(quest)
-                      setIsMultipleChoice(quest.type == 'multipleChoice')
-                      setIsQuestTypeSelected(true)
-                      dispatch(initOption(JSON.parse(quest.option_text)))
-                      setIsModalInfoActive(true)
-                    }}
-                    small
-                  />
-                  <Button
-                    color="danger"
-                    icon={mdiTrashCan}
-                    onClick={() => {
-                      setItemSelected(quest)
-                      setIsModalTrashActive(true)
-                    }}
-                    small
-                  />
-                </Buttons>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <div className="p-3 lg:px-6 border-t border-gray-100 dark:border-slate-800">
-        <div className="flex flex-col md:flex-row items-center justify-between py-3 md:py-0">
-          <Buttons>
-            {pagesList.map((page) => (
-              <Button
-                key={page}
-                active={page === currentPage}
-                label={String(page + 1)}
-                color={page === currentPage ? 'lightDark' : 'whiteDark'}
-                small
-                onClick={() => setCurrentPage(page)}
-              />
+          </thead>
+          <tbody>
+            {clients.length === 0 && (
+              <tr>
+                <td colSpan={6} className="text-center">
+                  <p className="text-gray-500 dark:text-slate-400">Tidak ada data</p>
+                </td>
+              </tr>
+            )}
+            {clientsPaginated.map((quest: Quest, index: number) => (
+              <tr key={quest.id}>
+                <td className="border-b-0 lg:w-6 before:hidden">
+                  <td data-label="Number">{index + 1}</td>
+                </td>
+                <td data-label="Question">{quest.question_text}</td>
+                <td data-label="Correct">{quest.answer != null ? quest.answer : '-'}</td>
+                <td data-label="Type">{quest.type}</td>
+                <td data-label="Created" className="lg:w-1 whitespace-nowrap">
+                  <small className="text-gray-500 dark:text-slate-400">
+                    {new Date(quest.created_at).toLocaleDateString('id-ID', {
+                      weekday: 'long',
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                    })}
+                  </small>
+                </td>
+                <td className="before:hidden lg:w-1 whitespace-nowrap">
+                  <Buttons type="justify-start lg:justify-end" noWrap>
+                    <Button
+                      color="info"
+                      icon={mdiPencil}
+                      onClick={() => {
+                        setItemSelected(quest)
+                        setIsMultipleChoice(quest.type == 'multipleChoice')
+                        setIsQuestTypeSelected(true)
+                        dispatch(initOption(JSON.parse(quest.option_text)))
+                        setIsModalInfoActive(true)
+                      }}
+                      small
+                    />
+                    <Button
+                      color="danger"
+                      icon={mdiTrashCan}
+                      onClick={() => {
+                        setItemSelected(quest)
+                        setIsModalTrashActive(true)
+                      }}
+                      small
+                    />
+                  </Buttons>
+                </td>
+              </tr>
             ))}
-          </Buttons>
-          <small className="mt-6 md:mt-0">
-            Halaman {currentPage + 1} dari {numPages}
-          </small>
+          </tbody>
+        </table>
+        <div className="p-3 lg:px-6 border-t border-gray-100 dark:border-slate-800">
+          <div className="flex flex-col md:flex-row items-center justify-between py-3 md:py-0">
+            <Buttons>
+              {pagesList.map((page) => (
+                <Button
+                  key={page}
+                  active={page === currentPage}
+                  label={String(page + 1)}
+                  color={page === currentPage ? 'lightDark' : 'whiteDark'}
+                  small
+                  onClick={() => setCurrentPage(page)}
+                />
+              ))}
+            </Buttons>
+            <small className="mt-6 md:mt-0">
+              Halaman {currentPage + 1} dari {numPages}
+            </small>
+          </div>
         </div>
-      </div>
+      </CardBox>
     </>
   )
 }

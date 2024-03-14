@@ -24,18 +24,14 @@ const UserAnswers = () => {
           main
         ></SectionTitleLineWithButton>
 
-        <CardBox className="mb-6" hasTable>
-          <TablePsikotesAnswer checked="no" />
-        </CardBox>
+        <TablePsikotesAnswer checked="no" />
         <Divider />
         <SectionTitleLineWithButton
           icon={mdiBallotOutline}
           title="Jawaban Peserta Sudah Dinilai"
           main
         ></SectionTitleLineWithButton>
-        <CardBox className="mb-6" hasTable>
-          <TablePsikotesAnswer checked="yes" />
-        </CardBox>
+        <TablePsikotesAnswer checked="yes" />
       </SectionMain>
     </>
   )

@@ -29,9 +29,7 @@ const StudentAgreement = () => {
           main
         ></SectionTitleLineWithButton>
 
-        <CardBox className="mb-6" hasTable>
-          <StudentAgreementTable />
-        </CardBox>
+        <StudentAgreementTable />
       </SectionMain>
     </>
   )

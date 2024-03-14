@@ -50,9 +50,7 @@ const QuestionBank = () => {
           />
         </SectionTitleLineWithButton>
 
-        <CardBox className="mb-6" hasTable>
-          <TablePsikotesQuest />
-        </CardBox>
+        <TablePsikotesQuest />
       </SectionMain>
     </>
   )

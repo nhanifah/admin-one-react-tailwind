@@ -39,9 +39,7 @@ const Interview = () => {
           />
         </SectionTitleLineWithButton>
 
-        <CardBox className="mb-6" hasTable>
-          <InterviewTable />
-        </CardBox>
+        <InterviewTable />
       </SectionMain>
     </>
   )

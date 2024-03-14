@@ -37,7 +37,6 @@ import {
 const Interview = () => {
   const router = useRouter()
   const { id } = router.query
-  const { interviewSchedule } = useInterviewScheduleByIdClients(id)
   // const interviewSchedule = useAppSelector((state) => state.interview.interviewSchedules)
   const dispatch = useAppDispatch()
 
@@ -95,23 +94,7 @@ const Interview = () => {
           </div>
         </SectionTitleLineWithButton>
 
-        <CardBox className="mb-6" hasTable>
-          <h3 className="text-base font-bold mb-4">
-            <span>Jadwal Interview : </span>
-            <span className="block custom-sm:inline">
-              {new Date(interviewSchedule.interview_date).toLocaleDateString('id-ID', {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit',
-                timeZone: 'UTC',
-              })}
-            </span>
-          </h3>
-          <InterviewStudents interviewId={id} />
-        </CardBox>
+        <InterviewStudents interviewId={id} />
       </SectionMain>
     </>
   )

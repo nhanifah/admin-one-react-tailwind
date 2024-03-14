@@ -42,9 +42,7 @@ const BatchList = () => {
           />
         </SectionTitleLineWithButton>
 
-        <CardBox className="mb-6" hasTable>
-          <TableBatch />
-        </CardBox>
+        <TableBatch />
       </SectionMain>
     </>
   )

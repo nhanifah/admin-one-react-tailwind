@@ -9,6 +9,7 @@ import { setInterviewSchedules, setStudents } from '../../stores/interviewSlice'
 import { InterviewSchedules } from '../../interfaces'
 import Link from 'next/link'
 import { searchFunction } from '../../utils/helpers'
+import CardBox from '../CardBox'
 
 const InterviewTable = () => {
   const { clients } = useBatchInterviewClients()
@@ -72,89 +73,91 @@ const InterviewTable = () => {
           </div>
         </form>
       </div>
-      <table>
-        <thead>
-          <tr>
-            <th>Waktu Interview</th>
-            <th>Tempat Interview</th>
-            <th>Batch</th>
-            <th />
-          </tr>
-        </thead>
-        <tbody>
-          {clients.length === 0 && (
+      <CardBox className="mb-6 mt-4" hasTable>
+        <table>
+          <thead>
             <tr>
-              <td colSpan={6} className="text-center py-6">
-                <p className="text-gray-500 dark:text-slate-400">Data tidak ditemukan</p>
-              </td>
+              <th>Waktu Interview</th>
+              <th>Tempat Interview</th>
+              <th>Batch</th>
+              <th />
             </tr>
-          )}
-          {clientsPaginated.map((data: InterviewSchedules) => (
-            <tr key={data.id}>
-              <td data-label="CreatedAt">
-                <small className="text-gray-500 dark:text-slate-400">
-                  {new Date(data.interview_date).toLocaleDateString('id-ID', {
-                    weekday: 'long',
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    timeZone: 'UTC',
-                  })}
-                </small>
-              </td>
-              <td data-label="Correct">{data.interview_location}</td>
-              <td data-label="Correct">{data?.batch_registration?.batch_name}</td>
-              <td className="before:hidden lg:w-1 whitespace-nowrap">
-                <Buttons type="justify-start lg:justify-end" noWrap>
-                  <Button
-                    color="warning"
-                    icon={mdiPencil}
-                    small
-                    onClick={() => {
-                      dispatch(setInterviewSchedules(data))
-                      dispatch(showEditModal())
-                    }}
-                  />
-                  <Link href={`/batch/interview/${data.id}`}>
+          </thead>
+          <tbody>
+            {clients.length === 0 && (
+              <tr>
+                <td colSpan={6} className="text-center py-6">
+                  <p className="text-gray-500 dark:text-slate-400">Data tidak ditemukan</p>
+                </td>
+              </tr>
+            )}
+            {clientsPaginated.map((data: InterviewSchedules) => (
+              <tr key={data.id}>
+                <td data-label="CreatedAt">
+                  <small className="text-gray-500 dark:text-slate-400">
+                    {new Date(data.interview_date).toLocaleDateString('id-ID', {
+                      weekday: 'long',
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      timeZone: 'UTC',
+                    })}
+                  </small>
+                </td>
+                <td data-label="Correct">{data.interview_location}</td>
+                <td data-label="Correct">{data?.batch_registration?.batch_name}</td>
+                <td className="before:hidden lg:w-1 whitespace-nowrap">
+                  <Buttons type="justify-start lg:justify-end" noWrap>
                     <Button
-                      color="info"
-                      icon={mdiEye}
+                      color="warning"
+                      icon={mdiPencil}
                       small
-                      label={'Daftar Siswa'}
                       onClick={() => {
                         dispatch(setInterviewSchedules(data))
-                        dispatch(setStudents(data.students))
-                        // router.push('/batch/interview/students')
+                        dispatch(showEditModal())
                       }}
                     />
-                  </Link>
-                </Buttons>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <div className="p-3 lg:px-6 border-t border-gray-100 dark:border-slate-800">
-        <div className="flex flex-col md:flex-row items-center justify-between py-3 md:py-0">
-          <Buttons>
-            {pagesList.map((page) => (
-              <Button
-                key={page}
-                active={page === currentPage}
-                label={String(page + 1)}
-                color={page === currentPage ? 'lightDark' : 'whiteDark'}
-                small
-                onClick={() => setCurrentPage(page)}
-              />
+                    <Link href={`/batch/interview/${data.id}`}>
+                      <Button
+                        color="info"
+                        icon={mdiEye}
+                        small
+                        label={'Daftar Siswa'}
+                        onClick={() => {
+                          dispatch(setInterviewSchedules(data))
+                          dispatch(setStudents(data.students))
+                          // router.push('/batch/interview/students')
+                        }}
+                      />
+                    </Link>
+                  </Buttons>
+                </td>
+              </tr>
             ))}
-          </Buttons>
-          <small className="mt-6 md:mt-0">
-            Halaman {currentPage + 1} dari {numPages}
-          </small>
+          </tbody>
+        </table>
+        <div className="p-3 lg:px-6 border-t border-gray-100 dark:border-slate-800">
+          <div className="flex flex-col md:flex-row items-center justify-between py-3 md:py-0">
+            <Buttons>
+              {pagesList.map((page) => (
+                <Button
+                  key={page}
+                  active={page === currentPage}
+                  label={String(page + 1)}
+                  color={page === currentPage ? 'lightDark' : 'whiteDark'}
+                  small
+                  onClick={() => setCurrentPage(page)}
+                />
+              ))}
+            </Buttons>
+            <small className="mt-6 md:mt-0">
+              Halaman {currentPage + 1} dari {numPages}
+            </small>
+          </div>
         </div>
-      </div>
+      </CardBox>
     </>
   )
 }
