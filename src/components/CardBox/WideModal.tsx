@@ -40,7 +40,7 @@ const WideCardBoxModal = ({
   return (
     <OverlayLayer onClick={onCancel} className={onCancel ? 'cursor-pointer' : ''}>
       <CardBox
-        className={`transition-transform shadow-lg max-h-modal overflow-y-scroll no-scrollbar w-11/12 md:w-4/5 lg:w-4/5 xl:w-2/4 ${zIndex}`}
+        className={`transition-transform shadow-lg max-h-modal overflow-y-scroll no-scrollbar w-11/12 md:w-4/5 lg:w-5/6 xl:w-4/5 ${zIndex}`}
         isModal
       >
         <CardBoxComponentTitle title={title}>

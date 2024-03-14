@@ -3,7 +3,7 @@ import { UserPayloadObject } from '../interfaces'
 
 interface MainState {
   userName: string
-  userEmail: null | string
+  userEmail: string
   isFieldFocusRegistered: boolean
 }
 

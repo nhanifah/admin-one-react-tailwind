@@ -70,13 +70,18 @@ const handler = NextAuth({
     signIn: '/login',
   },
   callbacks: {
-    jwt: async ({ token, user }) => {
+    jwt: async ({ token, trigger, user, session }) => {
       const userExists = await prisma.admins.findFirst({
         where: { email: token.email },
       })
       if (user) {
         token.role = userExists.role
         token.name = user.name
+      }
+
+      if (trigger == 'update') {
+        token.name = session.name
+        token.email = session.email
       }
       // console.log("REFFERAL:", userExists.refferal_id);
       console.log('TOKEN JWT:', token)

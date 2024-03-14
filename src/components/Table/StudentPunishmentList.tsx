@@ -1,78 +1,38 @@
-'use client'
-
-import { mdiEye, mdiWhatsapp } from '@mdi/js'
-import React, { ReactNode, useEffect, useMemo, useState } from 'react'
+import { mdiEye } from '@mdi/js'
+import React, { useMemo, useState } from 'react'
+import { useStudentClients } from '../../hooks/requestData'
+import { Students } from '../../interfaces'
 import Button from '../Button'
 import Buttons from '../Buttons'
-import { useAppDispatch, useAppSelector } from '../../stores/hooks'
-import { Students } from '../../interfaces'
 import StudentAvatar from '../UserAvatar'
-import { setStudents } from '../../stores/interviewSlice'
+import { useAppDispatch } from '../../stores/hooks'
 import { setStudent, showStudentDetailModal } from '../../stores/batchSlice'
-import { useInterviewScheduleByIdClients } from '../../hooks/requestData'
-import { searchFunction } from '../../utils/helpers'
+import { setTranskripFiles, showTraskripModal } from '../../stores/studentSlice'
+import { getTranskripFiles, searchFunction } from '../../utils/helpers'
+import { showPunishmentListModal } from '../../stores/punishmentSlice'
 
-type Props = {
-  children?: ReactNode
-  interviewId: any
-}
-
-const TableInterviewStudents = ({ interviewId }: Props) => {
-  // const selectedStudents = useAppSelector((state) => state.interview.students)
-  const { interviewSchedule } = useInterviewScheduleByIdClients(interviewId)
-  const selectedStudents = interviewSchedule?.students ?? []
-  const [checkAll, setCheckAll] = useState(false)
-  const [query, setQuery] = useState('')
-
+const StudentPunishmentList = ({ progress }) => {
   const dispatch = useAppDispatch()
+  const [query, setQuery] = useState('')
+  const { clients } = useStudentClients(progress)
 
-  const perPage = 50
+  const perPage = 5
 
   const [currentPage, setCurrentPage] = useState(0)
 
-  const filteredClients: any = useMemo(
-    () => searchFunction(selectedStudents, query),
-    [selectedStudents, query]
-  )
-  const clientsPaginated = filteredClients?.slice(
-    perPage * currentPage,
-    perPage * (currentPage + 1)
-  )
+  const filteredClients: any = useMemo(() => searchFunction(clients, query), [clients, query])
+  const clientsPaginated = filteredClients.slice(perPage * currentPage, perPage * (currentPage + 1))
 
-  let numPages = selectedStudents.length / perPage
+  let numPages = clients.length / perPage
 
   if (numPages % 1 !== 0) {
-    numPages = 1
+    numPages = Math.floor(numPages) + 1
   }
 
   const pagesList: number[] = []
 
   for (let i = 0; i < numPages; i++) {
     pagesList.push(i)
-  }
-
-  useEffect(() => {
-    console.log('CHanged')
-    let checkCount = 0
-    filteredClients.map((item: Students, index) => {
-      if (item.checked == true) {
-        checkCount += 1
-      }
-    })
-    setCheckAll(checkCount == filteredClients.length)
-  }, [filteredClients])
-
-  const handleCheck = (e: React.ChangeEvent<HTMLInputElement>, id: string) => {
-    const updated: Students[] = filteredClients.map((item: Students, index) => {
-      console.log(!item.checked, 'L')
-      if (item.checked) {
-        setCheckAll(false)
-      }
-      return item.id == id ? { ...item, checked: !item.checked } : item
-    })
-
-    console.log(updated)
-    dispatch(setStudents(updated))
   }
 
   return (
@@ -116,37 +76,24 @@ const TableInterviewStudents = ({ interviewId }: Props) => {
       <table>
         <thead>
           <tr>
-            <th>
-              <input
-                type="checkbox"
-                onChange={(e) => {
-                  setCheckAll(e.target.checked)
-                  const updated = filteredClients.map((item, index) => {
-                    return {
-                      ...item,
-                      checked: e.target.checked,
-                    }
-                  })
-                  dispatch(setStudents(updated))
-                }}
-                checked={checkAll}
-              />
-            </th>
             <th />
             <th>Nama</th>
-            <th>Progress</th>
+            <th>Batch</th>
+            <th>Jenis Pekerjaan</th>
+            <th>Asrama</th>
+            <th>Asal</th>
             <th />
           </tr>
         </thead>
         <tbody>
-          {selectedStudents?.length === 0 && (
+          {clients.length === 0 && (
             <tr>
-              <td colSpan={6} className="text-center py-6">
+              <td colSpan={8} className="text-center py-6">
                 <p className="text-gray-500 dark:text-slate-400">Data tidak ditemukan</p>
               </td>
             </tr>
           )}
-          {clientsPaginated?.map((client: Students, index: number) => {
+          {clientsPaginated.map((client: Students) => {
             let fotoAttachments: any[] = []
             fotoAttachments = client?.student_attachments?.filter((attachment) =>
               attachment.file_name.includes('foto_')
@@ -154,13 +101,6 @@ const TableInterviewStudents = ({ interviewId }: Props) => {
 
             return (
               <tr key={client.id}>
-                <td>
-                  <input
-                    type="checkbox"
-                    checked={client.checked}
-                    onChange={(e) => handleCheck(e, client.id)}
-                  />
-                </td>
                 <td className="border-b-0 lg:w-6 before:hidden">
                   <StudentAvatar
                     imgUrl={
@@ -172,38 +112,26 @@ const TableInterviewStudents = ({ interviewId }: Props) => {
                     className="w-24 h-24 mx-auto lg:w-6 lg:h-6"
                   />
                 </td>
-
                 <td data-label="Nama">{client.full_name}</td>
-                <td data-label="Asal">{client.progress}</td>
+                <td data-label="Batch">{client?.batch_registration?.batch_name}</td>
+                <td data-label="Jenis Pekerjaan" className="capitalize">
+                  {client.want_to_work}
+                </td>
+                <td data-label="Asrama" className="lg:w-32">
+                  {client.dormitory === 'yes' ? 'Iya' : 'Tidak'}
+                </td>
+                <td data-label="Asal">{client.province}</td>
+
                 <td className="before:hidden lg:w-1 whitespace-nowrap">
                   <Buttons type="justify-start lg:justify-end" noWrap>
                     <Button
-                      color="success"
-                      icon={mdiWhatsapp}
+                      color="contrast"
+                      label="Lihat Daftar Sanksi"
                       onClick={() => {
-                        // sanitize phone number
-                        let whatsapp = client.whatsapp_number
-                        if (whatsapp.charAt(0) === '+') {
-                          whatsapp = whatsapp.substring(1)
-                        }
-                        whatsapp = whatsapp.replace(/[\s\-_.,]/g, '')
-                        if (whatsapp.startsWith('08')) {
-                          whatsapp = '62' + whatsapp.substring(1)
-                        }
-
-                        window.open(`https://wa.me/${whatsapp}`)
-                      }}
-                      small
-                    />
-                    <Button
-                      color="info"
-                      icon={mdiEye}
-                      small
-                      onClick={() => {
-                        console.log('Clicked')
                         dispatch(setStudent(client))
-                        dispatch(showStudentDetailModal())
+                        dispatch(showPunishmentListModal())
                       }}
+                      small
                     />
                   </Buttons>
                 </td>
@@ -235,4 +163,4 @@ const TableInterviewStudents = ({ interviewId }: Props) => {
   )
 }
 
-export default TableInterviewStudents
+export default StudentPunishmentList

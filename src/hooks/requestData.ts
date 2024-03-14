@@ -513,3 +513,81 @@ export const useSampleTransactions = () => {
     isError: error,
   }
 }
+
+export const useAdminClients = () => {
+  const updateData = async (data: any) => {
+    try {
+      const response = await axios.put('/api/admin', data)
+      return {
+        status: response.status,
+        data: response.data,
+      }
+    } catch (error) {
+      return {
+        status: error.response.status,
+        data: error.response.data,
+      }
+    }
+  }
+
+  const updatePassword = async (data: any) => {
+    try {
+      const response = await axios.put('/api/admin/password', data)
+      return {
+        status: response.status,
+        data: response.data,
+      }
+    } catch (error) {
+      return {
+        status: error.response.status,
+        data: error.response.data,
+      }
+    }
+  }
+
+  return {
+    updateData,
+    updatePassword,
+  }
+}
+
+export const usePunishmentClients = () => {
+  const addPunishment = async (data: any) => {
+    try {
+      const response = await axios.post('/api/student/punishment', data)
+      return {
+        status: response.status,
+        data: response.data,
+      }
+    } catch (error) {
+      return {
+        status: error.response.status,
+        data: error.response.data,
+      }
+    }
+  }
+
+  const uploadPunishmentAttachment = async (data: any) => {
+    try {
+      const response = await axios.post('/api/student/punishment/attachment', data, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
+      mutate('/api/student/punishments')
+      return {
+        status: response.status,
+        data: response.data,
+      }
+    } catch (error) {
+      console.log(error)
+      return {
+        status: error.response.status,
+        data: error.response.data ?? 'Terjadi Kesalahan',
+      }
+    }
+  }
+
+  return {
+    addPunishment,
+    uploadPunishmentAttachment,
+  }
+}

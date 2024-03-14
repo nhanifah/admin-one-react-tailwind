@@ -1,5 +1,12 @@
-import { mdiEye, mdiPoliceBadge, mdiWhatsapp, mdiCurrencyUsd } from '@mdi/js'
-import React, { useState } from 'react'
+import {
+  mdiEye,
+  mdiPoliceBadge,
+  mdiWhatsapp,
+  mdiCurrencyUsd,
+  mdiDownload,
+  mdiMicrosoftExcel,
+} from '@mdi/js'
+import React, { useMemo, useRef, useState } from 'react'
 import { useStudentClients } from '../../hooks/requestData'
 import { Students } from '../../interfaces'
 import Button from '../Button'
@@ -8,17 +15,48 @@ import StudentAvatar from '../UserAvatar'
 import { useAppDispatch } from '../../stores/hooks'
 import { setStudent, showStudentDetailModal } from '../../stores/batchSlice'
 import { setTranskripFiles, showTraskripModal } from '../../stores/studentSlice'
-import { getTranskripFiles } from '../../utils/helpers'
+import { getTranskripFiles, searchFunction } from '../../utils/helpers'
+import { showPunishmentModal } from '../../stores/punishmentSlice'
+import toast from 'react-hot-toast'
 
 const StudentLists = ({ progress }) => {
+  const fileRef = useRef<HTMLInputElement>(null)
+
+  const { postFile } = useStudentClients('success')
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files
+    if (files && files.length > 0) {
+      const file = files[0]
+      const formData = new FormData()
+      formData.append('file', file)
+      const res = await postFile(formData)
+      // console.log(res);
+
+      if (res.status == 'success') {
+        toast.success(res.message)
+      } else {
+        console.log(res)
+        toast.error('Gagal mengimpor data')
+      }
+
+      // reset the input
+      e.target.value = ''
+    }
+  }
+
+  const [query, setQuery] = useState('')
+
   const dispatch = useAppDispatch()
   const { clients } = useStudentClients(progress)
 
   const perPage = 5
 
+  const filteredClients: any = useMemo(() => searchFunction(clients, query), [clients, query])
+
   const [currentPage, setCurrentPage] = useState(0)
 
-  const clientsPaginated = clients.slice(perPage * currentPage, perPage * (currentPage + 1))
+  const clientsPaginated = filteredClients.slice(perPage * currentPage, perPage * (currentPage + 1))
 
   let numPages = clients.length / perPage
 
@@ -34,6 +72,80 @@ const StudentLists = ({ progress }) => {
 
   return (
     <>
+      <form className="hidden">
+        <input type="file" name="file" ref={fileRef} onChange={handleFileChange} />
+      </form>
+      <div className="grid grid-cols-3 gap-4 items-start">
+        <form className="custom-lg:col-span-1 col-span-3 ">
+          <label
+            htmlFor="default-search"
+            className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
+          >
+            Search
+          </label>
+          <div className="relative">
+            <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+              <svg
+                className="w-4 h-4 text-gray-500 dark:text-gray-400"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+                />
+              </svg>
+            </div>
+            <input
+              type="search"
+              id="default-search"
+              className="block w-full ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder="Cari . . ."
+              onChange={(e) => setQuery(e.target.value)}
+            />
+          </div>
+        </form>
+        <div className="custom-lg:col-span-2 col-span-3 ">
+          <Buttons className="w-full grid grid-cols-3 custom-lg:flex custom-lg:justify-end">
+            <Button
+              href="https://lpk-harehare.nos.jkt-1.neo.id/Import%20File%20-%20Siswa%20LPK.xlsx"
+              icon={mdiDownload}
+              label="Unduh Sampel Excel"
+              color="contrast"
+              roundedFull
+              small
+              className="min-w-[180px] sm:col-span-1 col-span-3"
+            />
+            <Button
+              onClick={() => {
+                fileRef.current && fileRef.current.click()
+              }}
+              icon={mdiMicrosoftExcel}
+              label="Impor dari Excel"
+              color="success"
+              roundedFull
+              small
+              className="min-w-[180px] sm:col-span-1 col-span-3"
+            />
+            <Button
+              target="_blank"
+              icon={mdiMicrosoftExcel}
+              label="Ekspor ke Excel"
+              color="info"
+              roundedFull
+              small
+              className="min-w-[180px] sm:col-span-1 col-span-3"
+              disabled
+            />
+          </Buttons>
+        </div>
+      </div>
+
       <table>
         <thead>
           <tr>
@@ -129,8 +241,10 @@ const StudentLists = ({ progress }) => {
                     <Button
                       color="danger"
                       icon={mdiPoliceBadge}
-                      onClick={() => {}}
-                      disabled
+                      onClick={() => {
+                        dispatch(setStudent(client))
+                        dispatch(showPunishmentModal())
+                      }}
                       small
                     />
                     <Button
