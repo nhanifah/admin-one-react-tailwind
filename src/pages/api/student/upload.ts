@@ -1,7 +1,7 @@
 // crud student
 import { NextApiRequest, NextApiResponse } from 'next'
 import { PrismaClient } from '@prisma/client'
-import { getSession } from 'next-auth/react'
+import { getToken } from "next-auth/jwt"
 import { Formidable } from "formidable";
 import xlsx from 'xlsx';
 
@@ -14,7 +14,7 @@ export const config = {
 };
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    const session = await getSession({ req })
+    const session = await getToken({ req })
 
     if (!session) {
         // return res.status(401).json({ message: 'Unauthorized' })

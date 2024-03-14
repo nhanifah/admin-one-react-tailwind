@@ -20,6 +20,7 @@ type Props = {
   active?: boolean
   disabled?: boolean
   roundedFull?: boolean
+  full?: boolean
   onClick?: (e: React.MouseEvent) => void
 }
 
@@ -39,6 +40,7 @@ export default function Button({
   active = false,
   disabled = false,
   roundedFull = false,
+  full = false,
   onClick,
 }: Props) {
   const Spinner = ({ size, white }) => {
@@ -70,6 +72,10 @@ export default function Button({
     getButtonColor(color, outline, !disabled, active),
     className,
   ]
+
+  if (full) {
+    componentClass.push('w-full')
+  }
 
   if (!label && icon) {
     componentClass.push('p-1')

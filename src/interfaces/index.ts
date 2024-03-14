@@ -95,6 +95,26 @@ export type Student = {
   want_to_work?: string
 }
 
+export type Admin = {
+  id: string
+  name: string
+  username: string
+  email: string
+  password: string
+  role: string
+  created_at: Date
+  updated_at: Date
+  master_roles: MasterRoles
+}
+
+export type MasterRoles = {
+  id: string
+  name: string
+  access: string[]
+  created_at: Date
+  updated_at: Date
+}
+
 export type StudentSikotes = {
   id: string
   student_id: string
@@ -140,6 +160,24 @@ export type payment = {
   amount: number
   type: string
   installments: installments[]
+}
+
+export type User = {
+  id: string
+  name: string
+  username: string
+  email: string
+  password: string
+  role: string
+  created_at: Date
+  updated_at: Date
+  master_roles: {
+    id: string
+    name: string
+    access: string[]
+    created_at: Date
+    updated_at: Date
+  }
 }
 
 export type Students = {

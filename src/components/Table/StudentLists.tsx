@@ -4,7 +4,6 @@ import { useStudentClients } from '../../hooks/requestData'
 import { Students } from '../../interfaces'
 import Button from '../Button'
 import Buttons from '../Buttons'
-import WideCardBoxModal from '../CardBox/WideModal'
 import StudentAvatar from '../UserAvatar'
 import { useAppDispatch } from '../../stores/hooks'
 import { setStudent, showStudentDetailModal } from '../../stores/batchSlice'
@@ -33,28 +32,8 @@ const StudentLists = ({ progress }) => {
     pagesList.push(i)
   }
 
-  const [isModalTrashActive, setIsModalTrashActive] = useState(false)
-
-  const handleModalAction = () => {
-    setIsModalTrashActive(false)
-  }
-
   return (
     <>
-      <WideCardBoxModal
-        title="Please confirm"
-        buttonColor="danger"
-        buttonLabel="Confirm"
-        isActive={isModalTrashActive}
-        onConfirm={handleModalAction}
-        onCancel={handleModalAction}
-      >
-        <p>
-          Lorem ipsum dolor sit amet <b>adipiscing elit</b>
-        </p>
-        <p>This is sample modal</p>
-      </WideCardBoxModal>
-
       <table>
         <thead>
           <tr>
@@ -78,6 +57,7 @@ const StudentLists = ({ progress }) => {
           )}
           {clientsPaginated.map((client: Students) => {
             let fotoAttachments: any[] = []
+            console.log('client:', client)
             fotoAttachments = client?.student_attachments?.filter((attachment) =>
               attachment.file_name.includes('foto_')
             )
@@ -149,7 +129,7 @@ const StudentLists = ({ progress }) => {
                     <Button
                       color="danger"
                       icon={mdiPoliceBadge}
-                      onClick={() => setIsModalTrashActive(true)}
+                      onClick={() => {}}
                       disabled
                       small
                     />

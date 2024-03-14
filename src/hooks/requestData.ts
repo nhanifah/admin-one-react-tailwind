@@ -93,6 +93,96 @@ export const useBatchInterviewClients = () => {
   }
 }
 
+export const useMasterRoleClients = () => {
+  const { data, error } = useSWR('/api/role', fetcher)
+
+  const updateStudentsSchedule = async (data: object) => {
+    try {
+      const response = await axios.put('/api/batch/interview/studentsSchedules', data)
+      return {
+        status: response.status,
+        data: response.data,
+      }
+    } catch (error) {
+      console.log(error.response.data)
+      return {
+        status: error.response.status,
+        data: error.response.data,
+      }
+    }
+  }
+
+  return {
+    clients: data?.data ?? [],
+    isLoading: !error && !data,
+    isError: error,
+    updateStudentsSchedule,
+  }
+}
+
+export const useUserManagerClients = () => {
+  const { data, error } = useSWR('/api/user', fetcher)
+
+  const updateUserManager = async (data: object) => {
+    try {
+      const response = await axios.put('/api/user', data)
+      mutate('/api/user')
+      return {
+        status: response.status,
+        data: response.data,
+      }
+    } catch (error) {
+      console.log(error.response.data)
+      return {
+        status: error.response.status,
+        data: error.response.data,
+      }
+    }
+  }
+
+  const createUserManager = async (data: object) => {
+    try {
+      const response = await axios.post('/api/user', data)
+      mutate('/api/user')
+      return {
+        status: response.status,
+        data: response.data,
+      }
+    } catch (error) {
+      console.log(error.response.data)
+      return {
+        status: error.response.status,
+        data: error.response.data ?? 'Terjadi kesalahan',
+      }
+    }
+  }
+
+  const deleteUserManager = async (id: string) => {
+    try {
+      const response = await axios.delete('/api/user', { data: { id: id } })
+      mutate('/api/user')
+      return {
+        status: response.status,
+        data: response.data,
+      }
+    } catch (error) {
+      return {
+        status: error.response.status,
+        data: error?.response?.data ?? 'Terjadi kesalahan',
+      }
+    }
+  }
+
+  return {
+    clients: data?.data ?? [],
+    isLoading: !error && !data,
+    isError: error,
+    updateUserManager,
+    createUserManager,
+    deleteUserManager,
+  }
+}
+
 export const useStudentClients = (progress: string = 'success') => {
   const { data, error } = useSWR(`/api/student/${progress}`, fetcher)
 
