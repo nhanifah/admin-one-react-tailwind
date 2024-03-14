@@ -69,9 +69,10 @@ export const useBankQuestionClients = () => {
 export const useBatchInterviewClients = () => {
   const { data, error } = useSWR('/api/batch/interview', fetcher)
 
-  const updateStudentsSchedule = async (data: object) => {
+  const updateStudentsSchedule = async (data: any) => {
     try {
       const response = await axios.put('/api/batch/interview/studentsSchedules', data)
+      mutate(`/api/interview/${data.interviewId}`)
       return {
         status: response.status,
         data: response.data,
@@ -242,9 +243,11 @@ export const useStudentClients = (progress: string = 'success') => {
     }
   }
 
-  const updateProgress = async (data: object) => {
+  const updateProgress = async (data: any) => {
     try {
       const response = await axios.put('/api/student/progress', data)
+      console.log(data)
+      mutate(`/api/interview/${data.interviewId}`)
       return {
         status: response.status,
         data: response.data,
@@ -499,6 +502,7 @@ export const useInterviewScheduleByIdClients = (id: any) => {
 
   return {
     interviewSchedule: data?.data ?? [],
+    students: data?.students ?? [],
     isLoading: !error && !data,
     isError: error,
   }
@@ -508,7 +512,7 @@ export const useSampleTransactions = () => {
   const { data, error } = useSWR('/data-sources/history.json', fetcher)
 
   return {
-    transactions: data?.data ?? [],
+    transactions: data?.interview ?? [],
     isLoading: !error && !data,
     isError: error,
   }

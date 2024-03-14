@@ -93,7 +93,7 @@ export default function BatchStudentsModal() {
               name="progress"
               id="progress"
               component="select"
-              className="py-0 rounded-full h-full"
+              className="py-0 rounded-full h-full dark:text-black"
               onChange={(e) => setFieldValue('progress', e.target.value)}
             >
               <option className="capitalize" selected value="registering">

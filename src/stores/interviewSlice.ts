@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { Students, InterviewSchedules } from '../interfaces'
+import { boolean } from 'zod'
 
 const interviewSchedules: InterviewSchedules = {
   id: '',
@@ -20,6 +21,9 @@ const initialState = {
   addModal: false,
   editModal: false,
   contractModal: false,
+  interviewId: '',
+  checkAll: false,
+  studentsId: <string[]>[],
 }
 
 export const styleSlice = createSlice({
@@ -68,6 +72,22 @@ export const styleSlice = createSlice({
     closeContractModal: (state) => {
       state.contractModal = false
     },
+    setInterviewId: (state, action: PayloadAction<any>) => {
+      state.interviewId = action.payload
+    },
+    setCheckAll: (state, action: PayloadAction<boolean>) => {
+      state.checkAll = action.payload
+    },
+    addStudentId: (state, action: PayloadAction<any>) => {
+      state.studentsId.push(action.payload)
+    },
+    popStudentId: (state, action: PayloadAction<any>) => {
+      const index = state.studentsId.indexOf(action.payload)
+      state.studentsId.splice(index, 1)
+    },
+    resetStudentId: (state) => {
+      state.studentsId = []
+    },
   },
 })
 
@@ -86,6 +106,11 @@ export const {
   closeEditModal,
   showContractModal,
   closeContractModal,
+  setInterviewId,
+  setCheckAll,
+  addStudentId,
+  popStudentId,
+  resetStudentId,
 } = styleSlice.actions
 
 export default styleSlice.reducer

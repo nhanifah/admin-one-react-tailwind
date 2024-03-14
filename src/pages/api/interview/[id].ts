@@ -19,7 +19,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       },
     })
 
-    return res.status(200).json({ data: interview })
+    return res.status(200).json({ data: interview, students: interview?.students })
   } else if (req.method == 'PUT') {
     const body = req.body
     const { id }: any = req.query

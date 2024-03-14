@@ -7,11 +7,17 @@ import Buttons from '../Buttons'
 import { useAppDispatch, useAppSelector } from '../../stores/hooks'
 import { Students } from '../../interfaces'
 import StudentAvatar from '../UserAvatar'
-import { setStudents } from '../../stores/interviewSlice'
+import {
+  addStudentId,
+  popStudentId,
+  resetStudentId,
+  setCheckAll,
+  setStudents,
+} from '../../stores/interviewSlice'
 import { setStudent, showStudentDetailModal } from '../../stores/batchSlice'
 import { useInterviewScheduleByIdClients } from '../../hooks/requestData'
-import { searchFunction } from '../../utils/helpers'
 import CardBox from '../CardBox'
+import { searchFunction } from '../../utils/helpers'
 
 type Props = {
   children?: ReactNode
@@ -20,9 +26,13 @@ type Props = {
 
 const TableInterviewStudents = ({ interviewId }: Props) => {
   // const selectedStudents = useAppSelector((state) => state.interview.students)
-  const { interviewSchedule } = useInterviewScheduleByIdClients(interviewId)
-  const selectedStudents = interviewSchedule?.students ?? []
-  const [checkAll, setCheckAll] = useState(false)
+  const { interviewSchedule, students } = useInterviewScheduleByIdClients(interviewId)
+  // console.log(students)
+  let selectedStudents = students
+  // const [selectedStudents, setSelectedStudents] = useState<Students[]>(students)
+  const checkAll = useAppSelector((state) => state.interview.checkAll)
+  const selected = useAppSelector((state) => state.interview.studentsId)
+  console.log(selected)
   const [query, setQuery] = useState('')
 
   const dispatch = useAppDispatch()
@@ -35,10 +45,8 @@ const TableInterviewStudents = ({ interviewId }: Props) => {
     () => searchFunction(selectedStudents, query),
     [selectedStudents, query]
   )
-  const clientsPaginated = filteredClients?.slice(
-    perPage * currentPage,
-    perPage * (currentPage + 1)
-  )
+
+  const clientsPaginated = filteredClients.slice(perPage * currentPage, perPage * (currentPage + 1))
 
   let numPages = selectedStudents.length / perPage
 
@@ -53,27 +61,15 @@ const TableInterviewStudents = ({ interviewId }: Props) => {
   }
 
   useEffect(() => {
-    console.log('CHanged')
-    let checkCount = 0
-    filteredClients.map((item: Students, index) => {
-      if (item.checked == true) {
-        checkCount += 1
-      }
-    })
-    setCheckAll(checkCount == filteredClients.length)
-  }, [filteredClients])
+    dispatch(setCheckAll(selected.length >= filteredClients.length))
+  }, [selected, filteredClients])
 
   const handleCheck = (e: React.ChangeEvent<HTMLInputElement>, id: string) => {
-    const updated: Students[] = filteredClients.map((item: Students, index) => {
-      console.log(!item.checked, 'L')
-      if (item.checked) {
-        setCheckAll(false)
-      }
-      return item.id == id ? { ...item, checked: !item.checked } : item
-    })
-
-    console.log(updated)
-    dispatch(setStudents(updated))
+    if (selected.includes(id)) {
+      dispatch(popStudentId(id))
+    } else {
+      dispatch(addStudentId(id))
+    }
   }
 
   return (
@@ -97,9 +93,9 @@ const TableInterviewStudents = ({ interviewId }: Props) => {
               >
                 <path
                   stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
                   d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
                 />
               </svg>
@@ -136,14 +132,15 @@ const TableInterviewStudents = ({ interviewId }: Props) => {
                 <input
                   type="checkbox"
                   onChange={(e) => {
-                    setCheckAll(e.target.checked)
-                    const updated = filteredClients.map((item, index) => {
-                      return {
-                        ...item,
-                        checked: e.target.checked,
+                    dispatch(setCheckAll(e.target.checked))
+                    if (e.target.checked) dispatch(resetStudentId())
+                    filteredClients.map((item) => {
+                      if (e.target.checked) {
+                        dispatch(addStudentId(item.id))
+                      } else {
+                        dispatch(resetStudentId())
                       }
                     })
-                    dispatch(setStudents(updated))
                   }}
                   checked={checkAll}
                 />
@@ -155,77 +152,78 @@ const TableInterviewStudents = ({ interviewId }: Props) => {
             </tr>
           </thead>
           <tbody>
-            {selectedStudents?.length === 0 && (
+            {selectedStudents?.length === 0 ? (
               <tr>
                 <td colSpan={6} className="text-center py-6">
                   <p className="text-gray-500 dark:text-slate-400">Data tidak ditemukan</p>
                 </td>
               </tr>
+            ) : (
+              clientsPaginated?.map((client: Students, index: number) => {
+                let fotoAttachments: any[] = []
+                fotoAttachments = client?.student_attachments?.filter((attachment) =>
+                  attachment.file_name.includes('foto_')
+                )
+
+                return (
+                  <tr key={client.id}>
+                    <td>
+                      <input
+                        type="checkbox"
+                        checked={selected.includes(client.id)}
+                        onChange={(e) => handleCheck(e, client.id)}
+                      />
+                    </td>
+                    <td className="border-b-0 lg:w-6 before:hidden">
+                      <StudentAvatar
+                        imgUrl={
+                          fotoAttachments.length != 0
+                            ? fotoAttachments[0]['file_url']
+                            : 'https://lpk-harehare.nos.jkt-1.neo.id/avatar.jpg'
+                        }
+                        alt={client.full_name}
+                        className="w-24 h-24 mx-auto lg:w-6 lg:h-6"
+                      />
+                    </td>
+
+                    <td data-label="Nama">{client.full_name}</td>
+                    <td data-label="Asal">{client.progress}</td>
+                    <td className="before:hidden lg:w-1 whitespace-nowrap">
+                      <Buttons type="justify-start lg:justify-end" noWrap>
+                        <Button
+                          color="success"
+                          icon={mdiWhatsapp}
+                          onClick={() => {
+                            // sanitize phone number
+                            let whatsapp = client.whatsapp_number
+                            if (whatsapp.charAt(0) === '+') {
+                              whatsapp = whatsapp.substring(1)
+                            }
+                            whatsapp = whatsapp.replace(/[\s\-_.,]/g, '')
+                            if (whatsapp.startsWith('08')) {
+                              whatsapp = '62' + whatsapp.substring(1)
+                            }
+
+                            window.open(`https://wa.me/${whatsapp}`)
+                          }}
+                          small
+                        />
+                        <Button
+                          color="info"
+                          icon={mdiEye}
+                          small
+                          onClick={() => {
+                            console.log('Clicked')
+                            dispatch(setStudent(client))
+                            dispatch(showStudentDetailModal())
+                          }}
+                        />
+                      </Buttons>
+                    </td>
+                  </tr>
+                )
+              })
             )}
-            {clientsPaginated?.map((client: Students, index: number) => {
-              let fotoAttachments: any[] = []
-              fotoAttachments = client?.student_attachments?.filter((attachment) =>
-                attachment.file_name.includes('foto_')
-              )
-
-              return (
-                <tr key={client.id}>
-                  <td>
-                    <input
-                      type="checkbox"
-                      checked={client.checked}
-                      onChange={(e) => handleCheck(e, client.id)}
-                    />
-                  </td>
-                  <td className="border-b-0 lg:w-6 before:hidden">
-                    <StudentAvatar
-                      imgUrl={
-                        fotoAttachments.length != 0
-                          ? fotoAttachments[0]['file_url']
-                          : 'https://lpk-harehare.nos.jkt-1.neo.id/avatar.jpg'
-                      }
-                      alt={client.full_name}
-                      className="w-24 h-24 mx-auto lg:w-6 lg:h-6"
-                    />
-                  </td>
-
-                  <td data-label="Nama">{client.full_name}</td>
-                  <td data-label="Asal">{client.progress}</td>
-                  <td className="before:hidden lg:w-1 whitespace-nowrap">
-                    <Buttons type="justify-start lg:justify-end" noWrap>
-                      <Button
-                        color="success"
-                        icon={mdiWhatsapp}
-                        onClick={() => {
-                          // sanitize phone number
-                          let whatsapp = client.whatsapp_number
-                          if (whatsapp.charAt(0) === '+') {
-                            whatsapp = whatsapp.substring(1)
-                          }
-                          whatsapp = whatsapp.replace(/[\s\-_.,]/g, '')
-                          if (whatsapp.startsWith('08')) {
-                            whatsapp = '62' + whatsapp.substring(1)
-                          }
-
-                          window.open(`https://wa.me/${whatsapp}`)
-                        }}
-                        small
-                      />
-                      <Button
-                        color="info"
-                        icon={mdiEye}
-                        small
-                        onClick={() => {
-                          console.log('Clicked')
-                          dispatch(setStudent(client))
-                          dispatch(showStudentDetailModal())
-                        }}
-                      />
-                    </Buttons>
-                  </td>
-                </tr>
-              )
-            })}
           </tbody>
         </table>
         <div className="p-3 lg:px-6 border-t border-gray-100 dark:border-slate-800">

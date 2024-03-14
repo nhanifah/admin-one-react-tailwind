@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import CardBoxModal from '../CardBox/Modal'
 import { useAppDispatch, useAppSelector } from '../../stores/hooks'
-import { closeContractModal, setStudents } from '../../stores/interviewSlice'
+import { closeContractModal, setCheckAll, setStudents } from '../../stores/interviewSlice'
 import { studentProgressSchema } from '../../utils/validator'
 import toast from 'react-hot-toast'
 import { Students } from '../../interfaces'
@@ -13,6 +13,8 @@ export default function ContractModal() {
   const contractModal = useAppSelector((state) => state.interview.contractModal)
   const selectedStudents = useAppSelector((state) => state.interview.students)
   const interviewSchedule = useAppSelector((state) => state.interview.interviewSchedules)
+  const interviewId = useAppSelector((state) => state.interview.interviewId)
+  const studentsId = useAppSelector((state) => state.interview.studentsId)
   const { updateProgress } = useStudentClients('')
   const [loading, setLoading] = useState(false)
 
@@ -22,14 +24,6 @@ export default function ContractModal() {
 
   const handleSubmit = async () => {
     setLoading(true)
-    const checkedStudent: Students[] = []
-    const studentsId: string[] = []
-    selectedStudents.map((item, index) => {
-      if (item.checked) {
-        checkedStudent.push(item)
-        studentsId.push(item.id)
-      }
-    })
 
     try {
       studentProgressSchema.parse({
@@ -46,11 +40,13 @@ export default function ContractModal() {
     const { status, data } = await updateProgress({
       selectedStudentsId: studentsId,
       progress: 'contract',
+      interviewId,
     })
     if (status == 200) {
       console.log(data)
       const students = await axios.get(`/api/batch/interview/students/${interviewSchedule.id}`)
       dispatch(setStudents(students.data))
+      // dispatch(setCheckAll(false))
       dispatch(closeContractModal())
       toast.success(`Berhasil membuat kontrak dan pembayaran siswa!`)
     } else {

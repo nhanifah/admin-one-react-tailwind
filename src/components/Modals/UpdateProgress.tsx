@@ -9,7 +9,7 @@ import { studentProgressSchema } from '../../utils/validator'
 import toast from 'react-hot-toast'
 import { useStudentClients } from '../../hooks/requestData'
 import React from 'react'
-import { closeProgressModal, setStudents } from '../../stores/interviewSlice'
+import { closeProgressModal, setCheckAll, setStudents } from '../../stores/interviewSlice'
 import { Students } from '../../interfaces'
 import axios from 'axios'
 import { mutate } from 'swr'
@@ -18,6 +18,8 @@ export default function UpdateInterviewScheduleModal() {
   const dispatch = useAppDispatch()
   const selectedStudents = useAppSelector((state) => state.interview.students)
   const interviewSchedule = useAppSelector((state) => state.interview.interviewSchedules)
+  const studentsId = useAppSelector((state) => state.interview.studentsId)
+  const interviewId = useAppSelector((state) => state.interview.interviewId)
   const progressModal = useAppSelector((state) => state.interview.progressModal)
   const formRef = useRef<any>()
   const { updateProgress } = useStudentClients('')
@@ -29,14 +31,6 @@ export default function UpdateInterviewScheduleModal() {
 
   const handleSubmit = async (values, { resetForm }) => {
     setLoading(true)
-    const checkedStudent: Students[] = []
-    const studentsId: string[] = []
-    selectedStudents.map((item, index) => {
-      if (item.checked) {
-        checkedStudent.push(item)
-        studentsId.push(item.id)
-      }
-    })
 
     try {
       studentProgressSchema.parse({
@@ -50,11 +44,14 @@ export default function UpdateInterviewScheduleModal() {
       return
     }
 
-    const { status, data } = await updateProgress({ selectedStudentsId: studentsId, ...values })
+    const { status, data } = await updateProgress({
+      selectedStudentsId: studentsId,
+      ...values,
+      interviewId,
+    })
     if (status == 200) {
       console.log(data)
       // const students = await axios.get(`/api/batch/interview/students/${interviewSchedule.id}`)
-      mutate(`/api/interview/${interviewSchedule.id}`)
       // dispatch(setStudents(students.data))
       dispatch(closeProgressModal())
       toast.success(`${data.data.count} progress siswa berhasil diupdate!`)
@@ -62,6 +59,7 @@ export default function UpdateInterviewScheduleModal() {
       console.log(data)
       toast.error('progress siswa gagal diupdate!')
     }
+    // dispatch(setCheckAll(false))
     setLoading(false)
   }
 

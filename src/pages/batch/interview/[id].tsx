@@ -17,6 +17,7 @@ import { useAppDispatch, useAppSelector } from '../../../stores/hooks'
 import React from 'react'
 import InterviewStudents from '../../../components/Table/InterviewStudents'
 import {
+  setInterviewId,
   showBroadcastModal,
   showContractModal,
   showProgressModal,
@@ -56,7 +57,10 @@ const Interview = () => {
         <SectionTitleLineWithButton icon={mdiBallotOutline} title="Daftar Siswa" main>
           <div className="grid grid-cols-1 custom-sm:grid-cols-2 sm:grid-cols-3 gap-3 md:grid-cols-4">
             <Button
-              onClick={() => dispatch(showContractModal())}
+              onClick={() => {
+                dispatch(setInterviewId(id))
+                dispatch(showContractModal())
+              }}
               target="_blank"
               icon={mdiFileSign}
               label="Buat Kontrak"
@@ -74,7 +78,10 @@ const Interview = () => {
               small
             />
             <Button
-              onClick={() => dispatch(showUpdateModal())}
+              onClick={() => {
+                dispatch(setInterviewId(id))
+                dispatch(showUpdateModal())
+              }}
               target="_blank"
               icon={mdiClockOutline}
               label="Ubah Jadwal Interview"
@@ -83,7 +90,10 @@ const Interview = () => {
               small
             />
             <Button
-              onClick={() => dispatch(showProgressModal())}
+              onClick={() => {
+                dispatch(setInterviewId(id))
+                dispatch(showProgressModal())
+              }}
               target="_blank"
               icon={mdiUpdate}
               label="Ubah Progress Siswa"

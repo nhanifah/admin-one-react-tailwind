@@ -9,7 +9,12 @@ import { updateInterviewSchedulesSchema } from '../../utils/validator'
 import toast from 'react-hot-toast'
 import { useBatchClients, useBatchInterviewClients } from '../../hooks/requestData'
 import React from 'react'
-import { closeUpdateModal, setStudents, showUpdateModal } from '../../stores/interviewSlice'
+import {
+  closeUpdateModal,
+  setCheckAll,
+  setStudents,
+  showUpdateModal,
+} from '../../stores/interviewSlice'
 import { InterviewSchedules, Students } from '../../interfaces'
 import axios from 'axios'
 
@@ -17,6 +22,8 @@ export default function UpdateInterviewScheduleModal() {
   const dispatch = useAppDispatch()
   const selectedStudents = useAppSelector((state) => state.interview.students)
   const interviewSchedule = useAppSelector((state) => state.interview.interviewSchedules)
+  const interviewId = useAppSelector((state) => state.interview.interviewId)
+  const studentsId = useAppSelector((state) => state.interview.studentsId)
   const [schedules, setSchedules] = useState<InterviewSchedules[]>([])
   const updateModal = useAppSelector((state) => state.interview.updateModal)
   const formRef = useRef<any>()
@@ -43,14 +50,6 @@ export default function UpdateInterviewScheduleModal() {
 
   const handleSubmit = async (values, { resetForm }) => {
     setLoading(true)
-    const checkedStudent: Students[] = []
-    const studentsId: string[] = []
-    selectedStudents.map((item, index) => {
-      if (item.checked) {
-        checkedStudent.push(item)
-        studentsId.push(item.id)
-      }
-    })
 
     try {
       updateInterviewSchedulesSchema.parse({
@@ -67,6 +66,7 @@ export default function UpdateInterviewScheduleModal() {
     const { status, data } = await updateStudentsSchedule({
       selectedStudentsId: studentsId,
       ...values,
+      interviewId,
     })
     if (status == 200) {
       console.log(data)
@@ -78,6 +78,7 @@ export default function UpdateInterviewScheduleModal() {
       console.log(data)
       toast.error('Jadwal interview siswa gagal diubah!')
     }
+    // dispatch(setCheckAll(false))
     setLoading(false)
   }
 
