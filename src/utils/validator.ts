@@ -194,3 +194,28 @@ export const passwordSchema = z
       message: 'Konfirmasi Password tidak sama!',
     }
   )
+
+export const userManager = z.object({
+  name: z
+    .string({
+      required_error: 'Nama harus diisi',
+    })
+    .refine((value) => value.length > 0, { message: 'Nama harus diisi' }),
+  username: z
+    .string({
+      required_error: 'Username harus diisi',
+    })
+    .min(1, { message: 'Username harus diisi' })
+    .refine((value) => !/\s/.test(value), { message: 'Username tidak boleh mengandung spasi' })
+    .refine((value) => /^[a-zA-Z0-9_]+$/.test(value), { message: 'Username hanya boleh mengandung huruf, angka, dan garis bawah' }),
+  email: z
+    .string({
+      required_error: 'Email harus diisi',
+    })
+    .refine((value) => value.length > 0, { message: 'Email harus diisi' }),
+  master_roles: z
+    .object({
+      id: z.string(),
+    })
+    .refine((value) => value.id.length > 0, { message: 'Hak akses harus dipilih' }),
+})

@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { BatchStudents, Students } from '../interfaces'
+import { BatchStudents, Students, User } from '../interfaces'
 
 const batch_selected: BatchStudents = {
   id: '',
@@ -7,6 +7,24 @@ const batch_selected: BatchStudents = {
   quota: 0,
   end_date: '',
   students: [],
+}
+
+const user: User = {
+  id: '',
+  name: '',
+  username: '',
+  email: '',
+  master_roles: {
+    id: '',
+    name: '',
+    access: [],
+    created_at: new Date(),
+    updated_at: new Date(),
+  },
+  created_at: new Date(),
+  updated_at: new Date(),
+  password: '',
+  role: ''
 }
 
 const students_selected: Students[] = []
@@ -57,7 +75,9 @@ export const styleSlice = createSlice({
     batch_selected,
     students_selected,
     studentDetailModal: false,
+    userDetailModal: false,
     student,
+    user,
     editModal: false,
   },
   reducers: {
@@ -86,8 +106,17 @@ export const styleSlice = createSlice({
     closeStudentDetailModal: (state) => {
       state.studentDetailModal = false
     },
+    showUserDetailModal: (state) => {
+      state.userDetailModal = true
+    },
+    closeUserDetailModal: (state) => {
+      state.userDetailModal = false
+    },
     setStudent: (state, action: PayloadAction<Students>) => {
       state.student = action.payload
+    },
+    setUser: (state, action: PayloadAction<User>) => {
+      state.user = action.payload
     },
     showEditModal: (state) => {
       state.editModal = true
@@ -107,7 +136,10 @@ export const {
   setStudentsSelected,
   showStudentDetailModal,
   closeStudentDetailModal,
+  showUserDetailModal,
+  closeUserDetailModal,
   setStudent,
+  setUser,
   showEditModal,
   closeEditModal,
 } = styleSlice.actions

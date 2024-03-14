@@ -1,5 +1,6 @@
 import {
   // mdiAccountCircle,
+  mdiAccountGroupOutline,
   mdiMonitor,
   mdiUpload,
   // mdiGithub,
@@ -83,6 +84,11 @@ const menuAside: MenuAsideItem[] = [
         disabled: true,
       },
     ],
+  },
+  {
+    href: '/userManager/list',
+    label: 'User Manager',
+    icon: mdiAccountGroupOutline,
   },
   {
     href: '/affiliate/list',
