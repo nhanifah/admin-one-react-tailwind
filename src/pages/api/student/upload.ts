@@ -82,9 +82,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 if (typeof item.installment === 'string') {
                     item.installment = item.installment.toLowerCase() === 'ya' ? 'yes' : 'no';
                 }
-                // Konversi tipe item.process_batch menjadi number
-                if (typeof item.process_batch !== 'number' && item.process_batch !== null) {
-                    item.process_batch = parseInt(item.process_batch);
+                // Konversi tipe item.process_batch menjadi string
+                if (typeof item.process_batch === 'number' && item.process_batch !== null) {
+                    item.process_batch = item.process_batch.toString();
                 }
                 if (item.process_referral !== undefined && item.process_referral !== null) {
                     item.process_referral = item.process_referral.toString();
