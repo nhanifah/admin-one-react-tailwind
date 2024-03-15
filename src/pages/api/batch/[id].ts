@@ -15,7 +15,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       include: {
         students: {
           include: {
+            batch_registration: true,
+            master_referral: true,
             student_attachments: true,
+            payments: {
+              include: {
+                installments: true,
+              },
+            },
+            student_punishments: true,
+            interview_schedule: true,
           },
         },
       },

@@ -24,7 +24,7 @@ const user: User = {
   created_at: new Date(),
   updated_at: new Date(),
   password: '',
-  role: ''
+  role: '',
 }
 
 const students_selected: Students[] = []
@@ -65,6 +65,13 @@ const student: Students = {
     file_url: '',
   },
   student_punishments: [],
+  interview: {
+    id: '',
+    interview_date: '',
+    batch_id: '',
+    interview_location: '',
+    students: [],
+  },
 }
 
 export const styleSlice = createSlice({

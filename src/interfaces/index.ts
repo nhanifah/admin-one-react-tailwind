@@ -188,11 +188,12 @@ export type Students = {
   nik: string
   province: string
   city: string
+  birthdate: string
   subdistrict: string
   village: string
   address_detail: string
   batch_id: string
-  interview_schedule: string
+  interview_id: string
   dormitory: string
   installment: string
   guardian_name: string
@@ -209,9 +210,11 @@ export type Students = {
     id: string
     batch_name: string
   }
+  referral_source: string
   master_referral?: {
     id: string
     referral_name: string
+    name: string
   }
   student_attachments: {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -222,6 +225,7 @@ export type Students = {
   }[]
   student_punishments: StudentPunishment[]
   payments?: payment[]
+  interview_schedule: InterviewSchedules
 }
 
 export type StudentPunishment = {

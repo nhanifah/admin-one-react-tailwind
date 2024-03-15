@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { PrismaClient } from '@prisma/client'
-import { getToken } from "next-auth/jwt"
+import { getToken } from 'next-auth/jwt'
 
 const prisma = new PrismaClient({ log: ['query', 'error'] })
 
@@ -31,6 +31,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             },
           },
           student_punishments: true,
+          interview_schedule: true,
         },
       })
       return res.status(200).json({ data: students })
@@ -51,6 +52,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             },
           },
           student_punishments: true,
+          interview_schedule: true,
         },
       })
       return res.status(200).json({ data: students })
@@ -75,6 +77,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             },
           },
           student_punishments: true,
+          interview_schedule: true,
         },
       })
 
@@ -96,6 +99,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             },
           },
           student_punishments: true,
+          interview_schedule: true,
         },
       })
       return res.status(200).json({ data: students })
