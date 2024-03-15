@@ -45,24 +45,6 @@ const menuAside: MenuAsideItem[] = [
     ],
   },
   {
-    label: 'Batch',
-    icon: mdiListBox,
-    menu: [
-      {
-        label: 'Daftar Batch',
-        href: '/batch/list',
-      },
-      {
-        label: 'Interview',
-        href: '/batch/interview',
-      },
-      {
-        label: 'Daftar Calon Siswa',
-        href: '/batch/student',
-      },
-    ],
-  },
-  {
     label: 'Peserta',
     icon: mdiAccountBoxMultiple,
     menu: [
@@ -85,6 +67,25 @@ const menuAside: MenuAsideItem[] = [
       },
     ],
   },
+  {
+    label: 'Batch',
+    icon: mdiListBox,
+    menu: [
+      {
+        label: 'Daftar Batch',
+        href: '/batch/list',
+      },
+      {
+        label: 'Interview',
+        href: '/batch/interview',
+      },
+      {
+        label: 'Daftar Calon Siswa',
+        href: '/batch/student',
+      },
+    ],
+  },
+
   {
     href: '/userManager/list',
     label: 'User Manager',
