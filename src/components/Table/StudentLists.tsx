@@ -205,13 +205,16 @@ const StudentLists = ({ progress }) => {
               </td> */}
                   <td className="before:hidden lg:w-1 whitespace-nowrap">
                     <Buttons type="justify-start lg:justify-end" noWrap>
-                      <Button
-                        color="warning"
-                        icon={mdiCurrencyUsd}
-                        onClick={() => {}}
-                        small
-                        disabled
-                      />
+                      {progress != 'registering' && (
+                        <Button
+                          color="warning"
+                          icon={mdiCurrencyUsd}
+                          onClick={() => {}}
+                          small
+                          disabled
+                        />
+                      )}
+
                       <Button
                         color="success"
                         icon={mdiWhatsapp}
@@ -239,15 +242,17 @@ const StudentLists = ({ progress }) => {
                         }}
                         small
                       />
-                      <Button
-                        color="danger"
-                        icon={mdiPoliceBadge}
-                        onClick={() => {
-                          dispatch(setStudent(client))
-                          dispatch(showPunishmentModal())
-                        }}
-                        small
-                      />
+                      {progress != 'registering' && (
+                        <Button
+                          color="danger"
+                          icon={mdiPoliceBadge}
+                          onClick={() => {
+                            dispatch(setStudent(client))
+                            dispatch(showPunishmentModal())
+                          }}
+                          small
+                        />
+                      )}
                       <Button
                         color="contrast"
                         label="Lihat transkrip"
