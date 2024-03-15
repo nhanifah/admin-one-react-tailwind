@@ -57,7 +57,7 @@ const menuAside: MenuAsideItem[] = [
         href: '/batch/interview',
       },
       {
-        label: 'Daftar Calon Siswa',
+        label: 'Pendaftaran',
         href: '/batch/student',
       },
     ],

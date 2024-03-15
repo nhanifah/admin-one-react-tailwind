@@ -24,7 +24,7 @@ export default function UserDetailModal() {
 
     const handleFormSubmit = async (values) => {
         // alert(values)
-        const { status, data } = user.id.length > 0 ? await updateUserManager({ id: user.id, ...values}) : await createUserManager(values)
+        const { status, data } = user.id.length > 0 ? await updateUserManager({ id: user.id, ...values, password: null}) : await createUserManager(values)
         
         console.log(status, data)
         if (status === 200) {

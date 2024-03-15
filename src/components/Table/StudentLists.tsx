@@ -190,7 +190,15 @@ const StudentLists = ({ progress }) => {
                       className="w-24 h-24 mx-auto lg:w-6 lg:h-6"
                     />
                   </td>
-                  <td data-label="Nama">{client.full_name}</td>
+                  <td
+                  className="cursor-pointer"
+                  data-label="Nama" 
+                  onClick={() => {
+                    dispatch(setStudent(client))
+                    dispatch(showStudentDetailModal())
+                  }}>{
+                  client.full_name
+                  }</td>
                   <td data-label="Batch">{client?.batch_registration?.batch_name}</td>
                   <td data-label="Jenis Pekerjaan" className="capitalize">
                     {client.want_to_work}
@@ -206,13 +214,6 @@ const StudentLists = ({ progress }) => {
                   <td className="before:hidden lg:w-1 whitespace-nowrap">
                     <Buttons type="justify-start lg:justify-end" noWrap>
                       <Button
-                        color="warning"
-                        icon={mdiCurrencyUsd}
-                        onClick={() => {}}
-                        small
-                        disabled
-                      />
-                      <Button
                         color="success"
                         icon={mdiWhatsapp}
                         onClick={() => {
@@ -227,15 +228,6 @@ const StudentLists = ({ progress }) => {
                           }
 
                           window.open(`https://wa.me/${whatsapp}`)
-                        }}
-                        small
-                      />
-                      <Button
-                        color="info"
-                        icon={mdiEye}
-                        onClick={() => {
-                          dispatch(setStudent(client))
-                          dispatch(showStudentDetailModal())
                         }}
                         small
                       />
