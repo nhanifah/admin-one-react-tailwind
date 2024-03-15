@@ -16,16 +16,12 @@ const menuNavBar: MenuNavBarItem[] = [
       {
         icon: mdiAccount,
         label: 'My Profile',
-        href: '/profile',
+        href: '/profile/edit',
       },
-      {
-        icon: mdiCogOutline,
-        label: 'Settings',
-      },
-      {
-        icon: mdiEmail,
-        label: 'Messages',
-      },
+      // {
+      //   icon: mdiCogOutline,
+      //   label: 'Settings',
+      // },
       {
         isDivider: true,
       },
