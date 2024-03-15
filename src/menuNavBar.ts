@@ -50,7 +50,7 @@ const menuNavBar: MenuNavBarItem[] = [
     icon: mdiHelpCircle,
     label: 'Help & Support',
     isDesktopNoLabel: true,
-    href: 'https://dashboard.lpk-harehare.id',
+    href: 'https://youtu.be/8s1YEA7aG4s',
     target: '_blank',
   },
   {
