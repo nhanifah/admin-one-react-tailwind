@@ -207,7 +207,9 @@ export const userManager = z.object({
     })
     .min(1, { message: 'Username harus diisi' })
     .refine((value) => !/\s/.test(value), { message: 'Username tidak boleh mengandung spasi' })
-    .refine((value) => /^[a-zA-Z0-9_]+$/.test(value), { message: 'Username hanya boleh mengandung huruf, angka, dan garis bawah' }),
+    .refine((value) => /^[a-zA-Z0-9_]+$/.test(value), {
+      message: 'Username hanya boleh mengandung huruf, angka, dan garis bawah',
+    }),
   email: z
     .string({
       required_error: 'Email harus diisi',
@@ -218,4 +220,13 @@ export const userManager = z.object({
       id: z.string(),
     })
     .refine((value) => value.id.length > 0, { message: 'Hak akses harus dipilih' }),
+})
+
+export const roleSchema = z.object({
+  name: z
+    .string({
+      required_error: 'Nama Role harus diisi',
+    })
+    .min(1, { message: 'Nama Role harus diisi' }),
+  accessList: z.string().array().nonempty({ message: 'Minimal memiliki 1 izin' }),
 })

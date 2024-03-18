@@ -9,3 +9,7 @@
 
 @import 'styles/_basic.css';
 @import 'styles/_white.css';
+
+.select__input {
+  @apply !py-1;
+}

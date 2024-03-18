@@ -34,15 +34,15 @@ const UserLists = () => {
     const { status, data } = await deleteUserManager(user.id)
     data
     if (status == 200) {
-        toast.success('User berhasil dihapus')
-      } else {
-        toast.error('User gagal dihapus')
-      }
-}
+      toast.success('User berhasil dihapus')
+    } else {
+      toast.error('User gagal dihapus')
+    }
+  }
 
   return (
     <>
-      <table>
+      <table className="table-fixed">
         <thead>
           <tr>
             <th>Nama</th>
@@ -69,15 +69,18 @@ const UserLists = () => {
                 <td data-label="Email" className="lg:w-32">
                   {client.email}
                 </td>
-                <td data-label="Hak Akses">
-                  {client.master_roles.name}
-                </td>
-                <td data-label="Izin">
-                  {
-                    client.master_roles.access.map((access) => {
-                      return <span key={access} className="text-xs text-black dark:text-slate-400 bg-yellow-300 p-2 rounded-lg mx-1">{access}</span>
-                    })
-                  }
+                <td data-label="Hak Akses">{client.master_roles.name}</td>
+                <td data-label="Izin" className="flex flex-wrap gap-4 justify-start">
+                  {client.master_roles.access.map((access) => {
+                    return (
+                      <span
+                        key={access}
+                        className="text-xs text-black dark:text-slate-400 bg-yellow-300 p-2 rounded-lg mx-1"
+                      >
+                        {access}
+                      </span>
+                    )
+                  })}
                 </td>
                 {/* <td data-label="Progress" className="lg:w-1 whitespace-nowrap">
                 <small className="text-gray-500 dark:text-slate-400">{client.created}</small>
@@ -107,12 +110,13 @@ const UserLists = () => {
                                 color: '#fff',
                               },
                             })
-                            break;
+                            break
                           case 2:
                             toast.dismiss()
                             handleDelete(client)
-                            break;
-                        }}}
+                            break
+                        }
+                      }}
                       small
                     />
                   </Buttons>

@@ -9,6 +9,7 @@ import interviewReducer from './interviewSlice'
 import affiliateReducer from './affiliateSlice'
 import studentReducer from './studentSlice'
 import punishmentReducer from './punishmentSlice'
+import RoleReducer from './RoleSlice'
 
 export const store = configureStore({
   reducer: {
@@ -22,6 +23,7 @@ export const store = configureStore({
     affiliate: affiliateReducer,
     student: studentReducer,
     punishment: punishmentReducer,
+    role: RoleReducer,
   },
 })
 

@@ -20,6 +20,7 @@ type Props = {
   zIndex?: string
   loading?: boolean
   disabled?: boolean
+  overflow?: boolean
 }
 
 const WideCardBoxModal = ({
@@ -32,6 +33,7 @@ const WideCardBoxModal = ({
   zIndex = 'z-40',
   loading = false,
   disabled = false,
+  overflow = true,
 }: Props) => {
   if (!isActive) {
     return null
@@ -40,7 +42,9 @@ const WideCardBoxModal = ({
   return (
     <OverlayLayer onClick={onCancel} className={onCancel ? 'cursor-pointer' : ''}>
       <CardBox
-        className={`transition-transform shadow-lg max-h-modal overflow-y-scroll no-scrollbar w-11/12 md:w-4/5 lg:w-5/6 xl:w-4/5 ${zIndex}`}
+        className={`transition-transform shadow-lg max-h-modal  no-scrollbar w-11/12 md:w-4/5 lg:w-5/6 xl:w-4/5 ${
+          overflow && 'overflow-y-scroll'
+        } ${zIndex}`}
         isModal
       >
         <CardBoxComponentTitle title={title}>

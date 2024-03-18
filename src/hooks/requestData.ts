@@ -97,9 +97,45 @@ export const useBatchInterviewClients = () => {
 export const useMasterRoleClients = () => {
   const { data, error } = useSWR('/api/role', fetcher)
 
-  const updateStudentsSchedule = async (data: object) => {
+  const addRole = async (data: object) => {
     try {
-      const response = await axios.put('/api/batch/interview/studentsSchedules', data)
+      const response = await axios.post('/api/role', data)
+      mutate('/api/role')
+      return {
+        status: response.status,
+        data: response.data,
+      }
+    } catch (error) {
+      console.log(error.response.data)
+      return {
+        status: error.response.status,
+        data: error.response.data,
+      }
+    }
+  }
+
+  const updateRole = async (data) => {
+    console.log(data)
+    try {
+      const response = await axios.put('/api/role', data)
+      mutate('/api/role')
+      return {
+        status: response.status,
+        data: response.data,
+      }
+    } catch (error) {
+      console.log(error.response.data)
+      return {
+        status: error.response.status,
+        data: error.response.data,
+      }
+    }
+  }
+
+  const deleteRole = async (data: object) => {
+    try {
+      const response = await axios.delete('/api/role', { data })
+      mutate('/api/role')
       return {
         status: response.status,
         data: response.data,
@@ -117,7 +153,9 @@ export const useMasterRoleClients = () => {
     clients: data?.data ?? [],
     isLoading: !error && !data,
     isError: error,
-    updateStudentsSchedule,
+    addRole,
+    updateRole,
+    deleteRole,
   }
 }
 
