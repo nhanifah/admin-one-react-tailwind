@@ -68,7 +68,7 @@ model cbt_enrolled {
 model cbt_examination {
   id            String          @id @default(dbgenerated("(uuid())")) @db.Char(36)
   name          String?         @db.VarChar(255)
-  minimal_value String?         @db.VarChar(255)
+  minimal_value Int?            @default(0)
   leases_time   String?         @db.VarChar(255)
   created_at    DateTime?       @default(now()) @db.DateTime(0)
   updated_at    DateTime?       @default(now()) @db.DateTime(0)
@@ -173,8 +173,8 @@ model payments {
   batch_id           String?             @db.Char(36)
   amount             Decimal?            @db.Decimal(10, 2)
   type               payments_type?
-  created_at         String?             @db.VarChar(255)
-  updated_at         DateTime?           @db.DateTime(0)
+  created_at         DateTime?           @default(now()) @db.DateTime(0)
+  updated_at         DateTime?           @default(now()) @db.DateTime(0)
   installments       installments[]
   batch_registration batch_registration? @relation(fields: [batch_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "batch_fk")
   students           students?           @relation(fields: [student_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "student_fk")

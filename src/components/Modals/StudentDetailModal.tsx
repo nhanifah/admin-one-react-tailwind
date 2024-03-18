@@ -65,7 +65,7 @@ export default function StudentDetailModal() {
                 interview_schedule: {
                   ...student.interview_schedule,
                   interview_date: new Date(
-                    student.interview_schedule.interview_date
+                    student.interview_schedule?.interview_date
                   ).toLocaleDateString('id-ID', {
                     weekday: 'long',
                     year: 'numeric',
