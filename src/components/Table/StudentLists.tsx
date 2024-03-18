@@ -190,7 +190,16 @@ const StudentLists = ({ progress }) => {
                       className="w-24 h-24 mx-auto lg:w-6 lg:h-6"
                     />
                   </td>
-                  <td data-label="Nama">{client.full_name}</td>
+                  <td
+                    className="cursor-pointer"
+                    data-label="Nama"
+                    onClick={() => {
+                      dispatch(setStudent(client))
+                      dispatch(showStudentDetailModal())
+                    }}
+                  >
+                    {client.full_name}
+                  </td>
                   <td data-label="Batch">{client?.batch_registration?.batch_name}</td>
                   <td data-label="Jenis Pekerjaan" className="capitalize">
                     {client.want_to_work}

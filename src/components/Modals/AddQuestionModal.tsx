@@ -62,6 +62,9 @@ export default function AddQuestionModal() {
     } catch (error) {
       console.log(error)
       setValidationErrors(error.errors)
+setTimeout(() => {
+        setValidationErrors([])
+      }, 3000)
       setLoading(false)
       return
     }

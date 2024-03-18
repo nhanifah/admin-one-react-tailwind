@@ -286,8 +286,8 @@ enum installments_discount {
 }
 
 enum payments_type {
-  pedidikan
-  belajar
+  pendidikan
+  pendaftaran
 }
 
 enum students_want_to_work {

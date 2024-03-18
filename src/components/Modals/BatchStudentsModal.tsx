@@ -61,6 +61,9 @@ export default function BatchStudentsModal() {
     } catch (error) {
       console.log(error)
       // setValidationErrors(error.errors)
+setTimeout(() => {
+        setValidationErrors([])
+      }, 3000)
       toast.error(error.errors[0].message)
       setLoading(false)
       return

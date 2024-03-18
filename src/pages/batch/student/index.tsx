@@ -15,7 +15,7 @@ const StudentList = () => {
   return (
     <>
       <Head>
-        <title>{getPageTitle('Daftar Calon Siswa')}</title>
+        <title>{getPageTitle('Pendaftaran')}</title>
       </Head>
 
       <StudentDetailModal />
