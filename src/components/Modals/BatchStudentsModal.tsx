@@ -3,7 +3,7 @@
 import { mdiUpdate } from '@mdi/js'
 import WideCardBoxModal from '../CardBox/WideModal'
 import { useAppDispatch, useAppSelector } from '../../stores/hooks'
-import { closeModalStudents } from '../../stores/batchSlice'
+import { closeModalStudents, resetStudentId } from '../../stores/batchSlice'
 import toast from 'react-hot-toast'
 import TableBatchStudents from '../Table/BatchStudents'
 import { Field, Form, Formik } from 'formik'
@@ -18,7 +18,7 @@ export default function BatchStudentsModal() {
   const dispatch = useAppDispatch()
   const modalStudents = useAppSelector((state) => state.batch.modalStudents)
   const selectedBatch = useAppSelector((state) => state.batch.batch_selected)
-  const selectedStudents = useAppSelector((state) => state.batch.students_selected)
+  const selectedStudentsId = useAppSelector((state) => state.batch.selectedStudentsId)
   const formRef = useRef<any>()
   const handleModalAction = () => {
     dispatch(closeModalStudents())
@@ -47,23 +47,14 @@ export default function BatchStudentsModal() {
     // console.log(selectedStudents)
     setLoading(true)
 
-    const selectedStudentsId: string[] = []
-    selectedStudents.map((item, index) => {
-      if (item.checked) {
-        selectedStudentsId.push(item.id)
-      }
-    })
     try {
       studentProgressSchema.parse({
         selectedStudentsId,
         ...values,
+        batchId: selectedBatch.id,
       })
     } catch (error) {
       console.log(error)
-      // setValidationErrors(error.errors)
-setTimeout(() => {
-        setValidationErrors([])
-      }, 3000)
       toast.error(error.errors[0].message)
       setLoading(false)
       return
@@ -73,6 +64,7 @@ setTimeout(() => {
     if (status == 200) {
       console.log(data)
       dispatch(closeModalStudents())
+      dispatch(resetStudentId())
       toast.success(`${data.data.count} progress siswa berhasil diupdate!`)
     } else {
       console.log(data)

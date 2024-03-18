@@ -6,7 +6,7 @@ const prisma = new PrismaClient({ log: ['query', 'error'] })
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method == 'GET') {
     const { id }: any = req.query
-    const batch = await prisma.batch_registration.findMany({
+    const batch = await prisma.batch_registration.findFirst({
       where: {
         id: {
           equals: id,
@@ -15,7 +15,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       include: {
         students: {
           include: {
-            batch_registration: true,
             master_referral: true,
             student_attachments: true,
             payments: {
@@ -30,14 +29,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       },
     })
 
-    batch[0].students = batch[0].students.map((item, index) => {
-      return {
-        ...item,
-        checked: false,
-      }
-    })
-
-    return res.status(200).json({ data: batch })
+    return res.status(200).json({ data: batch?.students })
   } else if (req.method == 'PUT') {
     const body = await req.body
     const { id }: any = req.query
