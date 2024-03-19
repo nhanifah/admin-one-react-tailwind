@@ -1,6 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { BatchStudents, Students, User } from '../interfaces'
 
+const selectedStudentsId = <string[]>[]
+
 const batch_selected: BatchStudents = {
   id: '',
   batch_name: '',
@@ -86,6 +88,7 @@ export const styleSlice = createSlice({
     student,
     user,
     editModal: false,
+    selectedStudentsId,
   },
   reducers: {
     showModal: (state, action: PayloadAction<null>) => {
@@ -131,6 +134,16 @@ export const styleSlice = createSlice({
     closeEditModal: (state) => {
       state.editModal = false
     },
+    addStudentId: (state, action: PayloadAction<any>) => {
+      state.selectedStudentsId.push(action.payload)
+    },
+    popStudentId: (state, action: PayloadAction<any>) => {
+      const index = state.selectedStudentsId.indexOf(action.payload)
+      state.selectedStudentsId.splice(index, 1)
+    },
+    resetStudentId: (state) => {
+      state.selectedStudentsId = []
+    },
   },
 })
 
@@ -149,6 +162,9 @@ export const {
   setUser,
   showEditModal,
   closeEditModal,
+  addStudentId,
+  popStudentId,
+  resetStudentId,
 } = styleSlice.actions
 
 export default styleSlice.reducer

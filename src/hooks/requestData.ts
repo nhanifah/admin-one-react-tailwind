@@ -286,6 +286,7 @@ export const useStudentClients = (progress: string = 'success') => {
       const response = await axios.put('/api/student/progress', data)
       console.log(data)
       mutate(`/api/interview/${data.interviewId}`)
+      mutate(`/api/batch/${data.batchId}`)
       return {
         status: response.status,
         data: response.data,
@@ -399,20 +400,23 @@ export const useBatchClients = () => {
     }
   }
 
-  const getBatchStudents = async (id: string) => {
-    // const response = await axios.get(`api/batch/${id}`){
-    const response = await axios.get(`/api/batch/${id}`)
-    return response
-
-    // }
-  }
   return {
     clients: data?.data ?? [],
     isLoading: !error && !data,
     isError: error,
     createData,
-    getBatchStudents,
     editData,
+  }
+}
+
+export const useBatchClientsById = (id: string) => {
+  const { data, error } = useSWR(`/api/batch/${id}`, fetcher)
+
+  mutate(`/api/batch/${id}`)
+  return {
+    clients: data?.data ?? [],
+    isLoading: !error && !data,
+    isError: error,
   }
 }
 
