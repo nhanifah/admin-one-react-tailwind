@@ -1,7 +1,6 @@
 import { mdiBallotOutline, mdiPlusBox } from '@mdi/js'
 import Head from 'next/head'
 import { ReactElement } from 'react'
-import CardBox from '../../components/CardBox'
 import LayoutAuthenticated from '../../layouts/Authenticated'
 import SectionMain from '../../components/Section/Main'
 import SectionTitleLineWithButton from '../../components/Section/TitleLineWithButton'
