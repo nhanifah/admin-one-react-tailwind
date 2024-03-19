@@ -2,7 +2,7 @@ import {
   mdiEye,
   mdiPoliceBadge,
   mdiWhatsapp,
-  mdiCurrencyUsd,
+  mdiPencil,
   mdiDownload,
   mdiMicrosoftExcel,
 } from '@mdi/js'
@@ -217,7 +217,7 @@ const StudentLists = ({ progress }) => {
                       {progress != 'registering' && (
                         <Button
                           color="warning"
-                          icon={mdiCurrencyUsd}
+                          icon={mdiPencil}
                           onClick={() => {}}
                           small
                           disabled
