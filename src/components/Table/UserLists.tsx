@@ -42,14 +42,13 @@ const UserLists = () => {
 
   return (
     <>
-      <table className="table-fixed">
+      <table className="">
         <thead>
           <tr>
             <th>Nama</th>
             <th>Username</th>
             <th>Email</th>
             <th>Hak Akses</th>
-            <th>Izin</th>
             <th />
           </tr>
         </thead>
@@ -66,22 +65,10 @@ const UserLists = () => {
               <tr key={client.id}>
                 <td data-label="Nama">{client.name}</td>
                 <td data-label="Username">{client.username}</td>
-                <td data-label="Email" className="lg:w-32">
+                <td data-label="Email" className="">
                   {client.email}
                 </td>
                 <td data-label="Hak Akses">{client.master_roles.name}</td>
-                <td data-label="Izin" className="flex flex-wrap gap-4 justify-start">
-                  {client.master_roles.access.map((access) => {
-                    return (
-                      <span
-                        key={access}
-                        className="text-xs text-black dark:text-slate-400 bg-yellow-300 p-2 rounded-lg mx-1"
-                      >
-                        {access}
-                      </span>
-                    )
-                  })}
-                </td>
                 {/* <td data-label="Progress" className="lg:w-1 whitespace-nowrap">
                 <small className="text-gray-500 dark:text-slate-400">{client.created}</small>
               </td> */}
