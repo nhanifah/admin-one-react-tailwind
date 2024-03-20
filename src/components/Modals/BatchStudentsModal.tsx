@@ -1,5 +1,3 @@
-'use client'
-
 import { mdiUpdate } from '@mdi/js'
 import WideCardBoxModal from '../CardBox/WideModal'
 import { useAppDispatch, useAppSelector } from '../../stores/hooks'

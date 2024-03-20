@@ -8,18 +8,16 @@ import {
   popStudentId,
   resetStudentId,
   setStudent,
-  setStudentsSelected,
   showStudentDetailModal,
 } from '../../stores/batchSlice'
-import { BatchStudents, Students } from '../../interfaces'
+import { Students } from '../../interfaces'
 import StudentAvatar from '../UserAvatar'
-import axios from 'axios'
 import { searchFunction } from '../../utils/helpers'
 import { useBatchClientsById } from '../../hooks/requestData'
 
 const TableBatchStudents = () => {
   const selectedBatch = useAppSelector((state) => state.batch.batch_selected)
-  const { clients, isLoading } = useBatchClientsById(selectedBatch.id)
+  const { clients } = useBatchClientsById(selectedBatch.id)
   const [showAll, setShowAll] = useState(true)
   const [query, setQuery] = useState('')
   const selectedStudentsId = useAppSelector((state) => state.batch.selectedStudentsId)
@@ -34,11 +32,13 @@ const TableBatchStudents = () => {
   const [currentPage, setCurrentPage] = useState(0)
 
   const filteredByProgress = useMemo(() => {
-    if (showAll) {
-      return clients
-    }
-    return clients.filter((student) => student.progress === 'success')
-  }, [showAll])
+    return clients.filter((student) => {
+      if (showAll) {
+        return true
+      }
+      return student.progress === 'success'
+    })
+  }, [clients, showAll])
 
   const filteredClients: any = useMemo(
     () => searchFunction(filteredByProgress, query),
@@ -71,7 +71,6 @@ const TableBatchStudents = () => {
       dispatch(popStudentId(id))
     } else {
       dispatch(addStudentId(id))
-      console.log('add')
     }
   }
 
