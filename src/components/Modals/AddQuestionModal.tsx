@@ -62,27 +62,22 @@ export default function AddQuestionModal() {
     } catch (error) {
       console.log(error)
       setValidationErrors(error.errors)
-setTimeout(() => {
+      setTimeout(() => {
         setValidationErrors([])
       }, 3000)
       setLoading(false)
       return
     }
 
-    const { status, data } = await createData(values)
+    const { status, data } = await createData({ ...values, option: option })
     if (status == 200) {
       console.log(data)
       resetForm({
-        values: {
-          questionType: '',
-          question: '',
-          option: [],
-          answer: '',
-          point: 0,
-          answerSelected: '',
-        },
+        values: initialValues,
       })
       dispatch(resetOption())
+      setIsQuestTypeSelected(false)
+
       toast.success('Soal berhasil ditambahkan!')
     } else {
       console.log(data)
