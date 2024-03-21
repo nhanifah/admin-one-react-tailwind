@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from '../../stores/hooks'
 import React, { useRef } from 'react'
 import { closeStudentEditModal } from '../../stores/batchSlice'
 import Divider from '../Divider'
-import { mdiMail, mdiWhatsapp } from '@mdi/js'
+import { mdiBookEducation, mdiIdCard, mdiMail, mdiBriefcase, mdiWhatsapp, mdiAccount } from '@mdi/js'
 import { useStudentClients } from '../../hooks/requestData'
 import toast from 'react-hot-toast'
 import { studentSchema } from '../../utils/validator'
@@ -113,7 +113,7 @@ export default function UpdateInterviewScheduleModal() {
               onSubmit={handleModalAction}
             >
               <Form>
-                <FormField label="Nama Lengkap" labelFor="full_name">
+                <FormField label="Nama Lengkap" labelFor="full_name" icons={[mdiAccount]}>
                   <Field name="full_name" placeholder="Nama Lengkap" id="full_name" autoFocus />
                 </FormField>
 
@@ -121,21 +121,25 @@ export default function UpdateInterviewScheduleModal() {
                   <FormField label="Tanggal Lahir">
                     <Field name="birthdate" type="date" />
                   </FormField>
-                  <FormField label="NIK">
+                  <FormField label="NIK" icons={[mdiIdCard]}>
                     <Field name="nik" placeholder="nik" type="number" />
                   </FormField>
                 </div>
 
-                <FormField label="Kontak" icons={[mdiWhatsapp, mdiMail]}>
-                  <Field name="whatsapp_number" placeholder="Whatsapp" />
-                  <Field type="email" name="email" placeholder="Email" />
-                </FormField>
+                <div className="grid grid-cols-2 gap-3">
+                  <FormField label="Kontak" icons={[mdiWhatsapp]}>
+                    <Field name="whatsapp_number" placeholder="Whatsapp" />
+                  </FormField>
+                  <FormField label="Email" icons={[mdiMail]}>
+                    <Field type="email" name="email" placeholder="Email" />
+                  </FormField>
+                </div>
 
                 <div className="grid grid-cols-2 gap-3">
-                  <FormField label="Pendidikan Terakhir">
+                  <FormField label="Pendidikan Terakhir" icons={[mdiBookEducation]}>
                     <Field name="last_education" />
                   </FormField>
-                  <FormField label="Pekerjaan Sekarang">
+                  <FormField label="Pekerjaan Sekarang" icons={[mdiBriefcase]}>
                     <Field name="work_now" />
                   </FormField>
                 </div>
@@ -162,7 +166,7 @@ export default function UpdateInterviewScheduleModal() {
                 </FormField>
                 <Divider />
 
-                <FormField label="Biodata Orangtua" icons={[mdiWhatsapp, mdiMail]}>
+                <FormField label="Biodata Orangtua" icons={[mdiMail, mdiWhatsapp]}>
                   <Field name="guardian_name" placeholder="Nama Orangtua" />
                   <Field name="guardian_phone" placeholder="Whatsapp Orangtua" />
                 </FormField>
