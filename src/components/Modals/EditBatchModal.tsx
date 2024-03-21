@@ -54,7 +54,7 @@ setTimeout(() => {
     setLoading(false)
   }
 
-  let endDate = selectedBatch.end_date.split('T')[0]
+  const endDate = selectedBatch.end_date.split('T')[0]
 
   return (
     <CardBoxModal

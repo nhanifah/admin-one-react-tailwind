@@ -228,7 +228,7 @@ export const useStudentClients = (progress: string = 'success') => {
   const updateData = async (data: object) => {
     try {
       const response = await axios.put('/api/student', data)
-      mutate('/api/student')
+      mutate(`/api/student/${progress}`)
       return {
         status: response.status,
         data: response.data,

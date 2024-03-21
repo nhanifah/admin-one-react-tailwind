@@ -13,17 +13,17 @@ import Button from '../Button'
 import Buttons from '../Buttons'
 import StudentAvatar from '../UserAvatar'
 import { useAppDispatch } from '../../stores/hooks'
-import { setStudent, showStudentDetailModal } from '../../stores/batchSlice'
+import { setStudent, showStudentDetailModal, showStudentEditModal } from '../../stores/batchSlice'
 import { setTranskripFiles, showTraskripModal } from '../../stores/studentSlice'
 import { getTranskripFiles, searchFunction } from '../../utils/helpers'
 import { showPunishmentModal } from '../../stores/punishmentSlice'
 import toast from 'react-hot-toast'
 import CardBox from '../CardBox'
+import { mutate } from 'swr'
 
 const StudentLists = ({ progress }) => {
   const fileRef = useRef<HTMLInputElement>(null)
-
-  const { postFile } = useStudentClients('success')
+  const { clients, postFile } = useStudentClients(progress)
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files
@@ -43,13 +43,15 @@ const StudentLists = ({ progress }) => {
 
       // reset the input
       e.target.value = ''
+      // mutate data
+      mutate('/api/student/dataSiswa')
     }
   }
 
   const [query, setQuery] = useState('')
 
   const dispatch = useAppDispatch()
-  const { clients } = useStudentClients(progress)
+  
 
   const perPage = 5
 
@@ -218,9 +220,11 @@ const StudentLists = ({ progress }) => {
                         <Button
                           color="warning"
                           icon={mdiPencil}
-                          onClick={() => {}}
+                          onClick={() => {
+                            dispatch(setStudent(client))
+                            dispatch(showStudentEditModal())
+                          }}
                           small
-                          disabled
                         />
                       )}
 

@@ -11,6 +11,7 @@ import StudentDetailModal from '../../components/Modals/StudentDetailModal'
 import TranskripViewer from '../../components/Modals/TranskripViewer'
 import UploadTranskripModal from '../../components/Modals/UploadTranskripModal'
 import PunishmentModal from '../../components/Modals/PunishmentModal'
+import UpdateStudentModal from '../../components/Modals/UpdateStudentModal'
 
 const StudentList = () => {
   return (
@@ -19,6 +20,7 @@ const StudentList = () => {
         <title>{getPageTitle('Daftar Siswa')}</title>
       </Head>
 
+      <UpdateStudentModal />
       <StudentDetailModal />
       <TranskripViewer />
       <UploadTranskripModal />

@@ -13,17 +13,7 @@ export default function FooterBar({ children }: Props) {
     <footer className={`py-2 px-6 ${containerMaxW}`}>
       <div className="block md:flex items-center justify-between">
         <div className="text-center md:text-left mb-6 md:mb-0">
-          {/* &copy;{year}{` `}
-          <b>
-            <a href="https://harehare-corp.com/" rel="noreferrer" target="_blank">
-              Harehare Group
-            </a>
-          </b>
-          {` `}
-          {children} */}
-        </div>
-        <div className="md:py-2">
-          &copy;{year}
+        &copy;{year}
           {` `}
           <b>
             <a href="https://harehare-corp.com/" rel="noreferrer" target="_blank">
@@ -32,6 +22,9 @@ export default function FooterBar({ children }: Props) {
           </b>
           {` `}
           {children}
+        </div>
+        <div className="md:py-2">
+          Version 1.0.6-rc
         </div>
       </div>
     </footer>

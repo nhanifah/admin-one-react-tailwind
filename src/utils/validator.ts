@@ -1,5 +1,61 @@
 import { z } from 'zod'
 
+export const studentSchema = z.object({
+  full_name: z
+    .string({
+      invalid_type_error: 'Masukan nama dengan benar!',
+      required_error: 'Nama tidak boleh kosong!',
+    })
+    .refine((value) => value.length > 0, { message: 'Nama tidak boleh kosong' }),
+  email: z
+    .string({
+      invalid_type_error: 'Masukan email dengan benar!',
+      required_error: 'Email tidak boleh kosong!',
+    })
+    .email({ message: 'Format email salah!' }),
+  whatsapp_number: z
+    .string({
+      invalid_type_error: 'Masukan nomor telepon dengan benar!',
+      required_error: 'Nomor telepon tidak boleh kosong!',
+    })
+    .min(10, { message: 'Nomor telepon minimal 10 digit' }),
+  last_education: z
+    .string({
+      invalid_type_error: 'Masukan pendidikan terakhir dengan benar!',
+      required_error: 'Pendidikan terakhir tidak boleh kosong!',
+    })
+    .refine((value) => value.length > 0, { message: 'Pendidikan terakhir tidak boleh kosong' }),
+  work_now: z
+    .string({
+      invalid_type_error: 'Masukan pekerjaan sekarang dengan benar!',
+      required_error: 'Pekerjaan sekarang tidak boleh kosong!',
+    }),
+  address_detail: z
+    .string({
+      invalid_type_error: 'Masukan alamat dengan benar!',
+      required_error: 'Alamat tidak boleh kosong!',
+    })
+    .refine((value) => value.length > 0, { message: 'Alamat tidak boleh kosong' }),
+  nik: z
+    .string({
+      invalid_type_error: 'Masukan NIK dengan benar!',
+      required_error: 'NIK tidak boleh kosong!',
+    })
+    .min(16, { message: 'NIK harus 16 digit' }),
+  guardian_name: z
+    .string({
+      invalid_type_error: 'Masukan nama orang tua dengan benar!',
+      required_error: 'Nama orang tua tidak boleh kosong!',
+    })
+    .refine((value) => value.length > 0, { message: 'Nama orang tua tidak boleh kosong' }),
+  guardian_phone: z
+    .string({
+      invalid_type_error: 'Masukan nomor telepon orang tua dengan benar!',
+      required_error: 'Nomor telepon orang tua tidak boleh kosong!',
+    })
+    .min(10, { message: 'Nomor telepon minimal 10 digit' }),
+})
+
 export const punishmentSchema = z.object({
   type: z
     .string({
