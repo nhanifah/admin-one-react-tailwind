@@ -43,7 +43,7 @@ export default function UserDetailModal() {
   }
 
   const handleResetPassword = async (values) => {
-    const { status, data } = await updateUserManager({ password: 'password', ...values })
+    const { status, data } = await updateUserManager({ sandi: 'password', ...values })
     if (status === 200) {
       dispatch(closeUserDetailModal())
       // toast

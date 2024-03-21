@@ -74,12 +74,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
 
         try {
-            const student = body.password ? await prisma.admins.update({
+            const student = body.sandi ? await prisma.admins.update({
                 where: {
                     id: body.id,
                 },
                 data: {
-                    password: await hash(body.password, 10),
+                    password: await hash(body.sandi, 10),
                 },
             }) : await prisma.admins.update({
                 where: {
