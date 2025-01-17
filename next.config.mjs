@@ -22,7 +22,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'cdn.lpk-harehare.id',
+        hostname: 'cdn.go-global.id',
       },
     ],
   },

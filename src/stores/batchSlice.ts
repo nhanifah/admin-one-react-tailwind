@@ -85,6 +85,7 @@ export const styleSlice = createSlice({
     students_selected,
     studentDetailModal: false,
     studentEditModal: false,
+    studentAddModal: false,
     userDetailModal: false,
     student,
     user,
@@ -111,6 +112,12 @@ export const styleSlice = createSlice({
       state.students_selected = action.payload
     },
 
+    showStudentAddModal: (state) => {
+      state.studentAddModal = true
+    },
+    closeStudentAddModal: (state) => {
+      state.studentAddModal = false
+    },
     showStudentEditModal: (state) => {
       state.studentEditModal = true
     },
@@ -159,6 +166,8 @@ export const {
   closeModal,
   showModalStudents,
   closeModalStudents,
+  showStudentAddModal,
+  closeStudentAddModal,
   showStudentEditModal,
   closeStudentEditModal,
   selectBatch,

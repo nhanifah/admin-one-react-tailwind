@@ -292,6 +292,12 @@ enum payments_type {
 
 enum students_want_to_work {
   nurse
+  building_cleaning
+  construction
+  automobile
+  hospitality
+  agriculture
+  food_service
   food
   other
 }
